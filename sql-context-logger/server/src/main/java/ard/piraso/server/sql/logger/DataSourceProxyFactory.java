@@ -1,4 +1,4 @@
-package ard.piraso.server.sql;
+package ard.piraso.server.sql.logger;
 
 import ard.piraso.server.logger.TraceableID;
 import ard.piraso.server.proxy.RegexMethodInterceptorAdapter;
@@ -9,7 +9,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 
 /**
- * {@link DataSource} logger.
+ * {@link DataSource} logger proxy factory.
  */
 public class DataSourceProxyFactory extends AbstractSQLProxyFactory<DataSource> {
 

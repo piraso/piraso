@@ -1,4 +1,4 @@
-package ard.piraso.server.sql;
+package ard.piraso.server.sql.logger;
 
 import ard.piraso.api.entry.ElapseTimeEntry;
 import ard.piraso.api.sql.SQLDataTotalRowsEntry;
@@ -11,6 +11,7 @@ import ard.piraso.server.logger.TraceableID;
 import ard.piraso.server.proxy.RegexMethodInterceptorAdapter;
 import ard.piraso.server.proxy.RegexMethodInterceptorEvent;
 import ard.piraso.server.proxy.RegexProxyFactory;
+import ard.piraso.server.sql.IDGenerator;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.lang.reflect.Method;

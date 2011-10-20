@@ -1,4 +1,4 @@
-package ard.piraso.server.sql;
+package ard.piraso.server.sql.logger;
 
 import ard.piraso.api.sql.SQLParameterEntry;
 import ard.piraso.server.proxy.RegexMethodInterceptorAdapter;

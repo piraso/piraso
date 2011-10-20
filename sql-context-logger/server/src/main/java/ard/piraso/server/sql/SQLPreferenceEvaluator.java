@@ -8,6 +8,9 @@ import ard.piraso.server.GeneralPreferenceEvaluator;
  */
 public class SQLPreferenceEvaluator extends GeneralPreferenceEvaluator {
 
+    private static final int DEFAULT_RETURN_SIZE = 100;
+
+
     public boolean isConnectionMethodCallEnabled() {
         return isEnabled(SQLPreferenceEnum.CONNECTION_METHOD_CALL_ENABLED);
     }
@@ -36,8 +39,10 @@ public class SQLPreferenceEvaluator extends GeneralPreferenceEvaluator {
         return isEnabled(SQLPreferenceEnum.RESULTSET_METHOD_CALL_ENABLED);
     }
 
-    public Integer getMaxDataSize() {
-        return getIntValue(SQLPreferenceEnum.VIEW_DATA_SIZE);
+    public int getMaxDataSize() {
+        Integer value = getIntValue(SQLPreferenceEnum.VIEW_DATA_SIZE);
+
+        return value == null ? DEFAULT_RETURN_SIZE : value;
     }
 
     private boolean isEnabled(SQLPreferenceEnum pref) {

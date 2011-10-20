@@ -1,4 +1,4 @@
-package ard.piraso.server.sql;
+package ard.piraso.server.sql.logger;
 
 import ard.piraso.api.entry.ElapseTimeEntry;
 import ard.piraso.api.sql.SQLViewEntry;
@@ -22,7 +22,7 @@ public class PreparedStatementProxyFactory extends AbstractSQLProxyFactory<Prepa
 
     private String sql;
 
-    private StatementParameterListener parameterListener;
+    private StatementParameterListener<PreparedStatement> parameterListener;
 
     public PreparedStatementProxyFactory(TraceableID id, String sql) {
         super(id, new RegexProxyFactory<PreparedStatement>(PreparedStatement.class));
@@ -34,7 +34,7 @@ public class PreparedStatementProxyFactory extends AbstractSQLProxyFactory<Prepa
         }
 
         if(getPref().isViewSQLEnabled()) {
-            parameterListener = new StatementParameterListener();
+            parameterListener = new StatementParameterListener<PreparedStatement>();
 
             factory.addMethodListener("set.*", parameterListener);
         }

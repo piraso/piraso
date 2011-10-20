@@ -1,4 +1,4 @@
-package ard.piraso.server.sql;
+package ard.piraso.server.sql.logger;
 
 import ard.piraso.server.logger.MethodCallLoggerListener;
 import ard.piraso.server.logger.SimpleMethodLoggerListener;

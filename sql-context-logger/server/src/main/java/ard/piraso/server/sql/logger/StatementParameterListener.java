@@ -1,4 +1,4 @@
-package ard.piraso.server.sql;
+package ard.piraso.server.sql.logger;
 
 import ard.piraso.api.sql.SQLParameterEntry;
 import ard.piraso.server.proxy.RegexMethodInterceptorAdapter;
@@ -6,7 +6,7 @@ import ard.piraso.server.proxy.RegexMethodInterceptorEvent;
 import org.aopalliance.intercept.MethodInvocation;
 
 import java.lang.reflect.Method;
-import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * Responsible for collecting statement parameters.
  */
-public class StatementParameterListener extends RegexMethodInterceptorAdapter<PreparedStatement> {
+public class StatementParameterListener<T extends Statement> extends RegexMethodInterceptorAdapter<T> {
 
     protected static final List<String> VALID_METHOD_NAMES = Arrays.asList(
             "setBoolean",
@@ -70,7 +70,7 @@ public class StatementParameterListener extends RegexMethodInterceptorAdapter<Pr
     }
 
     @Override
-    public void beforeCall(RegexMethodInterceptorEvent<PreparedStatement> evt) {
+    public void beforeCall(RegexMethodInterceptorEvent<T> evt) {
         MethodInvocation invocation = evt.getInvocation();
         Method method = invocation.getMethod();
 
