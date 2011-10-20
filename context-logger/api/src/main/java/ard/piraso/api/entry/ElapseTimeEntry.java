@@ -1,8 +1,11 @@
 package ard.piraso.api.entry;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 /**
  * An entry with elapse time.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ElapseTimeEntry implements Entry {
 
     private long startTime;
@@ -56,5 +59,25 @@ public class ElapseTimeEntry implements Entry {
 
     public long getElapseTime() {
         return endTime - startTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ElapseTimeEntry that = (ElapseTimeEntry) o;
+
+        if (endTime != that.endTime) return false;
+        if (startTime != that.startTime) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (startTime ^ (startTime >>> 32));
+        result = 31 * result + (int) (endTime ^ (endTime >>> 32));
+        return result;
     }
 }

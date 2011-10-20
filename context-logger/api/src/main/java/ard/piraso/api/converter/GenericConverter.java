@@ -6,11 +6,11 @@ import java.lang.reflect.Method;
 /**
  * Generic entry converter.
  */
-public class GenericConverter implements ObjectConverter {
+public class GenericConverter<T> implements ObjectConverter {
 
-    private Class clazz;
+    private Class<T> clazz;
 
-    public GenericConverter(Class clazz) {
+    public GenericConverter(Class<T> clazz) {
         this.clazz = clazz;
     }
 

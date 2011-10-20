@@ -32,7 +32,7 @@ public class ResultSetProxyFactory extends AbstractSQLProxyFactory<ResultSet> {
 
     private static final IDGenerator GENERATOR = new IDGenerator();
 
-    private ResultSetParameterListener parameterListener;
+    private ResultSetParameterListener parameterCollector;
 
     /**
      * Stores the record temporarily in memory to be dispatched when
@@ -54,9 +54,9 @@ public class ResultSetProxyFactory extends AbstractSQLProxyFactory<ResultSet> {
             factory.addMethodListener(".*", new MethodCallLoggerListener<ResultSet>(id, preference));
         }
 
-        parameterListener = new ResultSetParameterListener();
+        parameterCollector = new ResultSetParameterListener();
 
-        factory.addMethodListener("get.*", parameterListener);
+        factory.addMethodListener("get.*", parameterCollector);
         factory.addMethodListener("close", new MessageLoggerListener<ResultSet>(id, "Fetch Elapse Time", elapseTime));
         factory.addMethodListener("next|close", new NextCloseListener());
     }
@@ -71,15 +71,15 @@ public class ResultSetProxyFactory extends AbstractSQLProxyFactory<ResultSet> {
                 totalRowCount++;
             }
 
-            if(CollectionUtils.isNotEmpty(parameterListener.getParameters())) {
-                recordQueue.add(new ArrayList<SQLParameterEntry>(parameterListener.getParameters()));
-                parameterListener.clear();
+            if(CollectionUtils.isNotEmpty(parameterCollector.getParameters())) {
+                recordQueue.add(new ArrayList<SQLParameterEntry>(parameterCollector.getParameters()));
+                parameterCollector.clear();
             }
 
-            if(!parameterListener.isDisabled() && (recordQueue.size() >= getPref().getMaxDataSize()
+            if(!parameterCollector.isDisabled() && (recordQueue.size() >= getPref().getMaxDataSize()
                     || recordQueue.size() >= MAX_RETURN_RESULT)) {
                 if(totalRowCount >= getPref().getMaxDataSize()) {
-                    parameterListener.disable();
+                    parameterCollector.disable();
                 }
 
                 if(CollectionUtils.isNotEmpty(recordQueue)) {
@@ -88,7 +88,7 @@ public class ResultSetProxyFactory extends AbstractSQLProxyFactory<ResultSet> {
                 }
             }
 
-            if(!parameterListener.isDisabled() && method.getName().equals("close") && CollectionUtils.isNotEmpty(recordQueue)) {
+            if(!parameterCollector.isDisabled() && method.getName().equals("close") && CollectionUtils.isNotEmpty(recordQueue)) {
                 LogEntryDispatcher.forward(id, new SQLDataViewEntry(resultSetId, recordQueue));
                 recordQueue.clear();
             }

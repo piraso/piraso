@@ -55,10 +55,32 @@ public class Preferences {
     }
 
     public Integer getIntValue(String property) {
-        if(MapUtils.isEmpty(integerProperties) || integerProperties.containsKey(property)) {
+        if(MapUtils.isEmpty(integerProperties) || !integerProperties.containsKey(property)) {
             return null;
         }
 
         return integerProperties.get(property).getValue();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Preferences that = (Preferences) o;
+
+        if (booleanProperties != null ? !booleanProperties.equals(that.booleanProperties) : that.booleanProperties != null)
+            return false;
+        if (integerProperties != null ? !integerProperties.equals(that.integerProperties) : that.integerProperties != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = booleanProperties != null ? booleanProperties.hashCode() : 0;
+        result = 31 * result + (integerProperties != null ? integerProperties.hashCode() : 0);
+        return result;
     }
 }

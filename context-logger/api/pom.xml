@@ -14,6 +14,10 @@
     <packaging>jar</packaging>
     <name>context-logger-api</name>
 
+    <build>
+        <testSourceDirectory>src/main/test</testSourceDirectory>
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>org.codehaus.jackson</groupId>

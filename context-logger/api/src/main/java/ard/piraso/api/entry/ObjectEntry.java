@@ -67,4 +67,26 @@ public class ObjectEntry implements Entry {
     public void setSupported(boolean supported) {
         this.supported = supported;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ObjectEntry that = (ObjectEntry) o;
+
+        if (supported != that.supported) return false;
+        if (className != null ? !className.equals(that.className) : that.className != null) return false;
+        if (strValue != null ? !strValue.equals(that.strValue) : that.strValue != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = strValue != null ? strValue.hashCode() : 0;
+        result = 31 * result + (className != null ? className.hashCode() : 0);
+        result = 31 * result + (supported ? 1 : 0);
+        return result;
+    }
 }

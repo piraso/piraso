@@ -2,6 +2,8 @@ package ard.piraso.api.entry;
 
 import org.apache.commons.lang.ArrayUtils;
 
+import java.util.Arrays;
+
 /**
  * Defines an exception entry.
  */
@@ -53,5 +55,27 @@ public class ThrowableEntry implements Entry {
 
     public void setCause(ThrowableEntry cause) {
         this.cause = cause;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ThrowableEntry that = (ThrowableEntry) o;
+
+        if (cause != null ? !cause.equals(that.cause) : that.cause != null) return false;
+        if (message != null ? !message.equals(that.message) : that.message != null) return false;
+        if (!Arrays.equals(stackTrace, that.stackTrace)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = message != null ? message.hashCode() : 0;
+        result = 31 * result + (cause != null ? cause.hashCode() : 0);
+        result = 31 * result + (stackTrace != null ? Arrays.hashCode(stackTrace) : 0);
+        return result;
     }
 }
