@@ -1,11 +1,7 @@
 package ard.piraso.server;
 
 /**
- * Created by IntelliJ IDEA.
- * User: adleon
- * Date: 10/19/11
- * Time: 9:37 PM
- * To change this template use File | Settings | File Templates.
+ * The current thread context preferences.
  */
 public interface ContextPreference {
 

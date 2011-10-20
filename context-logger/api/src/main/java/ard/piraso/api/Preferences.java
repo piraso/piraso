@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * User preferences.
+ * Monitor preferences.
  */
 public class Preferences {
 

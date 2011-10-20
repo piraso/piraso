@@ -2,7 +2,7 @@ package ard.piraso.server.logger;
 
 import ard.piraso.api.entry.ElapseTimeEntry;
 import ard.piraso.api.entry.MessageEntry;
-import ard.piraso.server.LogEntryDispatcher;
+import ard.piraso.server.dispatcher.LogEntryDispatcher;
 import ard.piraso.server.proxy.RegexMethodInterceptorEvent;
 import ard.piraso.server.proxy.RegexMethodInterceptorListener;
 

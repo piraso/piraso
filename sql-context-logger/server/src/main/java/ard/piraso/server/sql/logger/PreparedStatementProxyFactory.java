@@ -2,7 +2,7 @@ package ard.piraso.server.sql.logger;
 
 import ard.piraso.api.entry.ElapseTimeEntry;
 import ard.piraso.api.sql.SQLViewEntry;
-import ard.piraso.server.LogEntryDispatcher;
+import ard.piraso.server.dispatcher.LogEntryDispatcher;
 import ard.piraso.server.logger.MessageLoggerListener;
 import ard.piraso.server.logger.MethodCallLoggerListener;
 import ard.piraso.server.logger.TraceableID;

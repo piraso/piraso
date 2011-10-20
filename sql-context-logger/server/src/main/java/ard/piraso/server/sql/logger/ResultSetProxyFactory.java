@@ -4,7 +4,7 @@ import ard.piraso.api.entry.ElapseTimeEntry;
 import ard.piraso.api.sql.SQLDataTotalRowsEntry;
 import ard.piraso.api.sql.SQLDataViewEntry;
 import ard.piraso.api.sql.SQLParameterEntry;
-import ard.piraso.server.LogEntryDispatcher;
+import ard.piraso.server.dispatcher.LogEntryDispatcher;
 import ard.piraso.server.logger.MessageLoggerListener;
 import ard.piraso.server.logger.MethodCallLoggerListener;
 import ard.piraso.server.logger.TraceableID;
@@ -24,17 +24,25 @@ import java.util.List;
  */
 public class ResultSetProxyFactory extends AbstractSQLProxyFactory<ResultSet> {
 
+    /**
+     * Maximum number of record queue size before we start dispatching to monitors.
+     * This will ensure that we do not cause {@link OutOfMemoryError}.
+     */
     private static final int MAX_RETURN_RESULT = 100;
 
     private static final IDGenerator GENERATOR = new IDGenerator();
 
-    protected ResultSetParameterListener parameterListener;
+    private ResultSetParameterListener parameterListener;
 
-    protected List<List<SQLParameterEntry>> records = new ArrayList<List<SQLParameterEntry>>(MAX_RETURN_RESULT);
+    /**
+     * Stores the record temporarily in memory to be dispatched when
+     * the set return size is reached.
+     */
+    private List<List<SQLParameterEntry>> recordQueue = new ArrayList<List<SQLParameterEntry>>(MAX_RETURN_RESULT);
 
-    protected long resultSetId = GENERATOR.next();
+    private long resultSetId = GENERATOR.next();
 
-    protected int totalRowCount = 0;
+    private int totalRowCount = 0;
 
     public ResultSetProxyFactory(TraceableID id) {
         super(id, new RegexProxyFactory<ResultSet>(ResultSet.class));
@@ -64,25 +72,25 @@ public class ResultSetProxyFactory extends AbstractSQLProxyFactory<ResultSet> {
             }
 
             if(CollectionUtils.isNotEmpty(parameterListener.getParameters())) {
-                records.add(new ArrayList<SQLParameterEntry>(parameterListener.getParameters()));
+                recordQueue.add(new ArrayList<SQLParameterEntry>(parameterListener.getParameters()));
                 parameterListener.clear();
             }
 
-            if(!parameterListener.isDisabled() && (records.size() >= getPref().getMaxDataSize()
-                    || records.size() >= MAX_RETURN_RESULT)) {
+            if(!parameterListener.isDisabled() && (recordQueue.size() >= getPref().getMaxDataSize()
+                    || recordQueue.size() >= MAX_RETURN_RESULT)) {
                 if(totalRowCount >= getPref().getMaxDataSize()) {
                     parameterListener.disable();
                 }
 
-                if(CollectionUtils.isNotEmpty(records)) {
-                    LogEntryDispatcher.forward(id, new SQLDataViewEntry(resultSetId, records));
-                    records.clear();
+                if(CollectionUtils.isNotEmpty(recordQueue)) {
+                    LogEntryDispatcher.forward(id, new SQLDataViewEntry(resultSetId, recordQueue));
+                    recordQueue.clear();
                 }
             }
 
-            if(!parameterListener.isDisabled() && method.getName().equals("close") && CollectionUtils.isNotEmpty(records)) {
-                LogEntryDispatcher.forward(id, new SQLDataViewEntry(resultSetId, records));
-                records.clear();
+            if(!parameterListener.isDisabled() && method.getName().equals("close") && CollectionUtils.isNotEmpty(recordQueue)) {
+                LogEntryDispatcher.forward(id, new SQLDataViewEntry(resultSetId, recordQueue));
+                recordQueue.clear();
             }
 
             if(method.getName().equals("close")) {
