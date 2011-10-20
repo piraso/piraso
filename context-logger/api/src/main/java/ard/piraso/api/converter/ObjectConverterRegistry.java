@@ -13,12 +13,12 @@ public class ObjectConverterRegistry {
 
     // base converter
     static {
-        register(String.class, new GenericConverter(String.class));
-        register(Integer.class, new GenericConverter(Integer.class));
-        register(Short.class, new GenericConverter(Short.class));
-        register(Byte.class, new GenericConverter(Byte.class));
-        register(Double.class, new GenericConverter(Double.class));
-        register(Float.class, new GenericConverter(Float.class));
+        register(String.class, new GenericConverter<String>(String.class));
+        register(Integer.class, new GenericConverter<Integer>(Integer.class));
+        register(Short.class, new GenericConverter<Short>(Short.class));
+        register(Byte.class, new GenericConverter<Byte>(Byte.class));
+        register(Double.class, new GenericConverter<Double>(Double.class));
+        register(Float.class, new GenericConverter<Float>(Float.class));
         register(Class.class, new ClassEntryConverter());
     }
 
