@@ -1,10 +1,12 @@
 package ard.piraso.api.entry;
 
 import ard.piraso.api.converter.ObjectConverterRegistry;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 /**
  * Object entry type
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ObjectEntry implements Entry {
 
     public static Object toObject(ObjectEntry entry) {
