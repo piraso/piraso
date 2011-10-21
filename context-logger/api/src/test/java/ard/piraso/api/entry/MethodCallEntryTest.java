@@ -23,7 +23,7 @@ public class MethodCallEntryTest extends AbstractJacksonTest {
 
         ElapseTimeEntry expectedElapseTime = new ElapseTimeEntry(System.currentTimeMillis(), System.currentTimeMillis() + 3000l);
         MethodCallEntry expectedMethodCall = new MethodCallEntry(method, expectedElapseTime);
-        expectedMethodCall.setArguments(new ObjectEntry[] {new ObjectEntry("13")});
+        expectedMethodCall.setArguments(EntryUtils.toEntry(arguments));
         expectedMethodCall.setReturnedValue(new ObjectEntry(method.invoke(Integer.class, arguments)));
 
         String jsonValue = mapper.writeValueAsString(expectedMethodCall);
@@ -49,16 +49,7 @@ public class MethodCallEntryTest extends AbstractJacksonTest {
         MethodCallEntry expectedMethodCall = new MethodCallEntry(method, expectedElapseTime);
         expectedMethodCall.setArguments(new ObjectEntry[] {new ObjectEntry("13")});
         expectedMethodCall.setReturnedValue(new ObjectEntry(method.invoke(Integer.class, arguments)));
-
-        // stack trace
-        StackTraceElement[] elements = Thread.currentThread().getStackTrace();
-        StackTraceElementEntry[] stackTrace = new StackTraceElementEntry[elements.length];
-
-        for(int i = 0; i < elements.length; i++) {
-            stackTrace[i] = new StackTraceElementEntry(elements[i]);
-        }
-
-        expectedMethodCall.setStackTrace(stackTrace);
+        expectedMethodCall.setStackTrace(EntryUtils.toEntry(Thread.currentThread().getStackTrace()));
 
         String jsonValue = mapper.writeValueAsString(expectedMethodCall);
         MethodCallEntry actualMethodCall = mapper.readValue(jsonValue, MethodCallEntry.class);

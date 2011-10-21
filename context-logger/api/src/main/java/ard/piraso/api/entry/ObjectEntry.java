@@ -9,18 +9,6 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ObjectEntry implements Entry {
 
-    public static Object toObject(ObjectEntry entry) {
-        if(entry == null || entry.isNull()) {
-            return null;
-        }
-
-        if(!entry.isSupported()) {
-            throw new IllegalStateException(String.format("Unsupported with class %s", entry.getClassName()));
-        }
-
-        return ObjectConverterRegistry.convertToObject(entry.getClassName(), entry.getStrValue());
-    }
-
     private String strValue;
 
     private String className;
@@ -30,15 +18,13 @@ public class ObjectEntry implements Entry {
     public ObjectEntry() {}
 
     public ObjectEntry(Object obj) {
-        if(obj == null) {
-            return;
-        }
+        if(obj != null) {
+            supported = ObjectConverterRegistry.isSupported(obj);
+            className = obj.getClass().getName();
 
-        supported = ObjectConverterRegistry.isSupported(obj);
-        className = obj.getClass().getName();
-
-        if(supported) {
-            strValue = ObjectConverterRegistry.convertToString(obj);
+            if(supported) {
+                strValue = ObjectConverterRegistry.convertToString(obj);
+            }
         }
     }
 
@@ -68,6 +54,15 @@ public class ObjectEntry implements Entry {
 
     public void setSupported(boolean supported) {
         this.supported = supported;
+    }
+
+    /**
+     * Converts this entry to actual object instance represented.
+     *
+     * @return the actual object represented
+     */
+    public Object toObject() {
+        return ObjectEntryUtils.toObject(this);
     }
 
     @Override

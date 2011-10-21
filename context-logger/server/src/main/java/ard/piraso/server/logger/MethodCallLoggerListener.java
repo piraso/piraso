@@ -5,7 +5,6 @@ import ard.piraso.server.GeneralPreferenceEvaluator;
 import ard.piraso.server.dispatcher.LogEntryDispatcher;
 import ard.piraso.server.proxy.RegexMethodInterceptorEvent;
 import ard.piraso.server.proxy.RegexMethodInterceptorListener;
-import org.apache.commons.lang.ArrayUtils;
 
 /**
  * Method call logger listener.
@@ -29,27 +28,11 @@ public class MethodCallLoggerListener<T> implements RegexMethodInterceptorListen
         entry = new MethodCallEntry(evt.getInvocation().getMethod(), elapseTime);
 
         Object[] arguments = evt.getInvocation().getArguments();
-
-        if(ArrayUtils.isNotEmpty(arguments)) {
-            ObjectEntry[] argumentEntries = new ObjectEntry[arguments.length];
-
-            for(int i = 0; i < arguments.length; i++) {
-                argumentEntries[i] = new ObjectEntry(arguments[i]);
-            }
-
-            entry.setArguments(argumentEntries);
-        }
+        entry.setArguments(EntryUtils.toEntry(arguments));
 
         // method stack trace only if debug is enabled
         if(preference.isStackTraceEnabled()) {
-            StackTraceElement[] elements = Thread.currentThread().getStackTrace();
-            StackTraceElementEntry[] stackTrace = new StackTraceElementEntry[elements.length];
-
-            for(int i = 0; i < elements.length; i++) {
-                stackTrace[i] = new StackTraceElementEntry(elements[i]);
-            }
-
-            entry.setStackTrace(stackTrace);
+            entry.setStackTrace(EntryUtils.toEntry(Thread.currentThread().getStackTrace()));
         }
 
         elapseTime.start();

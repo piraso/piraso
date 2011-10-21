@@ -1,8 +1,8 @@
 package ard.piraso.api.sql;
 
+import ard.piraso.api.entry.EntryUtils;
 import ard.piraso.api.entry.MethodCallEntry;
 import ard.piraso.api.entry.ObjectEntry;
-import org.apache.commons.lang.ArrayUtils;
 
 import java.lang.reflect.Method;
 
@@ -23,7 +23,7 @@ public class SQLParameterEntry extends MethodCallEntry {
     public SQLParameterEntry(String name, Method method, Object[] arguments, Object returnValue) {
         super(method);
         this.name = name;
-        initArguments(arguments);
+        setArguments(EntryUtils.toEntry(arguments));
         setReturnedValue(new ObjectEntry(returnValue));
     }
 
@@ -34,20 +34,8 @@ public class SQLParameterEntry extends MethodCallEntry {
     public SQLParameterEntry(Integer index, Method method, Object[] arguments, Object returnValue) {
         super(method);
         this.index = index;
-        initArguments(arguments);
+        setArguments(EntryUtils.toEntry(arguments));
         setReturnedValue(new ObjectEntry(returnValue));
-    }
-
-    private void initArguments(Object[] arguments) {
-        if(ArrayUtils.isNotEmpty(arguments)) {
-            ObjectEntry[] argumentEntries = new ObjectEntry[arguments.length];
-
-            for(int i = 0; i < arguments.length; i++) {
-                argumentEntries[i] = new ObjectEntry(arguments[i]);
-            }
-
-            setArguments(argumentEntries);
-        }
     }
 
     public String getName() {
@@ -64,5 +52,27 @@ public class SQLParameterEntry extends MethodCallEntry {
 
     public void setIndex(Integer index) {
         this.index = index;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SQLParameterEntry)) return false;
+        if (!super.equals(o)) return false;
+
+        SQLParameterEntry that = (SQLParameterEntry) o;
+
+        if (index != null ? !index.equals(that.index) : that.index != null) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (index != null ? index.hashCode() : 0);
+        return result;
     }
 }
