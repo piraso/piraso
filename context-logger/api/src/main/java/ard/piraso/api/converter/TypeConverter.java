@@ -1,7 +1,7 @@
 package ard.piraso.api.converter;
 
+import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
 
 import java.io.IOException;
 
@@ -12,12 +12,16 @@ import java.io.IOException;
  */
 public class TypeConverter<T> implements ObjectConverter {
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper;
 
     private Class<T> clazz;
 
     public TypeConverter(Class<T> clazz) {
         this.clazz = clazz;
+
+        mapper = new ObjectMapper();
+        mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mapper.configure(DeserializationConfig.Feature.FAIL_ON_NULL_FOR_PRIMITIVES, false);
     }
 
     /**
@@ -35,7 +39,7 @@ public class TypeConverter<T> implements ObjectConverter {
         }
 
         try {
-            return mapper.writeValueAsString(new TypeHolder<T>((T) obj));
+            return mapper.writeValueAsString(obj);
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
@@ -50,29 +54,9 @@ public class TypeConverter<T> implements ObjectConverter {
         }
 
         try {
-            TypeHolder<T> holder = mapper.readValue(str, new TypeReference<TypeHolder<T>>() {});
-
-            return holder.value;
+            return mapper.readValue(str, clazz);
         } catch (IOException e) {
             throw new IllegalStateException(e);
-        }
-    }
-
-    public static class TypeHolder<T> {
-        protected T value;
-
-        public TypeHolder() {}
-
-        public TypeHolder(T value) {
-            this.value = value;
-        }
-
-        public T getValue() {
-            return value;
-        }
-
-        public void setValue(T value) {
-            this.value = value;
         }
     }
 }

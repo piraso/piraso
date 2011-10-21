@@ -21,7 +21,7 @@ public class ObjectConverterRegistry {
         register(Byte.class, new TypeConverter<Byte>(Byte.class));
         register(Double.class, new TypeConverter<Double>(Double.class));
         register(Float.class, new TypeConverter<Float>(Float.class));
-        register(Class.class, new ClassTypeConverter());
+        register(Class.class, new TypeConverter<Class>(Class.class));
     }
 
     public static void register(Class clazz, ObjectConverter converter) {

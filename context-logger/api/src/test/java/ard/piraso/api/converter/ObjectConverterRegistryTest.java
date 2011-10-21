@@ -16,8 +16,8 @@ public class ObjectConverterRegistryTest {
         assertTrue(ObjectConverterRegistry.isSupported("test"));
         assertTrue(ObjectConverterRegistry.isSupported('a'));
         assertTrue(ObjectConverterRegistry.isSupported(1));
-        assertTrue(ObjectConverterRegistry.isSupported(Byte.valueOf((byte) 1)));
-        assertTrue(ObjectConverterRegistry.isSupported(Short.valueOf((short) 1)));
+        assertTrue(ObjectConverterRegistry.isSupported(Byte.valueOf("1")));
+        assertTrue(ObjectConverterRegistry.isSupported(Short.valueOf("1")));
         assertTrue(ObjectConverterRegistry.isSupported(1.0f));
         assertTrue(ObjectConverterRegistry.isSupported(1.0));
         assertTrue(ObjectConverterRegistry.isSupported(Integer.class));
@@ -26,7 +26,7 @@ public class ObjectConverterRegistryTest {
         assertFalse(ObjectConverterRegistry.isSupported(new Object()));
         assertFalse(ObjectConverterRegistry.isSupported(new SampleBean("test")));
 
-        ObjectConverterRegistry.register(SampleBean.class, new BeanConverter<SampleBean>(SampleBean.class));
+        ObjectConverterRegistry.register(SampleBean.class, new TypeConverter<SampleBean>(SampleBean.class));
 
         assertTrue(ObjectConverterRegistry.isSupported(new SampleBean("test")));
     }
@@ -62,7 +62,7 @@ public class ObjectConverterRegistryTest {
 
     @Test
     public void testBeanConversion() throws Exception {
-        ObjectConverterRegistry.register(SampleBean.class, new BeanConverter<SampleBean>(SampleBean.class));
+        ObjectConverterRegistry.register(SampleBean.class, new TypeConverter<SampleBean>(SampleBean.class));
 
         SampleBean expected = new SampleBean("sample");
 
