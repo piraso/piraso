@@ -1,15 +1,23 @@
 package ard.piraso.api.converter;
 
 /**
- * Created by IntelliJ IDEA.
- * User: adleon
- * Date: 10/19/11
- * Time: 10:11 PM
- * To change this template use File | Settings | File Templates.
+ * Defines an interface for converting objects to string and vise versa.
  */
 public interface ObjectConverter {
 
+    /**
+     * Converts the given object to string representation.
+     *
+     * @param obj the object to convert
+     * @return the string representation of the object
+     */
     String convertToString(Object obj);
 
+    /**
+     * Converts the given string back to the object instance.
+     *
+     * @param str the string to convert
+     * @return the object instance converted
+     */
     Object convertToObject(String str);
 }
