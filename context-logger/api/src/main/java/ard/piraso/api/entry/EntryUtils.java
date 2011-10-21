@@ -5,6 +5,8 @@ package ard.piraso.api.entry;
  */
 public final class EntryUtils {
 
+    private EntryUtils() {}
+
     public static ObjectEntry[] toEntry(Object[] objs) {
         if(objs == null) {
             return null;

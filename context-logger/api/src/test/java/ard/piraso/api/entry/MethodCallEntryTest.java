@@ -7,6 +7,8 @@ import org.junit.Test;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -22,7 +24,8 @@ public class MethodCallEntryTest extends AbstractJacksonTest {
         Object[] arguments = new Object[] {"13"};
 
         ElapseTimeEntry expectedElapseTime = new ElapseTimeEntry(System.currentTimeMillis(), System.currentTimeMillis() + 3000l);
-        MethodCallEntry expectedMethodCall = new MethodCallEntry(method, expectedElapseTime);
+        MethodCallEntry expectedMethodCall = new MethodCallEntry(method);
+        expectedMethodCall.setElapseTime(expectedElapseTime);
         expectedMethodCall.setArguments(EntryUtils.toEntry(arguments));
         expectedMethodCall.setReturnedValue(new ObjectEntry(method.invoke(Integer.class, arguments)));
 
@@ -92,6 +95,30 @@ public class MethodCallEntryTest extends AbstractJacksonTest {
         assertThat("null return value", actualMethodCall.getReturnedValue(), CoreMatchers.<Object>nullValue());
         assertThat("null stack trace", actualMethodCall.getStackTrace(), CoreMatchers.<Object>nullValue());
         assertThat("same entry", actualMethodCall, is(expectedMethodCall));
+    }
+
+    @Test
+    public void testHashCode() throws NoSuchMethodException {
+        Method method = ClassWithException.class.getMethod("methodWrapRethrown", new Class[0]);
+        Method method2 = Integer.class.getMethod("valueOf", new Class[] {String.class});
+
+
+        MethodCallEntry e1 = new MethodCallEntry(method);
+        MethodCallEntry e2 = new MethodCallEntry(method2) {{
+            setElapseTime(new ElapseTimeEntry());
+        }};
+
+        MethodCallEntry e3 = new MethodCallEntry(method);
+        MethodCallEntry e4 = new MethodCallEntry();
+
+        Set<MethodCallEntry> set = new HashSet<MethodCallEntry>();
+        set.add(e1);
+        set.add(e2);
+        set.add(e3);
+        set.add(e4);
+
+        // should only be 2 since e3 and e1 is same
+        assertThat(set.size(), is(3));
     }
 
     private static class ClassWithException {

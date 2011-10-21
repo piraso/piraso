@@ -2,6 +2,10 @@ package ard.piraso.api.entry;
 
 import org.junit.Test;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
+
 import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
 
@@ -9,6 +13,23 @@ import static junit.framework.Assert.assertTrue;
  * Test for {@link EntryUtils} class.
  */
 public class EntryUtilsTest {
+
+    @Test(expected = IllegalAccessException.class)
+    public void testPrivateConstructor() throws NoSuchMethodException, IllegalAccessException, InstantiationException {
+        EntryUtils.class.newInstance();
+    }
+
+    @Test
+    public void testPrivateConstructorWithAccessibility() throws NoSuchMethodException, IllegalAccessException, InstantiationException, InvocationTargetException {
+        Constructor constructor = EntryUtils.class.getDeclaredConstructors()[0];
+
+        assertTrue(Modifier.isPrivate(constructor.getModifiers()));
+
+        // force invoking private constructor
+        constructor.setAccessible(true);
+        constructor.newInstance();
+    }
+
     @Test
     public void testToEntryNullEntries() throws Exception {
         Object[] obj = null;

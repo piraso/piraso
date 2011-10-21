@@ -8,6 +8,8 @@ import ard.piraso.api.converter.ObjectConverterRegistry;
  */
 public final class ObjectEntryUtils {
 
+    private ObjectEntryUtils() {}
+
     public static Object toObject(ObjectEntry entry) {
         if(entry == null || entry.isNull()) {
             return null;

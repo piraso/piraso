@@ -126,10 +126,8 @@ public class MethodCallEntry implements Entry, ElapseTimeAware {
         if (elapseTime != null ? !elapseTime.equals(that.elapseTime) : that.elapseTime != null) return false;
         if (methodName != null ? !methodName.equals(that.methodName) : that.methodName != null) return false;
         if (!Arrays.equals(parameterClassNames, that.parameterClassNames)) return false;
-        if (returnClassName != null ? !returnClassName.equals(that.returnClassName) : that.returnClassName != null)
-            return false;
-        if (returnedValue != null ? !returnedValue.equals(that.returnedValue) : that.returnedValue != null)
-            return false;
+        if (returnClassName != null ? !returnClassName.equals(that.returnClassName) : that.returnClassName != null) return false;
+        if (returnedValue != null ? !returnedValue.equals(that.returnedValue) : that.returnedValue != null) return false;
         if (!Arrays.equals(stackTrace, that.stackTrace)) return false;
         if (thrown != null ? !thrown.equals(that.thrown) : that.thrown != null) return false;
 
