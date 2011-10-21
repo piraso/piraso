@@ -6,7 +6,9 @@ import org.codehaus.jackson.map.ObjectMapper;
 import java.io.IOException;
 
 /**
- * Generic type converter.
+ * Generic type converter. This can also be used for bean type classes.
+ * <p>
+ * For beans ensure to register only those that do not have any bi-directional relationship for associations.
  */
 public class TypeConverter<T> implements ObjectConverter {
 
