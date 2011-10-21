@@ -33,14 +33,18 @@ public class ObjectConverterRegistry {
     }
 
     public static String convertToString(Object obj) {
-        return REGISTRY.toString(obj);
+        try {
+            return REGISTRY.toString(obj);
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     public static Object convertToObject(String className, String strValue) {
         try {
             return REGISTRY.toObject(className, strValue);
-        } catch (ClassNotFoundException e) {
-            throw new UnsupportedOperationException(e);
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
         }
     }
 
@@ -58,7 +62,7 @@ public class ObjectConverterRegistry {
         return converters.containsKey(obj.getClass());
     }
 
-    private String toString(Object obj) {
+    private String toString(Object obj) throws Exception {
         if(!isClassSupported(obj)) {
             throw new IllegalArgumentException(String.format("obj '%s' not supported", String.valueOf(obj)));
         }
@@ -67,7 +71,7 @@ public class ObjectConverterRegistry {
         return converter.convertToString(obj);
     }
 
-    private Object toObject(String className, String strValue) throws ClassNotFoundException {
+    private Object toObject(String className, String strValue) throws Exception {
         Class clazz = Class.forName(className);
 
         if(!converters.containsKey(clazz)) {

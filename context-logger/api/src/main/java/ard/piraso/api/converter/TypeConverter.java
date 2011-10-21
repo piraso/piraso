@@ -28,35 +28,27 @@ public class TypeConverter<T> implements ObjectConverter {
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
-    public String convertToString(Object obj) {
+    public String convertToString(Object obj) throws IOException {
         if(obj == null) {
             return null;
         }
 
         if(!clazz.isInstance(obj)) {
-            throw new IllegalStateException(String.format("obj argument is not of type '%s' was '%s'.",
+            throw new IllegalArgumentException(String.format("obj argument is not of type '%s' was '%s'.",
                     clazz.getName(), obj.getClass().getName()));
         }
 
-        try {
-            return mapper.writeValueAsString(obj);
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }
+        return mapper.writeValueAsString(obj);
     }
 
     /**
      * {@inheritDoc}
      */
-    public Object convertToObject(String str) {
+    public Object convertToObject(String str) throws IOException {
         if(str == null) {
             return null;
         }
 
-        try {
-            return mapper.readValue(str, clazz);
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }
+        return mapper.readValue(str, clazz);
     }
 }

@@ -3,7 +3,7 @@ package ard.piraso.api.entry;
 /**
  * Contains helper method for processing entries.
  */
-public class EntryUtils {
+public final class EntryUtils {
 
     public static ObjectEntry[] toEntry(Object[] objs) {
         if(objs == null) {

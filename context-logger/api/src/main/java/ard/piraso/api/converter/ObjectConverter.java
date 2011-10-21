@@ -10,14 +10,16 @@ public interface ObjectConverter {
      *
      * @param obj the object to convert
      * @return the string representation of the object
+     * @throws Exception on error
      */
-    String convertToString(Object obj);
+    String convertToString(Object obj) throws Exception;
 
     /**
      * Converts the given string back to the object instance.
      *
      * @param str the string to convert
      * @return the object instance converted
+     * @throws Exception on error
      */
-    Object convertToObject(String str);
+    Object convertToObject(String str) throws Exception;
 }

@@ -6,8 +6,7 @@ import ard.piraso.api.converter.ObjectConverterRegistry;
  * Contains helper method for {@link ObjectEntry} class.
  *
  */
-public class ObjectEntryUtils {
-
+public final class ObjectEntryUtils {
 
     public static Object toObject(ObjectEntry entry) {
         if(entry == null || entry.isNull()) {
