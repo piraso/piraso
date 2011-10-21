@@ -7,8 +7,6 @@ import java.io.IOException;
 
 /**
  * Generic type converter.
- * <p>
- * This is used to convert primitive wrapper types.
  */
 public class TypeConverter<T> implements ObjectConverter {
 
