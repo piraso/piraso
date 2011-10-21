@@ -19,6 +19,18 @@
         </developer>
     </developers>
 
+    <distributionManagement>
+        <repository>
+            <id>repo</id>
+            <url>https://raw.github.com/alvinrdeleon/piraso-mvn-repo/master/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshot-repo</id>
+            <url>https://raw.github.com/alvinrdeleon/piraso-mvn-repo/master/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+
     <modules>
         <module>context-logger</module>
         <module>sql-context-logger</module>
