@@ -34,13 +34,33 @@ public class UserRegistry {
      * @return list of {@link Preferences}
      * @throws IOException on io error
      */
-    public List<Preferences> getRelevantPreferences(String monitoredAddr) throws IOException {
+    public List<Preferences> getContextPreferences(String monitoredAddr) throws IOException {
         List<Preferences> list = new LinkedList<Preferences>();
 
         List<ResponseLoggerService> tmp = new ArrayList<ResponseLoggerService>(userLoggerMap.values());
         for(ResponseLoggerService rl : tmp) {
             if(rl.isAlive() && rl.getMonitoredAddr().equals(monitoredAddr)) {
                 list.add(rl.getPreferences());
+            }
+        }
+
+        return list;
+    }
+
+    /**
+     * Retrieve all {@link ResponseLoggerService} given the monitored address.
+     *
+     * @param monitoredAddr the monitored address
+     * @return list of {@link ResponseLoggerService}
+     * @throws IOException on io error
+     */
+    public List<ResponseLoggerService> getContextLoggers(String monitoredAddr) throws IOException {
+        List<ResponseLoggerService> list = new LinkedList<ResponseLoggerService>();
+
+        List<ResponseLoggerService> tmp = new ArrayList<ResponseLoggerService>(userLoggerMap.values());
+        for(ResponseLoggerService rl : tmp) {
+            if(rl.isAlive() && rl.getMonitoredAddr().equals(monitoredAddr)) {
+                list.add(rl);
             }
         }
 

@@ -5,7 +5,6 @@ package ard.piraso.server;
  */
 public class RequestContextPreference implements ContextPreference {
 
-
     public boolean isMonitored() {
         return false;
     }

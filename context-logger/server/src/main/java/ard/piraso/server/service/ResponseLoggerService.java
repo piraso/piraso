@@ -7,27 +7,25 @@ import ard.piraso.server.logger.TraceableID;
 import java.io.IOException;
 
 /**
- * Represents a user service.
+ * Defines an interface for a response logger service.
  */
 public interface ResponseLoggerService {
 
     public User getUser();
 
-    public String getActivityUuid();
+    public long getId();
 
     public String getMonitoredAddr();
 
-    public void start() throws IOException;
+    public void start() throws Exception;
 
     public void stop() throws IOException;
 
     public boolean isAlive() throws IOException;
 
-    public boolean isStopped();
-    
-    public void waitTillStopped(long timeout);
+    public void stopAndWait(long timeout) throws InterruptedException;
 
     public Preferences getPreferences();
 
-    public void log(TraceableID id, Entry entry);
+    public void log(TraceableID id, Entry entry) throws IOException;
 }
