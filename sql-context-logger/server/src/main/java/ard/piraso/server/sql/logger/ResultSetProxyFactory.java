@@ -1,17 +1,17 @@
 package ard.piraso.server.sql.logger;
 
+import ard.piraso.api.IDGenerator;
 import ard.piraso.api.entry.ElapseTimeEntry;
 import ard.piraso.api.sql.SQLDataTotalRowsEntry;
 import ard.piraso.api.sql.SQLDataViewEntry;
 import ard.piraso.api.sql.SQLParameterEntry;
-import ard.piraso.server.dispatcher.LogEntryDispatcher;
+import ard.piraso.server.dispatcher.ContextLogDispatcher;
 import ard.piraso.server.logger.MessageLoggerListener;
 import ard.piraso.server.logger.MethodCallLoggerListener;
 import ard.piraso.server.logger.TraceableID;
 import ard.piraso.server.proxy.RegexMethodInterceptorAdapter;
 import ard.piraso.server.proxy.RegexMethodInterceptorEvent;
 import ard.piraso.server.proxy.RegexProxyFactory;
-import ard.piraso.server.sql.IDGenerator;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.lang.reflect.Method;
@@ -83,18 +83,18 @@ public class ResultSetProxyFactory extends AbstractSQLProxyFactory<ResultSet> {
                 }
 
                 if(CollectionUtils.isNotEmpty(recordQueue)) {
-                    LogEntryDispatcher.forward(id, new SQLDataViewEntry(resultSetId, recordQueue));
+                    ContextLogDispatcher.forward(id, new SQLDataViewEntry(resultSetId, recordQueue));
                     recordQueue.clear();
                 }
             }
 
             if(!parameterCollector.isDisabled() && method.getName().equals("close") && CollectionUtils.isNotEmpty(recordQueue)) {
-                LogEntryDispatcher.forward(id, new SQLDataViewEntry(resultSetId, recordQueue));
+                ContextLogDispatcher.forward(id, new SQLDataViewEntry(resultSetId, recordQueue));
                 recordQueue.clear();
             }
 
             if(method.getName().equals("close")) {
-                LogEntryDispatcher.forward(id, new SQLDataTotalRowsEntry(totalRowCount));
+                ContextLogDispatcher.forward(id, new SQLDataTotalRowsEntry(totalRowCount));
             }
         }
     }

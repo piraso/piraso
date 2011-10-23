@@ -2,7 +2,7 @@ package ard.piraso.server.logger;
 
 import ard.piraso.api.entry.*;
 import ard.piraso.server.GeneralPreferenceEvaluator;
-import ard.piraso.server.dispatcher.LogEntryDispatcher;
+import ard.piraso.server.dispatcher.ContextLogDispatcher;
 import ard.piraso.server.proxy.RegexMethodInterceptorEvent;
 import ard.piraso.server.proxy.RegexMethodInterceptorListener;
 
@@ -44,7 +44,7 @@ public class MethodCallLoggerListener<T> implements RegexMethodInterceptorListen
         elapseTime.stop();
         entry.setReturnedValue(new ObjectEntry(evt.getReturnedValue()));
 
-        LogEntryDispatcher.forward(id, entry);
+        ContextLogDispatcher.forward(id, entry);
     }
 
     public void exceptionCall(RegexMethodInterceptorEvent<T> evt) {
@@ -53,6 +53,6 @@ public class MethodCallLoggerListener<T> implements RegexMethodInterceptorListen
         entry.setThrown(new ThrowableEntry(evt.getException()));
         elapseTime.stop();
 
-        LogEntryDispatcher.forward(id, entry);
+        ContextLogDispatcher.forward(id, entry);
     }
 }

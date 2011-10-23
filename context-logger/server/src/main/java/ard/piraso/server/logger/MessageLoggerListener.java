@@ -2,7 +2,7 @@ package ard.piraso.server.logger;
 
 import ard.piraso.api.entry.ElapseTimeEntry;
 import ard.piraso.api.entry.MessageEntry;
-import ard.piraso.server.dispatcher.LogEntryDispatcher;
+import ard.piraso.server.dispatcher.ContextLogDispatcher;
 import ard.piraso.server.proxy.RegexMethodInterceptorEvent;
 import ard.piraso.server.proxy.RegexMethodInterceptorListener;
 
@@ -43,7 +43,7 @@ public class MessageLoggerListener<T> implements RegexMethodInterceptorListener<
         assert entry != null;
 
         entry.getElapseTime().stop();
-        LogEntryDispatcher.forward(id, entry);
+        ContextLogDispatcher.forward(id, entry);
     }
 
     public void exceptionCall(RegexMethodInterceptorEvent<T> evt) {
@@ -52,6 +52,6 @@ public class MessageLoggerListener<T> implements RegexMethodInterceptorListener<
         entry.getElapseTime().stop();
         entry.setMessage(evt.getInvocation().getMethod().getName() + ":" + evt.getException().getClass().getName());
 
-        LogEntryDispatcher.forward(id, entry);
+        ContextLogDispatcher.forward(id, entry);
     }
 }

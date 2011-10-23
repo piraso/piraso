@@ -2,6 +2,8 @@ package ard.piraso.api.converter;
 
 import org.junit.Test;
 
+import java.sql.Timestamp;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.*;
@@ -53,6 +55,11 @@ public class ObjectConverterRegistryTest {
         String booleanConvertedValue = ObjectConverterRegistry.convertToString(expectedBoolean);
         Boolean actualBoolean = (Boolean) ObjectConverterRegistry.convertToObject(Boolean.class.getName(), booleanConvertedValue);
         assertThat(actualBoolean, is(expectedBoolean));
+
+        final Timestamp expectedTimestamp = new Timestamp(System.currentTimeMillis());
+        String timestampConvertedValue = ObjectConverterRegistry.convertToString(expectedTimestamp);
+        Timestamp actualTimestamp = (Timestamp) ObjectConverterRegistry.convertToObject(Timestamp.class.getName(), timestampConvertedValue);
+        assertThat(actualTimestamp, is(expectedTimestamp));
 
         final Class expectedClass = Integer.class;
         String classConvertedValue = ObjectConverterRegistry.convertToString(expectedClass);

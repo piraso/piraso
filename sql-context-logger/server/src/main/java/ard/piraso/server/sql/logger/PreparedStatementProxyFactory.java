@@ -2,7 +2,7 @@ package ard.piraso.server.sql.logger;
 
 import ard.piraso.api.entry.ElapseTimeEntry;
 import ard.piraso.api.sql.SQLViewEntry;
-import ard.piraso.server.dispatcher.LogEntryDispatcher;
+import ard.piraso.server.dispatcher.ContextLogDispatcher;
 import ard.piraso.server.logger.MessageLoggerListener;
 import ard.piraso.server.logger.MethodCallLoggerListener;
 import ard.piraso.server.logger.TraceableID;
@@ -63,7 +63,7 @@ public class PreparedStatementProxyFactory extends AbstractSQLProxyFactory<Prepa
             if(getPref().isViewSQLEnabled()) {
                 elapseTime.stop();
 
-                LogEntryDispatcher.forward(id, new SQLViewEntry(sql, parameterListener.getParameters(), elapseTime));
+                ContextLogDispatcher.forward(id, new SQLViewEntry(sql, parameterListener.getParameters(), elapseTime));
 
                 // to be reused
                 parameterListener.clear();

@@ -1,6 +1,9 @@
 package ard.piraso.api.converter;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -22,6 +25,11 @@ public class ObjectConverterRegistry {
         register(Double.class, new TypeConverter<Double>(Double.class));
         register(Float.class, new TypeConverter<Float>(Float.class));
         register(Class.class, new TypeConverter<Class>(Class.class));
+
+        register(Date.class, new TypeConverter<Date>(Date.class));
+        register(java.sql.Date.class, new TypeConverter<java.sql.Date>(java.sql.Date.class));
+        register(Time.class, new TypeConverter<Time>(Time.class));
+        register(Timestamp.class, new TypeConverter<Timestamp>(Timestamp.class));
     }
 
     public static void register(Class clazz, ObjectConverter converter) {

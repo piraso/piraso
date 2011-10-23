@@ -30,7 +30,6 @@
         </snapshotRepository>
     </distributionManagement>
 
-
     <modules>
         <module>context-logger</module>
         <module>sql-context-logger</module>

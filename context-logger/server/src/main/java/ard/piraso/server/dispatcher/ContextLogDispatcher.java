@@ -1,6 +1,7 @@
 package ard.piraso.server.dispatcher;
 
 import ard.piraso.api.entry.Entry;
+import ard.piraso.api.entry.MessageEntry;
 import ard.piraso.server.logger.TraceableID;
 
 import java.util.ArrayList;
@@ -10,10 +11,21 @@ import java.util.List;
 
 /**
  * Singleton class for dispatching log entries to monitors.
+ * <p>
+ * This supports forward dispatch listeners.
  */
-public class LogEntryDispatcher {
+public class ContextLogDispatcher {
 
-    private static final LogEntryDispatcher DISPATCHER = new LogEntryDispatcher();
+    private static final ContextLogDispatcher DISPATCHER = new ContextLogDispatcher();
+
+    /**
+     * Forward log {@link ard.piraso.api.entry.MessageEntry} for dispatch.
+     *
+     * @param message the message
+     */
+    public static void forward(String message) {
+        forward(new TraceableID(String.valueOf(System.currentTimeMillis())), new MessageEntry(message));
+    }
 
     /**
      * Forward log entry for dispatch. Delegates to {@link #forwardEntry(TraceableID, Entry)}.
@@ -30,7 +42,7 @@ public class LogEntryDispatcher {
     /**
      * Private constructor to not allow to instantiate this class.
      */
-    private LogEntryDispatcher() {}
+    private ContextLogDispatcher() {}
 
     /**
      * Forward log entry for dispatch.
