@@ -67,4 +67,11 @@ public class RequestContextPreferenceTest {
 
         verify(context, times(2)).getIntValue(anyString());
     }
+
+    @Test
+    public void testRequestInScope() throws Exception {
+        requestContext.requestOnScope();
+
+        verify(context, times(1)).requestOnScope();
+    }
 }

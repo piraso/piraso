@@ -124,7 +124,6 @@ public class ResponseLoggerServiceImplTest {
         future.get();
         executor.shutdown();
 
-
         if(fail.get()) {
             fail("failure see exception trace.");
         }

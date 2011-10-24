@@ -38,7 +38,7 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
     /**
      * Maximum of 30 minutes idle time, otherwise the service will auto stop.
      */
-    private static final long MAX_IDLE_TIME_KILL_SIZE = 30 * 60 * 1000;
+    private static final long MAX_IDLE_TIME_KILL_SIZE = 60 * 60 * 1000;
 
     /**
      * Service instance id generator.
@@ -231,12 +231,16 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
             try {
                 long timeout = 1800000l;
 
-                if(timeout > maxIdleTimeout) {
+                if(timeout >= maxIdleTimeout) {
                     timeout = maxIdleTimeout;
                 }
 
+                long start = System.currentTimeMillis();
+
                 wait(timeout);
-                currentIdleTime += timeout;
+
+                // compute for idle time
+                currentIdleTime += System.currentTimeMillis() - start;
 
                 if(currentIdleTime >= maxIdleTimeout) {
                     forcedStopped = true;
