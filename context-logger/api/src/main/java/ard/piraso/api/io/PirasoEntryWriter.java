@@ -76,6 +76,7 @@ public class PirasoEntryWriter {
 
     public void write(String id, Entry entry) throws ParserConfigurationException, SAXException, IOException, TransformerException {
         writer.println(createXMLString(id, new Date(), entry));
+        writer.flush();
     }
 
     public void close() {
