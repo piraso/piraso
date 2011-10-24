@@ -1,6 +1,7 @@
 package ard.piraso.server.sql.logger;
 
 import ard.piraso.api.entry.ElapseTimeEntry;
+import ard.piraso.api.sql.SQLPreferenceEnum;
 import ard.piraso.api.sql.SQLViewEntry;
 import ard.piraso.server.dispatcher.ContextLogDispatcher;
 import ard.piraso.server.logger.MessageLoggerListener;
@@ -20,6 +21,10 @@ import java.sql.ResultSet;
  */
 public class PreparedStatementProxyFactory extends AbstractSQLProxyFactory<PreparedStatement> {
 
+    private static final String METHOD_CALL_PROPERTY = SQLPreferenceEnum.PREPARED_STATEMENT_METHOD_CALL_ENABLED.getPropertyName();
+
+    private static final String ENABLED_PROPERTY = SQLPreferenceEnum.PREPARED_STATEMENT_ENABLED.getPropertyName();
+
     private String sql;
 
     private StatementParameterListener<PreparedStatement> parameterListener;
@@ -30,7 +35,8 @@ public class PreparedStatementProxyFactory extends AbstractSQLProxyFactory<Prepa
         this.sql = sql;
 
         if(getPref().isPreparedStatementMethodCallEnabled()) {
-            factory.addMethodListener(".*", new MethodCallLoggerListener<PreparedStatement>(id, preference));
+            factory.addMethodListener(".*", new MethodCallLoggerListener<PreparedStatement>(
+                    METHOD_CALL_PROPERTY, id, preference));
         }
 
         if(getPref().isViewSQLEnabled()) {
@@ -39,7 +45,7 @@ public class PreparedStatementProxyFactory extends AbstractSQLProxyFactory<Prepa
             factory.addMethodListener("set.*", parameterListener);
         }
 
-        factory.addMethodListener("executeBatch", new MessageLoggerListener<PreparedStatement> (id, "Execution Elapse Time"));
+        factory.addMethodListener("executeBatch", new MessageLoggerListener<PreparedStatement> (ENABLED_PROPERTY, id, "Execution Elapse Time"));
         factory.addMethodListener("executeQuery|executeUpdate|execute|addBatch", new ExecuteSQLListener());
     }
 
@@ -63,7 +69,7 @@ public class PreparedStatementProxyFactory extends AbstractSQLProxyFactory<Prepa
             if(getPref().isViewSQLEnabled()) {
                 elapseTime.stop();
 
-                ContextLogDispatcher.forward(id, new SQLViewEntry(sql, parameterListener.getParameters(), elapseTime));
+                ContextLogDispatcher.forward(ENABLED_PROPERTY, id, new SQLViewEntry(sql, parameterListener.getParameters(), elapseTime));
 
                 // to be reused
                 parameterListener.clear();

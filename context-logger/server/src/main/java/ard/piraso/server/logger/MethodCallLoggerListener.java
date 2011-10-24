@@ -19,9 +19,12 @@ public class MethodCallLoggerListener<T> implements RegexMethodInterceptorListen
 
     private GeneralPreferenceEvaluator preference;
 
-    public MethodCallLoggerListener(TraceableID id, GeneralPreferenceEvaluator preference) {
+    private String preferenceProperty;
+
+    public MethodCallLoggerListener(String preferenceProperty, TraceableID id, GeneralPreferenceEvaluator preference) {
         this.id = id;
         this.preference = preference;
+        this.preferenceProperty = preferenceProperty;
     }
 
     public void beforeCall(RegexMethodInterceptorEvent<T> evt) {
@@ -44,7 +47,7 @@ public class MethodCallLoggerListener<T> implements RegexMethodInterceptorListen
         elapseTime.stop();
         entry.setReturnedValue(new ObjectEntry(evt.getReturnedValue()));
 
-        ContextLogDispatcher.forward(id, entry);
+        ContextLogDispatcher.forward(preferenceProperty, id, entry);
     }
 
     public void exceptionCall(RegexMethodInterceptorEvent<T> evt) {
@@ -53,6 +56,6 @@ public class MethodCallLoggerListener<T> implements RegexMethodInterceptorListen
         entry.setThrown(new ThrowableEntry(evt.getException()));
         elapseTime.stop();
 
-        ContextLogDispatcher.forward(id, entry);
+        ContextLogDispatcher.forward(preferenceProperty, id, entry);
     }
 }

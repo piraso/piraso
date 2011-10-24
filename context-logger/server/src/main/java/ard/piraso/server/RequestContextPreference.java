@@ -5,15 +5,57 @@ package ard.piraso.server;
  */
 public class RequestContextPreference implements ContextPreference {
 
+    /**
+     * The delegate instance
+     */
+    private PirasoContext delegate;
+
+    /**
+     * Construct this request context
+     */
+    public RequestContextPreference() {
+        this.delegate = PirasoContextHolder.getContext();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public boolean isMonitored() {
-        return false;
+        if(delegate == null) {
+            return false;
+        }
+
+        return delegate.isMonitored();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isEnabled(String property) {
-        return false;
+        if(delegate == null) {
+            return false;
+        }
+
+        return delegate.isEnabled(property);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Integer getIntValue(String property) {
-        return null;
+        if(delegate == null) {
+            return null;
+        }
+
+        return delegate.getIntValue(property);
+    }
+
+    /**
+     *  {@inheritDoc}
+     */
+    public void requestOnScope() {
+        if(delegate != null) {
+            delegate.requestOnScope();
+        }
     }
 }

@@ -1,7 +1,5 @@
 package ard.piraso.api.entry;
 
-import org.apache.commons.lang.ArrayUtils;
-
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
@@ -40,10 +38,15 @@ public class MethodCallEntry implements Entry, ElapseTimeAware {
     public MethodCallEntry(Method method, ElapseTimeEntry elapseTime, ThrowableEntry thrown) {
         this.elapseTime = elapseTime;
         this.thrown = thrown;
+
+        init(method);
+    }
+
+    public void init(Method method) {
         methodName = method.getName();
         returnClassName = method.getReturnType().getName();
 
-        if(ArrayUtils.isNotEmpty(method.getParameterTypes())) {
+        if(method.getParameterTypes() != null) {
             parameterClassNames = new String[method.getParameterTypes().length];
             for(int i = 0; i < method.getParameterTypes().length; i++) {
                 parameterClassNames[i] = method.getParameterTypes()[i].getName();
@@ -124,9 +127,9 @@ public class MethodCallEntry implements Entry, ElapseTimeAware {
 
         if (!Arrays.equals(arguments, that.arguments)) return false;
         if (elapseTime != null ? !elapseTime.equals(that.elapseTime) : that.elapseTime != null) return false;
-        if (methodName != null ? !methodName.equals(that.methodName) : that.methodName != null) return false;
+        if (!methodName.equals(that.methodName)) return false;
         if (!Arrays.equals(parameterClassNames, that.parameterClassNames)) return false;
-        if (returnClassName != null ? !returnClassName.equals(that.returnClassName) : that.returnClassName != null) return false;
+        if (!returnClassName.equals(that.returnClassName)) return false;
         if (returnedValue != null ? !returnedValue.equals(that.returnedValue) : that.returnedValue != null) return false;
         if (!Arrays.equals(stackTrace, that.stackTrace)) return false;
         if (thrown != null ? !thrown.equals(that.thrown) : that.thrown != null) return false;
@@ -136,11 +139,11 @@ public class MethodCallEntry implements Entry, ElapseTimeAware {
 
     @Override
     public int hashCode() {
-        int result = methodName != null ? methodName.hashCode() : 0;
-        result = 31 * result + (parameterClassNames != null ? Arrays.hashCode(parameterClassNames) : 0);
+        int result = methodName.hashCode();
+        result = 31 * result + Arrays.hashCode(parameterClassNames);
         result = 31 * result + (arguments != null ? Arrays.hashCode(arguments) : 0);
         result = 31 * result + (returnedValue != null ? returnedValue.hashCode() : 0);
-        result = 31 * result + (returnClassName != null ? returnClassName.hashCode() : 0);
+        result = 31 * result + returnClassName.hashCode();
         result = 31 * result + (elapseTime != null ? elapseTime.hashCode() : 0);
         result = 31 * result + (thrown != null ? thrown.hashCode() : 0);
         result = 31 * result + (stackTrace != null ? Arrays.hashCode(stackTrace) : 0);

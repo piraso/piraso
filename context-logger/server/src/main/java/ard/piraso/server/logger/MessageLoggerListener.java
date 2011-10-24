@@ -19,13 +19,16 @@ public class MessageLoggerListener<T> implements RegexMethodInterceptorListener<
 
     private String message;
 
-    public MessageLoggerListener(TraceableID id, String message) {
-        this(id, message, null);
+    private String preferenceProperty;
+
+    public MessageLoggerListener(String preferenceProperty, TraceableID id, String message) {
+        this(preferenceProperty, id, message, null);
     }
 
-    public MessageLoggerListener(TraceableID id, String message, ElapseTimeEntry elapseTime) {
+    public MessageLoggerListener(String preferenceProperty, TraceableID id, String message, ElapseTimeEntry elapseTime) {
         this.id = id;
         this.message = message;
+        this.preferenceProperty = preferenceProperty;
 
         if(elapseTime == null) {
             this.elapseTime = new ElapseTimeEntry();
@@ -52,6 +55,6 @@ public class MessageLoggerListener<T> implements RegexMethodInterceptorListener<
         entry.getElapseTime().stop();
         entry.setMessage(evt.getInvocation().getMethod().getName() + ":" + evt.getException().getClass().getName());
 
-        ContextLogDispatcher.forward(id, entry);
+        ContextLogDispatcher.forward(preferenceProperty, id, entry);
     }
 }

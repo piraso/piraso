@@ -1,5 +1,6 @@
 package ard.piraso.server.sql.logger;
 
+import ard.piraso.api.sql.SQLPreferenceEnum;
 import ard.piraso.server.logger.MethodCallLoggerListener;
 import ard.piraso.server.logger.SimpleMethodLoggerListener;
 import ard.piraso.server.logger.TraceableID;
@@ -15,16 +16,20 @@ import java.sql.PreparedStatement;
  */
 public class ConnectionProxyFactory extends AbstractSQLProxyFactory<Connection> {
 
+    private static final String METHOD_CALL_PROPERTY = SQLPreferenceEnum.CONNECTION_METHOD_CALL_ENABLED.getPropertyName();
+
+    private static final String ENABLED_PROPERTY = SQLPreferenceEnum.CONNECTION_ENABLED.getPropertyName();
+
     public ConnectionProxyFactory(TraceableID id) {
         super(id, new RegexProxyFactory<Connection>(Connection.class));
 
         if(getPref().isConnectionMethodCallEnabled()) {
-            factory.addMethodListener(".*", new MethodCallLoggerListener<Connection>(id, preference));
+            factory.addMethodListener(".*", new MethodCallLoggerListener<Connection>(METHOD_CALL_PROPERTY, id, preference));
         }
 
         if(getPref().isConnectionEnabled()) {
             if(!getPref().isConnectionMethodCallEnabled()) {
-                factory.addMethodListener("close|commit|rollback", new SimpleMethodLoggerListener<Connection>(id));
+                factory.addMethodListener("close|commit|rollback", new SimpleMethodLoggerListener<Connection>(ENABLED_PROPERTY, id));
             }
 
             if(!getPref().isPreparedStatementEnabled()) {

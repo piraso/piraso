@@ -22,6 +22,10 @@ public class DataSourceProxyFactory extends AbstractSQLProxyFactory<DataSource> 
     private class GetConnectionListener extends RegexMethodInterceptorAdapter<DataSource> {
         @Override
         public void afterCall(RegexMethodInterceptorEvent<DataSource> evt) {
+            // the current request retrieves a db connection
+            // which means the current request is in logging scope.
+            preference.requestOnScope();
+
             if(getPref().isConnectionEnabled()) {
                 Connection connection = (Connection) evt.getReturnedValue();
                 TraceableID newId = id.create("connection-", connection.hashCode());

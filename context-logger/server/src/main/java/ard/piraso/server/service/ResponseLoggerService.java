@@ -17,15 +17,17 @@ public interface ResponseLoggerService {
 
     public String getMonitoredAddr();
 
+    public Preferences getPreferences();
+
     public void start() throws Exception;
 
     public void stop() throws IOException;
 
-    public boolean isAlive() throws IOException;
+    public boolean isAlive();
 
-    public void stopAndWait(long timeout) throws InterruptedException;
+    public boolean isForcedStopped();
 
-    public Preferences getPreferences();
+    public void stopAndWait(long timeout) throws InterruptedException, IOException;
 
     public void log(TraceableID id, Entry entry) throws IOException;
 }
