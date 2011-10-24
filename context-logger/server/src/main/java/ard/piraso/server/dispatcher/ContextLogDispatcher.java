@@ -2,6 +2,8 @@ package ard.piraso.server.dispatcher;
 
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.MessageEntry;
+import ard.piraso.server.PirasoContext;
+import ard.piraso.server.PirasoContextHolder;
 import ard.piraso.server.logger.TraceableID;
 
 import java.util.ArrayList;
@@ -28,13 +30,24 @@ public class ContextLogDispatcher {
     }
 
     /**
-     * Forward log entry for dispatch. Delegates to {@link #forwardEntry(TraceableID, Entry)}.
+     * Forward log entry for dispatch. Delegates to {@link #forwardEntry(String, ard.piraso.server.logger.TraceableID, ard.piraso.api.entry.Entry)}.
      *
      * @param id the entry traceable id
      * @param entry the log entry to be dispatched.
      */
     public static void forward(TraceableID id, Entry entry) {
-        DISPATCHER.fireForwardedEvent(id, entry);
+        DISPATCHER.forwardEntry(null, id, entry);
+    }
+
+    /**
+     * Forward log entry for dispatch. Delegates to {@link #forwardEntry(String, ard.piraso.server.logger.TraceableID, ard.piraso.api.entry.Entry)}.
+     *
+     * @param preference property preference
+     * @param id the entry traceable id
+     * @param entry the log entry to be dispatched.
+     */
+    public static void forward(String preference, TraceableID id, Entry entry) {
+        DISPATCHER.forwardEntry(preference, id, entry);
     }
 
     private List<DispatcherForwardListener> listeners = Collections.synchronizedList(new LinkedList<DispatcherForwardListener>());
@@ -47,13 +60,17 @@ public class ContextLogDispatcher {
     /**
      * Forward log entry for dispatch.
      *
+     * @param preference the preference property
      * @param id the entry traceable id
      * @param entry the log entry to be dispatched.
      */
-    public void forwardEntry(TraceableID id, Entry entry) {
-        // todo implementation here
+    public void forwardEntry(String preference, TraceableID id, Entry entry) {
+        PirasoContext context = PirasoContextHolder.getContext();
 
-        fireForwardedEvent(id, entry);
+        if(context != null) {
+            context.log(preference, id, entry);
+            fireForwardedEvent(id, entry);
+        }
     }
 
     public void fireForwardedEvent(TraceableID id, Entry entry) {

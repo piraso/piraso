@@ -17,12 +17,15 @@ public class SimpleMethodLoggerListener<T> implements RegexMethodInterceptorList
 
     private MessageEntry entry;
 
-    public SimpleMethodLoggerListener(TraceableID id) {
-        this(id, null);
+    private String preferenceProperty;
+
+    public SimpleMethodLoggerListener(String preferenceProperty, TraceableID id) {
+        this(preferenceProperty, id, null);
     }
 
-    public SimpleMethodLoggerListener(TraceableID id, ElapseTimeEntry elapseTime) {
+    public SimpleMethodLoggerListener(String preferenceProperty, TraceableID id, ElapseTimeEntry elapseTime) {
         this.id = id;
+        this.preferenceProperty = preferenceProperty;
 
         if(elapseTime == null) {
             this.elapseTime = new ElapseTimeEntry();
@@ -40,7 +43,7 @@ public class SimpleMethodLoggerListener<T> implements RegexMethodInterceptorList
         assert entry != null;
 
         entry.getElapseTime().stop();
-        ContextLogDispatcher.forward(id, entry);
+        ContextLogDispatcher.forward(preferenceProperty, id, entry);
     }
 
     public void exceptionCall(RegexMethodInterceptorEvent<T> evt) {
@@ -49,6 +52,6 @@ public class SimpleMethodLoggerListener<T> implements RegexMethodInterceptorList
         entry.getElapseTime().stop();
         entry.setMessage(evt.getInvocation().getMethod().getName() + ":" + evt.getException().getClass().getName());
 
-        ContextLogDispatcher.forward(id, entry);
+        ContextLogDispatcher.forward(preferenceProperty, id, entry);
     }
 }

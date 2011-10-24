@@ -16,4 +16,12 @@ public class GeneralPreferenceEvaluator {
     public boolean isStackTraceEnabled() {
         return isEnabled(GeneralPreferenceEnum.STACK_TRACE_ENABLED);
     }
+
+    public boolean isLoggingScopedEnabled() {
+        return isEnabled(GeneralPreferenceEnum.SCOPE_ENABLED);
+    }
+
+    public void requestOnScope() {
+        preference.requestOnScope();
+    }
 }

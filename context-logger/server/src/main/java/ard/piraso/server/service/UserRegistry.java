@@ -1,8 +1,6 @@
 package ard.piraso.server.service;
 
 import ard.piraso.api.Preferences;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -14,8 +12,6 @@ import java.util.concurrent.locks.ReentrantLock;
  * Registry of piraso users.
  */
 public class UserRegistry {
-
-    private static final Log LOG = LogFactory.getLog(UserRegistry.class);
 
     /**
      * lock instance

@@ -91,7 +91,7 @@ public class MethodCallEntryTest extends AbstractJacksonTest {
         assertThat("not null return class names", actualMethodCall.getReturnClassName(), CoreMatchers.<Object>notNullValue());
         assertThat("not null throwable", actualMethodCall.getThrown(), CoreMatchers.<Object>notNullValue());
 
-        assertThat("null parameter class names", actualMethodCall.getParameterClassNames(), CoreMatchers.<Object>nullValue());
+        assertThat("empty parameter class names", actualMethodCall.getParameterClassNames().length == 0, is(true));
         assertThat("null return value", actualMethodCall.getReturnedValue(), CoreMatchers.<Object>nullValue());
         assertThat("null stack trace", actualMethodCall.getStackTrace(), CoreMatchers.<Object>nullValue());
         assertThat("same entry", actualMethodCall, is(expectedMethodCall));
@@ -102,7 +102,6 @@ public class MethodCallEntryTest extends AbstractJacksonTest {
         Method method = ClassWithException.class.getMethod("methodWrapRethrown", new Class[0]);
         Method method2 = Integer.class.getMethod("valueOf", new Class[] {String.class});
 
-
         MethodCallEntry e1 = new MethodCallEntry(method);
         MethodCallEntry e2 = new MethodCallEntry(method2) {{
             setElapseTime(new ElapseTimeEntry());
@@ -110,6 +109,7 @@ public class MethodCallEntryTest extends AbstractJacksonTest {
 
         MethodCallEntry e3 = new MethodCallEntry(method);
         MethodCallEntry e4 = new MethodCallEntry();
+        e4.init(Double.class.getMethod("valueOf", new Class[] {String.class}));
 
         Set<MethodCallEntry> set = new HashSet<MethodCallEntry>();
         set.add(e1);

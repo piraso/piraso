@@ -36,16 +36,16 @@ public class User {
 
         User user = (User) o;
 
-        if (remoteAddr != null ? !remoteAddr.equals(user.remoteAddr) : user.remoteAddr != null) return false;
-        if (activityUuid != null ? !activityUuid.equals(user.activityUuid) : user.activityUuid != null) return false;
+        if (!activityUuid.equals(user.activityUuid)) return false;
+        if (!remoteAddr.equals(user.remoteAddr)) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = remoteAddr != null ? remoteAddr.hashCode() : 0;
-        result = 31 * result + (activityUuid != null ? activityUuid.hashCode() : 0);
+        int result = remoteAddr.hashCode();
+        result = 31 * result + activityUuid.hashCode();
         return result;
     }
 }

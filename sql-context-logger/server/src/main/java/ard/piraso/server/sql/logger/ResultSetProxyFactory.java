@@ -5,6 +5,7 @@ import ard.piraso.api.entry.ElapseTimeEntry;
 import ard.piraso.api.sql.SQLDataTotalRowsEntry;
 import ard.piraso.api.sql.SQLDataViewEntry;
 import ard.piraso.api.sql.SQLParameterEntry;
+import ard.piraso.api.sql.SQLPreferenceEnum;
 import ard.piraso.server.dispatcher.ContextLogDispatcher;
 import ard.piraso.server.logger.MessageLoggerListener;
 import ard.piraso.server.logger.MethodCallLoggerListener;
@@ -32,6 +33,10 @@ public class ResultSetProxyFactory extends AbstractSQLProxyFactory<ResultSet> {
 
     private static final IDGenerator GENERATOR = new IDGenerator();
 
+    private static final String METHOD_CALL_PROPERTY = SQLPreferenceEnum.RESULTSET_METHOD_CALL_ENABLED.getPropertyName();
+
+    private static final String ENABLED_PROPERTY = SQLPreferenceEnum.RESULTSET_ENABLED.getPropertyName();
+
     private ResultSetParameterListener parameterCollector;
 
     /**
@@ -51,13 +56,13 @@ public class ResultSetProxyFactory extends AbstractSQLProxyFactory<ResultSet> {
         elapseTime.start();
 
         if(getPref().isResultSetMethodCallEnabled()) {
-            factory.addMethodListener(".*", new MethodCallLoggerListener<ResultSet>(id, preference));
+            factory.addMethodListener(".*", new MethodCallLoggerListener<ResultSet>(METHOD_CALL_PROPERTY, id, preference));
         }
 
         parameterCollector = new ResultSetParameterListener();
 
         factory.addMethodListener("get.*", parameterCollector);
-        factory.addMethodListener("close", new MessageLoggerListener<ResultSet>(id, "Fetch Elapse Time", elapseTime));
+        factory.addMethodListener("close", new MessageLoggerListener<ResultSet>(ENABLED_PROPERTY, id, "Fetch Elapse Time", elapseTime));
         factory.addMethodListener("next|close", new NextCloseListener());
     }
 
@@ -83,18 +88,18 @@ public class ResultSetProxyFactory extends AbstractSQLProxyFactory<ResultSet> {
                 }
 
                 if(CollectionUtils.isNotEmpty(recordQueue)) {
-                    ContextLogDispatcher.forward(id, new SQLDataViewEntry(resultSetId, recordQueue));
+                    ContextLogDispatcher.forward(ENABLED_PROPERTY, id, new SQLDataViewEntry(resultSetId, recordQueue));
                     recordQueue.clear();
                 }
             }
 
             if(!parameterCollector.isDisabled() && method.getName().equals("close") && CollectionUtils.isNotEmpty(recordQueue)) {
-                ContextLogDispatcher.forward(id, new SQLDataViewEntry(resultSetId, recordQueue));
+                ContextLogDispatcher.forward(ENABLED_PROPERTY, id, new SQLDataViewEntry(resultSetId, recordQueue));
                 recordQueue.clear();
             }
 
             if(method.getName().equals("close")) {
-                ContextLogDispatcher.forward(id, new SQLDataTotalRowsEntry(totalRowCount));
+                ContextLogDispatcher.forward(ENABLED_PROPERTY, id, new SQLDataTotalRowsEntry(totalRowCount));
             }
         }
     }

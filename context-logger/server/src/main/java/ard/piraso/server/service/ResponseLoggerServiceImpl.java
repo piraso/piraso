@@ -101,10 +101,30 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
     private Preferences preferences;
 
     /**
-     * Determiens the current idle time. If this exceed the {@link #MAX_IDLE_TIME_KILL_SIZE} the service will be forced
+     * Determines the current idle time. If this exceed the {@link #maxIdleTimeout} the service will be forced
      * stopped.
      */
     private long currentIdleTime = 0l;
+
+    /**
+     * Reason why service was forced stopped.
+     */
+    private String forcedStoppedReason;
+
+    /**
+     * Determines whether the service was force stopped.
+     */
+    private boolean forcedStopped = false;
+
+    /**
+     * maximum idle timeout
+     */
+    private long maxIdleTimeout = MAX_IDLE_TIME_KILL_SIZE;
+
+    /**
+     * maximum transfer queue force stopped size
+     */
+    private int maxQueueForceKillSize = MAX_QUEUE_FORCE_KILL_SIZE;
 
     /**
      * Construct the service given the user, request and response.
@@ -122,6 +142,24 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
         this.response = response;
         this.monitoredAddr = request.getParameter(MONITORED_ADDR_PARAMETER);
         this.preferences = new ObjectMapper().readValue(request.getParameter(PREFERENCES_PARAMETER), Preferences.class);
+    }
+
+    /**
+     * Sets the maximum idle timeout. When timeout is reached this service will be force stopped. This is measured in milliseconds.
+     *
+     * @param maxIdleTimeout the maximum idle timeout
+     */
+    public void setMaxIdleTimeout(long maxIdleTimeout) {
+        this.maxIdleTimeout = maxIdleTimeout;
+    }
+
+    /**
+     * Sets the maximum transfer queue size before the service will be forced stopped.
+     *
+     * @param maxQueueForceKillSize the maximum transfer queue size
+     */
+    public void setMaxQueueForceKillSize(int maxQueueForceKillSize) {
+        this.maxQueueForceKillSize = maxQueueForceKillSize;
     }
 
     /**
@@ -148,8 +186,15 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
     /**
      * {@inheritDoc}
      */
-    public boolean isAlive() throws IOException {
+    public boolean isAlive() {
         return alive;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isForcedStopped() {
+        return forcedStopped;
     }
 
     /**
@@ -182,13 +227,20 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
      * @throws IOException on io error
      */
     private void waitTillNoEntry() throws IOException {
-        if(transferQueue.isEmpty()) {
+        if(transferQueue.isEmpty() && !isForcedStopped()) {
             try {
-                wait(1800000l);
-                currentIdleTime += 1800000l;
+                long timeout = 1800000l;
 
-                if(currentIdleTime > MAX_IDLE_TIME_KILL_SIZE) {
-                    stop();
+                if(timeout > maxIdleTimeout) {
+                    timeout = maxIdleTimeout;
+                }
+
+                wait(timeout);
+                currentIdleTime += timeout;
+
+                if(currentIdleTime >= maxIdleTimeout) {
+                    forcedStopped = true;
+                    forcedStoppedReason = String.format("Idle timeout '%d' was reached.", maxIdleTimeout);
                 }
             } catch (InterruptedException ignored) {
             }
@@ -196,11 +248,23 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
     }
 
     /**
+     * Throws a {@link ForcedStoppedException} when forced stopped.
+     *
+     * @throws ForcedStoppedException on forced stopped.
+     */
+    private void throwWhenForcedStopped() throws ForcedStoppedException {
+        if(forcedStopped) {
+            alive = false;
+            throw new ForcedStoppedException(forcedStoppedReason);
+        }
+    }
+
+    /**
      * Empty the transfer queue and write to response stream writer. This will also reset the {@link #currentIdleTime}
      * to {@code 0}.
      */
-    private void writeAllTransferFromQueue() {
-        while(CollectionUtils.isNotEmpty(transferQueue)) {
+    private void writeAllTransfer() {
+        while(CollectionUtils.isNotEmpty(transferQueue) && !isForcedStopped()) {
             try {
                 TransferEntryHolder holder = transferQueue.remove(0);
 
@@ -219,9 +283,10 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
      */
     private void doLogWhileAlive() throws IOException {
         synchronized (this) {
-            while(alive) {
+            while(isAlive() || isForcedStopped()) {
                 waitTillNoEntry();
-                writeAllTransferFromQueue();
+                writeAllTransfer();
+                throwWhenForcedStopped();
             }
         }
     }
@@ -239,9 +304,10 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
     /**
      * {@inheritDoc}
      */
-    public void stopAndWait(long timeout) throws InterruptedException {
+    public void stopAndWait(long timeout) throws IOException, InterruptedException {
         synchronized(this) {
-            if(alive) {
+            if(isAlive()) {
+                stop();
                 wait(timeout);
             }
         }
@@ -259,8 +325,10 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
      */
     public void log(TraceableID id, Entry entry) throws IOException {
         synchronized (this) {
-            if(transferQueue.size() > MAX_QUEUE_FORCE_KILL_SIZE) {
-                stop();
+            if(transferQueue.size() + 1 >= maxQueueForceKillSize) {
+                forcedStopped = true;
+                forcedStoppedReason = String.format("Max queue force kill size '%d' was reached.", maxQueueForceKillSize);
+                notifyAll();
 
                 return;
             }

@@ -22,6 +22,7 @@
     <properties>
         <commons.collections.version>3.2.1</commons.collections.version>
         <jackson.version>1.9.0</jackson.version>
+        <spring.version>3.0.4.RELEASE</spring.version>
     </properties>
 
     <dependencies>
