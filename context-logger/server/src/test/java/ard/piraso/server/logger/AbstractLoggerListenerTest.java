@@ -3,6 +3,7 @@ package ard.piraso.server.logger;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.server.PirasoContext;
 import ard.piraso.server.PirasoContextHolder;
+import ard.piraso.server.proxy.RegexProxyFactory;
 import org.junit.Before;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -21,8 +22,11 @@ public abstract class AbstractLoggerListenerTest {
 
     protected Entry caughtEntry;
 
+    protected TraceableID id;
+
     @Before
     public void setUp() throws Exception {
+        id = new TraceableID("test");
         context = mock(PirasoContext.class);
 
         doAnswer(new Answer() {
@@ -33,5 +37,11 @@ public abstract class AbstractLoggerListenerTest {
         }).when(context).log(anyString(), any(TraceableID.class), any(Entry.class));
 
         PirasoContextHolder.setContext(context);
+    }
+
+    protected  class LoggerProxyFactory<T> extends AbstractLoggerProxyFactory<T> {
+        public LoggerProxyFactory(TraceableID id, RegexProxyFactory regexProxyFactory) {
+            super(id, regexProxyFactory);
+        }
     }
 }

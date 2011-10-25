@@ -21,15 +21,16 @@ public class MessageLoggerListenerTest extends AbstractLoggerListenerTest {
 
     @Test
     public void testProxy() throws SQLException {
-        RegexProxyFactory<Connection> factory = new RegexProxyFactory<Connection>(Connection.class);
-
-        Connection connection = mock(Connection.class);
-        ProxyInterceptorAware<Connection> proxy = factory.getProxyInterceptor(connection);
+        RegexProxyFactory<Connection> rf = new RegexProxyFactory<Connection>(Connection.class);
+        LoggerProxyFactory<Connection> factory = new LoggerProxyFactory<Connection>(id, rf);
 
         MessageLoggerListener<Connection> listener = new MessageLoggerListener<Connection>(null, new TraceableID("test"), "test");
+        rf.addMethodListener("close", listener);
 
-        proxy.getInterceptor().addMethodListener("close", listener);
-        proxy.getProxy().close();
+        Connection connection = mock(Connection.class);
+        Connection proxy = factory.getProxy(connection);
+
+        proxy.close();
 
         assertTrue(MessageEntry.class.isInstance(caughtEntry));
         verify(context, times(1)).log(anyString(), any(TraceableID.class), any(MessageEntry.class));
