@@ -33,6 +33,26 @@ public class ObjectConverterRegistryTest {
         assertTrue(ObjectConverterRegistry.isSupported(new SampleBean("test")));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testIsSupportedNull() throws Exception {
+        ObjectConverterRegistry.isSupported(null);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testToStringNull() throws Exception {
+        ObjectConverterRegistry.convertToString(null);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testToStringClassNotSupported() throws Exception {
+        ObjectConverterRegistry.convertToString(new StringBuilder());
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testToObjectNotSupportedClass() throws Exception {
+        ObjectConverterRegistry.convertToObject(StringBuilder.class.getName(), "");
+    }
+
     @Test
     public void testTypeConversion() throws Exception {
         final String expectedString = "test";
