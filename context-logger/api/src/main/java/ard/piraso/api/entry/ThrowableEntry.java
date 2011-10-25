@@ -1,7 +1,5 @@
 package ard.piraso.api.entry;
 
-import org.apache.commons.lang.ArrayUtils;
-
 /**
  * Defines an exception entry.
  */
@@ -18,12 +16,10 @@ public class ThrowableEntry extends Entry {
         message = e.getMessage();
 
         StackTraceElement[] elements = e.getStackTrace();
-        if(ArrayUtils.isNotEmpty(elements)) {
-            stackTrace = new StackTraceElementEntry[elements.length];
+        stackTrace = new StackTraceElementEntry[elements.length];
 
-            for(int i = 0; i < elements.length; i++) {
-                stackTrace[i] = new StackTraceElementEntry(elements[i]);
-            }
+        for(int i = 0; i < elements.length; i++) {
+            stackTrace[i] = new StackTraceElementEntry(elements[i]);
         }
 
         if(e.getCause() != null) {

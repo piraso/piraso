@@ -46,5 +46,6 @@ public class ObjectEntryUtilsTest {
         ObjectEntry entry = new ObjectEntry("test");
 
         assertEquals(ObjectEntryUtils.toObject(entry), test);
+        assertEquals(entry.toObject(), test);
     }
 }

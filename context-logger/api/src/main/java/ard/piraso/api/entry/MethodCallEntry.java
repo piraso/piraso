@@ -45,11 +45,9 @@ public class MethodCallEntry extends Entry implements ElapseTimeAware {
         methodName = method.getName();
         returnClassName = method.getReturnType().getName();
 
-        if(method.getParameterTypes() != null) {
-            parameterClassNames = new String[method.getParameterTypes().length];
-            for(int i = 0; i < method.getParameterTypes().length; i++) {
-                parameterClassNames[i] = method.getParameterTypes()[i].getName();
-            }
+        parameterClassNames = new String[method.getParameterTypes().length];
+        for(int i = 0; i < method.getParameterTypes().length; i++) {
+            parameterClassNames[i] = method.getParameterTypes()[i].getName();
         }
     }
 
