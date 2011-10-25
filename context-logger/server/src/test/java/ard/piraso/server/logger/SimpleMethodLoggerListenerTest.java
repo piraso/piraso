@@ -2,6 +2,7 @@ package ard.piraso.server.logger;
 
 import ard.piraso.api.entry.ElapseTimeEntry;
 import ard.piraso.api.entry.MessageEntry;
+import ard.piraso.server.AbstractLoggerListenerTest;
 import ard.piraso.server.proxy.ProxyInterceptorAware;
 import ard.piraso.server.proxy.RegexProxyFactory;
 import org.junit.Test;

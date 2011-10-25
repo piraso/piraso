@@ -50,6 +50,22 @@ public class ContextLogDispatcher {
         DISPATCHER.forwardEntry(preference, id, entry);
     }
 
+    public static void addListener(DispatcherForwardListener listener) {
+        DISPATCHER.addDispatcherListener(listener);
+    }
+
+    public static void removeListener(DispatcherForwardListener listener) {
+        DISPATCHER.removeDispatcherListener(listener);
+    }
+
+    public static void clearListeners() {
+        DISPATCHER.clearDispatcherListeners();
+    }
+
+    public static List<DispatcherForwardListener> getListeners() {
+        return DISPATCHER.getDispatcherListeners();
+    }
+
     private List<DispatcherForwardListener> listeners = Collections.synchronizedList(new LinkedList<DispatcherForwardListener>());
 
     /**
@@ -82,15 +98,19 @@ public class ContextLogDispatcher {
         }
     }
 
-    public void addListener(DispatcherForwardListener listener) {
+    public List<DispatcherForwardListener> getDispatcherListeners() {
+        return listeners;
+    }
+
+    public void addDispatcherListener(DispatcherForwardListener listener) {
         listeners.add(listener);
     }
 
-    public void removeListener(DispatcherForwardListener listener) {
+    public void removeDispatcherListener(DispatcherForwardListener listener) {
         listeners.remove(listener);
     }
 
-    public void clearListeners() {
+    public void clearDispatcherListeners() {
         listeners.clear();
     }
 }

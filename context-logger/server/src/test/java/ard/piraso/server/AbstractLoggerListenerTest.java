@@ -1,8 +1,9 @@
-package ard.piraso.server.logger;
+package ard.piraso.server;
 
 import ard.piraso.api.entry.Entry;
-import ard.piraso.server.PirasoContext;
-import ard.piraso.server.PirasoContextHolder;
+import ard.piraso.server.dispatcher.ContextLogDispatcher;
+import ard.piraso.server.logger.AbstractLoggerProxyFactory;
+import ard.piraso.server.logger.TraceableID;
 import ard.piraso.server.proxy.RegexProxyFactory;
 import org.junit.Before;
 import org.mockito.invocation.InvocationOnMock;
@@ -37,6 +38,7 @@ public abstract class AbstractLoggerListenerTest {
         }).when(context).log(anyString(), any(TraceableID.class), any(Entry.class));
 
         PirasoContextHolder.setContext(context);
+        ContextLogDispatcher.clearListeners();
     }
 
     protected  class LoggerProxyFactory<T> extends AbstractLoggerProxyFactory<T> {
