@@ -1,5 +1,6 @@
 package ard.piraso.server.logger;
 
+import ard.piraso.api.GeneralPreferenceEnum;
 import ard.piraso.api.entry.MessageEntry;
 import ard.piraso.api.entry.MethodCallEntry;
 import ard.piraso.server.AbstractLoggerListenerTest;
@@ -35,5 +36,27 @@ public class MethodCallLoggerListenerTest extends AbstractLoggerListenerTest {
 
         assertTrue(MethodCallEntry.class.isInstance(caughtEntry));
         verify(context, times(1)).log(anyString(), any(TraceableID.class), any(MessageEntry.class));
+    }
+
+    @Test
+    public void testProxyWithException() throws SQLException {
+        RegexProxyFactory<Connection> factory = new RegexProxyFactory<Connection>(Connection.class);
+
+        doReturn(true).when(context).isEnabled(GeneralPreferenceEnum.STACK_TRACE_ENABLED.getPropertyName());
+
+        MethodCallLoggerListener<Connection> listener = new MethodCallLoggerListener<Connection>(null, new TraceableID("test"), new GeneralPreferenceEvaluator());
+        factory.addMethodListener("close", listener);
+
+        Connection connection = mock(Connection.class);
+        ProxyInterceptorAware<Connection> proxy = factory.getProxyInterceptor(connection);
+
+        doThrow(new SQLException()).when(connection).close();
+
+        try {
+            proxy.getProxy().close();
+        } catch(Exception ignore) {}
+
+        assertTrue(MethodCallEntry.class.isInstance(caughtEntry));
+        verify(context, times(1)).log(anyString(), any(TraceableID.class), any(MethodCallEntry.class));
     }
 }

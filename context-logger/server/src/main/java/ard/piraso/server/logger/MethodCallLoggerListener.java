@@ -42,8 +42,6 @@ public class MethodCallLoggerListener<T> implements RegexMethodInterceptorListen
     }
 
     public void afterCall(RegexMethodInterceptorEvent<T> evt) {
-        assert entry != null;
-
         elapseTime.stop();
         entry.setReturnedValue(new ObjectEntry(evt.getReturnedValue()));
 
@@ -51,8 +49,6 @@ public class MethodCallLoggerListener<T> implements RegexMethodInterceptorListen
     }
 
     public void exceptionCall(RegexMethodInterceptorEvent<T> evt) {
-        assert entry != null;
-
         entry.setThrown(new ThrowableEntry(evt.getException()));
         elapseTime.stop();
 

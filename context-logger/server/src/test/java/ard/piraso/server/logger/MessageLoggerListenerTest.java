@@ -22,16 +22,35 @@ public class MessageLoggerListenerTest extends AbstractLoggerListenerTest {
 
     @Test
     public void testProxy() throws SQLException {
+        RegexProxyFactory<Connection> factory = new RegexProxyFactory<Connection>(Connection.class);
+
+        MessageLoggerListener<Connection> listener = new MessageLoggerListener<Connection>(null, new TraceableID("test"), "test");
+        factory.addMethodListener("close", listener);
+
+        Connection connection = mock(Connection.class);
+        ProxyInterceptorAware<Connection> proxy = factory.getProxyInterceptor(connection);
+
+        proxy.getProxy().close();
+
+        assertTrue(MessageEntry.class.isInstance(caughtEntry));
+        verify(context, times(1)).log(anyString(), any(TraceableID.class), any(MessageEntry.class));
+    }
+
+    @Test
+    public void testProxyWithException() throws SQLException {
         RegexProxyFactory<Connection> rf = new RegexProxyFactory<Connection>(Connection.class);
-        LoggerProxyFactory<Connection> factory = new LoggerProxyFactory<Connection>(id, rf);
 
         MessageLoggerListener<Connection> listener = new MessageLoggerListener<Connection>(null, new TraceableID("test"), "test");
         rf.addMethodListener("close", listener);
 
         Connection connection = mock(Connection.class);
-        Connection proxy = factory.getProxy(connection);
+        ProxyInterceptorAware<Connection> proxy = rf.getProxyInterceptor(connection);
 
-        proxy.close();
+        doThrow(new SQLException()).when(connection).close();
+
+        try {
+            proxy.getProxy().close();
+        } catch(Exception ignore) {}
 
         assertTrue(MessageEntry.class.isInstance(caughtEntry));
         verify(context, times(1)).log(anyString(), any(TraceableID.class), any(MessageEntry.class));

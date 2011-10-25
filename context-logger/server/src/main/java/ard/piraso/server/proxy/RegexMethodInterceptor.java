@@ -2,6 +2,7 @@ package ard.piraso.server.proxy;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
 import java.lang.reflect.Method;
@@ -96,11 +97,10 @@ public class RegexMethodInterceptor<T> implements MethodInterceptor {
     }
 
     public void addMethodListener(String regex, RegexMethodInterceptorListener<T> listener) {
-        if(listener == null) {
-            throw new IllegalArgumentException("listener cannot be null.");
-        }
-        
+        Validate.notNull("listener cannot be null.");
+
         Set<RegexMethodInterceptorListener<T>> set = listeners.get(regex);
+
         if(set == null) {
             set = new HashSet<RegexMethodInterceptorListener<T>>();
             listeners.put(regex, set);

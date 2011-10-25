@@ -53,4 +53,27 @@ public class SimpleMethodLoggerListenerTest extends AbstractLoggerListenerTest {
         assertTrue(MessageEntry.class.isInstance(caughtEntry));
         verify(context, times(1)).log(anyString(), any(TraceableID.class), any(MessageEntry.class));
     }
+
+    @Test
+    public void testProxyWithException() throws SQLException {
+        RegexProxyFactory<Connection> factory = new RegexProxyFactory<Connection>(Connection.class);
+
+        SimpleMethodLoggerListener<Connection> listener = new SimpleMethodLoggerListener<Connection>(null, new TraceableID("test"));
+        factory.addMethodListener("close", listener);
+
+        Connection connection = mock(Connection.class);
+        ProxyInterceptorAware<Connection> proxy = factory.getProxyInterceptor(connection);
+
+        ElapseTimeEntry elapseTime = new ElapseTimeEntry();
+        elapseTime.start();
+
+        doThrow(new SQLException()).when(connection).close();
+
+        try {
+            proxy.getProxy().close();
+        } catch(Exception ignore) {}
+
+        assertTrue(MessageEntry.class.isInstance(caughtEntry));
+        verify(context, times(1)).log(anyString(), any(TraceableID.class), any(MessageEntry.class));
+    }
 }

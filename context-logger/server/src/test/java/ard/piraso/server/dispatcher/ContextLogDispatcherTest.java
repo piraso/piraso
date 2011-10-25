@@ -2,12 +2,12 @@ package ard.piraso.server.dispatcher;
 
 import ard.piraso.api.entry.MessageEntry;
 import ard.piraso.server.AbstractLoggerListenerTest;
+import ard.piraso.server.PirasoContextHolder;
 import ard.piraso.server.logger.TraceableID;
 import org.junit.Test;
 import org.mockito.Matchers;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
@@ -36,8 +36,20 @@ public class ContextLogDispatcherTest extends AbstractLoggerListenerTest {
     }
 
     @Test
+    public void testForwardNoContext() throws Exception {
+        PirasoContextHolder.removeContext();
+        DispatcherForwardListener listener = spy(new DispatcherHandler());
+
+        ContextLogDispatcher.addListener(listener);
+        ContextLogDispatcher.forward("simpleMessage");
+
+        verify(listener, times(0)).forwarded(Matchers.<DispatcherForwardEvent>any());
+        verify(context, times(0)).log(anyString(), any(TraceableID.class), any(MessageEntry.class));
+    }
+
+    @Test
     public void testForwardWithListener() throws Exception {
-        DispatcherForwardListener listener = mock(DispatcherForwardListener.class);
+        DispatcherForwardListener listener = spy(new DispatcherHandler());
 
         ContextLogDispatcher.addListener(listener);
         ContextLogDispatcher.forward("simpleMessage");
@@ -55,4 +67,11 @@ public class ContextLogDispatcherTest extends AbstractLoggerListenerTest {
         verify(context, times(1)).log(anyString(), any(TraceableID.class), any(MessageEntry.class));
     }
 
+    private class DispatcherHandler implements DispatcherForwardListener {
+
+        public void forwarded(DispatcherForwardEvent evt) {
+            assertNotNull(evt.getEntry());
+            assertNotNull(evt.getId());
+        }
+    }
 }

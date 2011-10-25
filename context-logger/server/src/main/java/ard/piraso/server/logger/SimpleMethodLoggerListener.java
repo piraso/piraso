@@ -40,15 +40,11 @@ public class SimpleMethodLoggerListener<T> implements RegexMethodInterceptorList
     }
 
     public void afterCall(RegexMethodInterceptorEvent<T> evt) {
-        assert entry != null;
-
         entry.getElapseTime().stop();
         ContextLogDispatcher.forward(preferenceProperty, id, entry);
     }
 
     public void exceptionCall(RegexMethodInterceptorEvent<T> evt) {
-        assert entry != null;
-
         entry.getElapseTime().stop();
         entry.setMessage(evt.getInvocation().getMethod().getName() + ":" + evt.getException().getClass().getName());
 
