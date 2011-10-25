@@ -1,5 +1,6 @@
 package ard.piraso.server;
 
+import ard.piraso.api.GeneralPreferenceEnum;
 import ard.piraso.api.entry.MessageEntry;
 import ard.piraso.server.logger.TraceableID;
 import ard.piraso.server.service.ResponseLoggerService;
@@ -146,10 +147,54 @@ public class PirasoContextTest {
         TraceableID id = new TraceableID("test");
         MessageEntry entry = new MessageEntry("test");
 
+        context.requestOnScope();
         context.log(null, id, entry);
 
         verify(registry.getLogger(user), times(1)).log(id, entry);
         verify(registry.getLogger(user2), times(1)).log(id, entry);
+    }
+
+    @Test
+    public void testLogQueueEntry() throws IOException {
+        User user = associateUser(request);
+        ResponseLoggerService service = registry.getLogger(user);
+
+        service.getPreferences().addProperty(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName(), true);
+
+        TraceableID id = new TraceableID("test");
+        MessageEntry entry = new MessageEntry("test");
+
+        User user2 = associateUser(request);
+        ResponseLoggerService service2 = registry.getLogger(user2);
+
+        context.log(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName(), id, entry);
+
+        verify(service, times(0)).log(id, entry);
+        verify(service2, times(1)).log(id, entry);
+    }
+
+    @Test
+    public void testLogQueueEntryWithRequestOnScope() throws IOException {
+        User user = associateUser(request);
+        ResponseLoggerService service = registry.getLogger(user);
+
+        service.getPreferences().addProperty(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName(), true);
+
+        TraceableID id = new TraceableID("test");
+        MessageEntry entry = new MessageEntry("test");
+
+        User user2 = associateUser(request);
+        ResponseLoggerService service2 = registry.getLogger(user2);
+
+        context.log(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName(), id, entry);
+
+        verify(service, times(0)).log(id, entry);
+        verify(service2, times(1)).log(id, entry);
+
+        context.log(null, id, entry);
+
+        verify(service, times(2)).log(id, entry);
+        verify(service2, times(2)).log(id, entry);
     }
 
     private User associateUser(MockHttpServletRequest request) throws IOException {

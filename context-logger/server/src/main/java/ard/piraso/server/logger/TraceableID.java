@@ -2,7 +2,6 @@ package ard.piraso.server.logger;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,7 +38,7 @@ public class TraceableID {
             int count = Integer.parseInt(str.substring(start, end));
 
             buf.append(str.substring(0, start));
-            buf.append(String.valueOf(count));
+            buf.append(String.valueOf(count + 1));
         } else {
             buf.append(str).append("_2");
         }
@@ -62,36 +61,30 @@ public class TraceableID {
     public TraceableID create(int id) {
         TraceableID logId = new TraceableID(String.valueOf(id), ids);
         logId.properties.putAll(properties);
+
         return logId;
     }
 
     public TraceableID create(String id, int hashCode) {
         TraceableID logId = new TraceableID(id + Integer.toHexString(hashCode), ids);
         logId.properties.putAll(properties);
+
         return logId;
     }
 
     public TraceableID create(String id) {
         TraceableID logId = new TraceableID(id, ids);
         logId.properties.putAll(properties);
+
         return logId;
     }
 
-    public List<String> getIds() {
+    public LinkedList<String> getIds() {
         return ids;
-    }
-
-    public String pop() {
-        return ids.removeLast();
-    }
-
-    public String peek() {
-        return ids.getLast();
     }
 
     @Override
     public String toString() {
         return ids.toString();
     }
-
 }
