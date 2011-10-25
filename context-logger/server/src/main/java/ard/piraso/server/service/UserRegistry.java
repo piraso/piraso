@@ -21,7 +21,7 @@ public class UserRegistry {
     /**
      * Contains the map of {@link User} and {@link ResponseLoggerService}.
      */
-    private Map<User, ResponseLoggerService> userLoggerMap = new HashMap<User, ResponseLoggerService>(20);
+    private Map<User, ResponseLoggerService> userLoggerMap = Collections.synchronizedMap(new HashMap<User, ResponseLoggerService>(20));
 
     /**
      * Retrieve all {@link Preferences} given the monitored address.

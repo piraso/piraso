@@ -62,11 +62,11 @@ public class UserTest {
         assertThat(set.size(), is(2));
     }
 
-    private User createUser(String remoteAddr) {
+    public static User createUser(String remoteAddr) {
         return createUser(remoteAddr, null);
     }
 
-    private User createUser(String remoteAddr, String activityId) {
+    public static User createUser(String remoteAddr, String activityId) {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setRemoteAddr(remoteAddr);
 
