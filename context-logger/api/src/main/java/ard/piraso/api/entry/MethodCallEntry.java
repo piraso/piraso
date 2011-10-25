@@ -1,12 +1,11 @@
 package ard.piraso.api.entry;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 /**
  * Defines a method call log entry.
  */
-public class MethodCallEntry implements Entry, ElapseTimeAware {
+public class MethodCallEntry extends Entry implements ElapseTimeAware {
 
     private String methodName;
 
@@ -116,37 +115,5 @@ public class MethodCallEntry implements Entry, ElapseTimeAware {
 
     public void setElapseTime(ElapseTimeEntry elapseTime) {
         this.elapseTime = elapseTime;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        MethodCallEntry that = (MethodCallEntry) o;
-
-        if (!Arrays.equals(arguments, that.arguments)) return false;
-        if (elapseTime != null ? !elapseTime.equals(that.elapseTime) : that.elapseTime != null) return false;
-        if (!methodName.equals(that.methodName)) return false;
-        if (!Arrays.equals(parameterClassNames, that.parameterClassNames)) return false;
-        if (!returnClassName.equals(that.returnClassName)) return false;
-        if (returnedValue != null ? !returnedValue.equals(that.returnedValue) : that.returnedValue != null) return false;
-        if (!Arrays.equals(stackTrace, that.stackTrace)) return false;
-        if (thrown != null ? !thrown.equals(that.thrown) : that.thrown != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = methodName.hashCode();
-        result = 31 * result + Arrays.hashCode(parameterClassNames);
-        result = 31 * result + (arguments != null ? Arrays.hashCode(arguments) : 0);
-        result = 31 * result + (returnedValue != null ? returnedValue.hashCode() : 0);
-        result = 31 * result + returnClassName.hashCode();
-        result = 31 * result + (elapseTime != null ? elapseTime.hashCode() : 0);
-        result = 31 * result + (thrown != null ? thrown.hashCode() : 0);
-        result = 31 * result + (stackTrace != null ? Arrays.hashCode(stackTrace) : 0);
-        return result;
     }
 }

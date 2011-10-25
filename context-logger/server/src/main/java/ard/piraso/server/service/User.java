@@ -1,5 +1,8 @@
 package ard.piraso.server.service;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
 
@@ -31,21 +34,11 @@ public class User {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        User user = (User) o;
-
-        if (!activityUuid.equals(user.activityUuid)) return false;
-        if (!remoteAddr.equals(user.remoteAddr)) return false;
-
-        return true;
+        return EqualsBuilder.reflectionEquals(this, o);
     }
 
     @Override
     public int hashCode() {
-        int result = remoteAddr.hashCode();
-        result = 31 * result + activityUuid.hashCode();
-        return result;
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

@@ -2,6 +2,8 @@ package ard.piraso.api;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -100,25 +102,11 @@ public class Preferences {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Preferences that = (Preferences) o;
-
-        if (booleanProperties != null ? !booleanProperties.equals(that.booleanProperties) : that.booleanProperties != null)
-            return false;
-        if (integerProperties != null ? !integerProperties.equals(that.integerProperties) : that.integerProperties != null)
-            return false;
-        if (urlPatterns != null ? !urlPatterns.equals(that.urlPatterns) : that.urlPatterns != null) return false;
-
-        return true;
+        return EqualsBuilder.reflectionEquals(this, o);
     }
 
     @Override
     public int hashCode() {
-        int result = booleanProperties != null ? booleanProperties.hashCode() : 0;
-        result = 31 * result + (integerProperties != null ? integerProperties.hashCode() : 0);
-        result = 31 * result + (urlPatterns != null ? urlPatterns.hashCode() : 0);
-        return result;
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

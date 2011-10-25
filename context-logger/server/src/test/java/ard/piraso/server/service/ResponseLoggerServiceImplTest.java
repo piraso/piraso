@@ -221,7 +221,7 @@ public class ResponseLoggerServiceImplTest {
         }).when(writer).println(anyString());
     }
 
-    private class ExceptionThrowEntry implements Entry {
+    private class ExceptionThrowEntry extends Entry {
         public String getPropertyThatThrowException() {
             throw new IllegalStateException("always thrown");
         }
