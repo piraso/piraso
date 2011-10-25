@@ -26,17 +26,19 @@ public class UserRegistry {
     /**
      * Retrieve all {@link Preferences} given the monitored address.
      *
-     * @param monitoredAddr the monitored address
+     * @param request the http servlet request
      * @return list of {@link Preferences}
      * @throws IOException on io error
      */
-    public List<Preferences> getContextPreferences(String monitoredAddr) throws IOException {
+    public List<Preferences> getContextPreferences(HttpServletRequest request) throws IOException {
         List<Preferences> list = new LinkedList<Preferences>();
 
         List<ResponseLoggerService> tmp = new ArrayList<ResponseLoggerService>(userLoggerMap.values());
         for(ResponseLoggerService rl : tmp) {
-            if(rl.isAlive() && rl.getMonitoredAddr().equals(monitoredAddr)) {
-                list.add(rl.getPreferences());
+            Preferences preferences = rl.getPreferences();
+            if(rl.isAlive() && rl.getMonitoredAddr().equals(getMonitoredAddr(request)) &&
+                    preferences.isUrlAcceptable(request.getRequestURI())) {
+                list.add(preferences);
             }
         }
 
@@ -46,21 +48,27 @@ public class UserRegistry {
     /**
      * Retrieve all {@link ResponseLoggerService} given the monitored address.
      *
-     * @param monitoredAddr the monitored address
+     * @param request the http servlet request
      * @return list of {@link ResponseLoggerService}
      * @throws IOException on io error
      */
-    public List<ResponseLoggerService> getContextLoggers(String monitoredAddr) throws IOException {
+    public List<ResponseLoggerService> getContextLoggers(HttpServletRequest request) throws IOException {
         List<ResponseLoggerService> list = new LinkedList<ResponseLoggerService>();
 
         List<ResponseLoggerService> tmp = new ArrayList<ResponseLoggerService>(userLoggerMap.values());
         for(ResponseLoggerService rl : tmp) {
-            if(rl.isAlive() && rl.getMonitoredAddr().equals(monitoredAddr)) {
+            Preferences preferences = rl.getPreferences();
+            if(rl.isAlive() && rl.getMonitoredAddr().equals(getMonitoredAddr(request)) &&
+                    preferences.isUrlAcceptable(request.getRequestURI())) {
                 list.add(rl);
             }
         }
 
         return list;
+    }
+
+    private String getMonitoredAddr(HttpServletRequest request) {
+        return request.getRemoteAddr();
     }
 
     public boolean isUserExist(User user) {
@@ -75,6 +83,10 @@ public class UserRegistry {
 
     public User createOrGetUser(HttpServletRequest request) {
         return new User(request);
+    }
+
+    public ResponseLoggerService getLogger(User user) {
+        return userLoggerMap.get(user);
     }
 
     private ResponseLoggerService stopServiceIfExist(User user) throws IOException {

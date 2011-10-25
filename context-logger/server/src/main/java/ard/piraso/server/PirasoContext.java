@@ -27,7 +27,7 @@ public class PirasoContext implements ContextPreference {
 
     private UserRegistry registry;
 
-    private String monitoredAddr;
+    private HttpServletRequest request;
 
     private boolean requestOnScope;
 
@@ -35,7 +35,7 @@ public class PirasoContext implements ContextPreference {
 
     PirasoContext(HttpServletRequest request, UserRegistry registry) {
         this.registry = registry;
-        this.monitoredAddr = request.getRemoteAddr();
+        this.request = request;
     }
 
     /**
@@ -43,7 +43,7 @@ public class PirasoContext implements ContextPreference {
      */
     public boolean isMonitored() {
         try {
-            return CollectionUtils.isNotEmpty(registry.getContextPreferences(monitoredAddr));
+            return CollectionUtils.isNotEmpty(registry.getContextPreferences(request));
         } catch (IOException e) {
             return false;
         }
@@ -54,7 +54,7 @@ public class PirasoContext implements ContextPreference {
      */
     public boolean isEnabled(String property) {
         try {
-            List<Preferences> preferencesList = registry.getContextPreferences(monitoredAddr);
+            List<Preferences> preferencesList = registry.getContextPreferences(request);
 
             for(Preferences pref : preferencesList) {
                 if(pref.isEnabled(property)) {
@@ -73,7 +73,7 @@ public class PirasoContext implements ContextPreference {
      */
     public Integer getIntValue(String property) {
         try {
-            List<Preferences> preferencesList = registry.getContextPreferences(monitoredAddr);
+            List<Preferences> preferencesList = registry.getContextPreferences(request);
             Integer max = null;
 
             for(Preferences pref : preferencesList) {
@@ -104,16 +104,14 @@ public class PirasoContext implements ContextPreference {
 
     private void logScoped(TraceableID id, Entry entry, boolean scopedEnabled) {
         try {
-            List<ResponseLoggerService> loggers = registry.getContextLoggers(monitoredAddr);
+            List<ResponseLoggerService> loggers = registry.getContextLoggers(request);
 
             for(ResponseLoggerService logger : loggers) {
                 Preferences preferences = logger.getPreferences();
 
-                if(logger.isAlive()) {
-                    boolean actual = preferences.isEnabled(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName());
-                    if(actual == scopedEnabled) {
-                        logger.log(id, entry);
-                    }
+                boolean actual = preferences.isEnabled(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName());
+                if(actual == scopedEnabled) {
+                    logger.log(id, entry);
                 }
             }
         } catch (IOException e) {
@@ -129,6 +127,11 @@ public class PirasoContext implements ContextPreference {
      * @param entry the entry to log
      */
     public void log(String preferenceProperty, TraceableID id, Entry entry) {
+        if(!isMonitored()) {
+            // ignore any logs when current context is not monitored.
+            return;
+        }
+
         // only log for those that ignores logging scope
         if(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName().equals(preferenceProperty) && !requestOnScope) {
             logScoped(id, entry, false);
@@ -146,17 +149,15 @@ public class PirasoContext implements ContextPreference {
         }
 
         try {
-            List<ResponseLoggerService> loggers = registry.getContextLoggers(monitoredAddr);
+            List<ResponseLoggerService> loggers = registry.getContextLoggers(request);
 
             for(ResponseLoggerService logger : loggers) {
                 Preferences preferences = logger.getPreferences();
 
-                if(logger.isAlive()) {
-                    if(preferenceProperty == null) {
-                        logger.log(id, entry);
-                    } else if(preferences.isEnabled(preferenceProperty)) {
-                        logger.log(id, entry);
-                    }
+                if(preferenceProperty == null) {
+                    logger.log(id, entry);
+                } else if(preferences.isEnabled(preferenceProperty)) {
+                    logger.log(id, entry);
                 }
             }
         } catch (IOException e) {

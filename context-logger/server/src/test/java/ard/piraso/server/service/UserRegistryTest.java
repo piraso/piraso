@@ -1,12 +1,13 @@
 package ard.piraso.server.service;
 
-import ard.piraso.api.Preferences;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 
+import static ard.piraso.server.CommonMockObjects.*;
 import static junit.framework.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 /**
  * Test for {@link UserRegistry} class.
@@ -22,47 +23,44 @@ public class UserRegistryTest {
 
     @Test
     public void testCreateUser() throws Exception {
-        User expected = UserTest.createUser("test", "a1");
-
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setRemoteAddr("test");
-        request.addParameter("activity_uuid", "a1");
-
-        User actual = registry.createOrGetUser(request);
+        User expected = createUser("test", "a1");
+        User actual = registry.createOrGetUser(mockRequest("test", "a1"));
 
         assertEquals(expected, actual);
     }
 
     @Test
     public void testAssociate() throws Exception {
-        final String monitoredAddr = "test";
-        User user = UserTest.createUser(monitoredAddr);
-        ResponseLoggerService service = mockService(monitoredAddr, true);
+        MockHttpServletRequest request = mockRequest("test", "a1");
+
+        User user = registry.createOrGetUser(request);
+        ResponseLoggerService service = mockService(request.getRemoteAddr(), true);
 
         registry.associate(user, service);
 
-        assertEquals(1, registry.getContextPreferences(monitoredAddr).size());
-        assertEquals(1, registry.getContextLoggers(monitoredAddr).size());
+        assertEquals(1, registry.getContextPreferences(request).size());
+        assertEquals(1, registry.getContextLoggers(request).size());
         assertTrue(registry.isUserExist(user));
     }
 
     @Test
     public void testRemove() throws Exception {
-        final String monitoredAddr = "test";
-        User user = UserTest.createUser(monitoredAddr);
-        ResponseLoggerService service = mockService(monitoredAddr, true);
+        MockHttpServletRequest request = mockRequest("test", "a1");
+
+        User user = registry.createOrGetUser(request);
+        ResponseLoggerService service = mockService(request.getRemoteAddr(), true);
 
         registry.associate(user, service);
 
-        assertEquals(1, registry.getContextPreferences(monitoredAddr).size());
-        assertEquals(1, registry.getContextLoggers(monitoredAddr).size());
+        assertEquals(1, registry.getContextPreferences(request).size());
+        assertEquals(1, registry.getContextLoggers(request).size());
         assertTrue(registry.isUserExist(user));
 
         registry.removeUser(user);
 
         assertFalse(registry.isUserExist(user));
-        assertTrue(registry.getContextLoggers(monitoredAddr).isEmpty());
-        assertTrue(registry.getContextPreferences(monitoredAddr).isEmpty());
+        assertTrue(registry.getContextLoggers(request).isEmpty());
+        assertTrue(registry.getContextPreferences(request).isEmpty());
         verify(service, times(1)).stop();
 
         // removing non existing user
@@ -75,42 +73,45 @@ public class UserRegistryTest {
 
     @Test
     public void testGetContext() throws Exception {
-        final String monitoredAddr = "test";
-        User user = UserTest.createUser(monitoredAddr);
-        ResponseLoggerService service = mockService(monitoredAddr, true);
+        MockHttpServletRequest request = mockRequest("test", "a1");
+        MockHttpServletRequest orig = request;
+
+        User user = registry.createOrGetUser(request);
+        ResponseLoggerService service = mockService(request.getRemoteAddr(), true);
 
         registry.associate(user, service);
 
-        assertEquals(1, registry.getContextPreferences(monitoredAddr).size());
-        assertEquals(1, registry.getContextLoggers(monitoredAddr).size());
+        assertEquals(1, registry.getContextPreferences(orig).size());
+        assertEquals(1, registry.getContextLoggers(orig).size());
+
+        // not valid url
+        service.getPreferences().addUrlPattern("/someValidUrl");
+        request.setRequestURI("/notValid");
+
+        assertEquals(0, registry.getContextPreferences(orig).size());
+        assertEquals(0, registry.getContextLoggers(orig).size());
+
+        // remove patterns
+        service.getPreferences().setUrlPatterns(null);
 
         // not alive
-        user = UserTest.createUser("test2");
-        service = mockService(monitoredAddr, false);
+        request = mockRequest("test2");
+        User user2 = registry.createOrGetUser(request);
+        ResponseLoggerService service2 = mockService(request.getRemoteAddr(), false);
 
-        registry.associate(user, service);
+        registry.associate(user2, service2);
 
-        assertEquals(1, registry.getContextPreferences(monitoredAddr).size());
-        assertEquals(1, registry.getContextLoggers(monitoredAddr).size());
+        assertEquals(1, registry.getContextPreferences(orig).size());
+        assertEquals(1, registry.getContextLoggers(orig).size());
 
         // not same monitored Addr and alive
-        user = UserTest.createUser("test3");
-        service = mockService("test3", true);
+        request = mockRequest("test3");
+        User user3 = registry.createOrGetUser(request);
+        ResponseLoggerService service3 = mockService(request.getRemoteAddr(), true);
 
-        registry.associate(user, service);
+        registry.associate(user3, service3);
 
-        assertEquals(1, registry.getContextPreferences(monitoredAddr).size());
-        assertEquals(1, registry.getContextLoggers(monitoredAddr).size());
-    }
-
-    private ResponseLoggerService mockService(String monitoredAddr, boolean alive) {
-        ResponseLoggerService service = mock(ResponseLoggerService.class);
-        Preferences preferences = mock(Preferences.class);
-
-        doReturn(preferences).when(service).getPreferences();
-        doReturn(monitoredAddr).when(service).getMonitoredAddr();
-        doReturn(alive).when(service).isAlive();
-
-        return service;
+        assertEquals(1, registry.getContextPreferences(orig).size());
+        assertEquals(1, registry.getContextLoggers(orig).size());
     }
 }

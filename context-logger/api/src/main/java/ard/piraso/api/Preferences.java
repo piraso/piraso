@@ -1,8 +1,11 @@
 package ard.piraso.api;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,6 +16,8 @@ public class Preferences {
     private Map<String, Property<Boolean>> booleanProperties;
 
     private Map<String, Property<Integer>> integerProperties;
+
+    private List<String> urlPatterns;
 
     public Map<String, Property<Boolean>> getBooleanProperties() {
         return booleanProperties;
@@ -38,6 +43,14 @@ public class Preferences {
         integerProperties.put(property.getName(), property);
     }
 
+    public void addUrlPattern(String pattern) {
+        if(urlPatterns == null) {
+            urlPatterns = new ArrayList<String>();
+        }
+
+        urlPatterns.add(pattern);
+    }
+
     public void setBooleanProperties(Map<String, Property<Boolean>> booleanProperties) {
         this.booleanProperties = booleanProperties;
     }
@@ -48,6 +61,29 @@ public class Preferences {
 
     public void setIntegerProperties(Map<String, Property<Integer>> integerProperties) {
         this.integerProperties = integerProperties;
+    }
+
+    public List<String> getUrlPatterns() {
+        return urlPatterns;
+    }
+
+    public void setUrlPatterns(List<String> urlPatterns) {
+        this.urlPatterns = urlPatterns;
+    }
+
+    public boolean isUrlAcceptable(String url) {
+        // if empty all url are acceptable
+        if(CollectionUtils.isEmpty(urlPatterns)) {
+            return true;
+        }
+
+        for(String pattern : urlPatterns) {
+            if(url.matches(pattern)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public boolean isEnabled(String property) {
@@ -73,6 +109,7 @@ public class Preferences {
             return false;
         if (integerProperties != null ? !integerProperties.equals(that.integerProperties) : that.integerProperties != null)
             return false;
+        if (urlPatterns != null ? !urlPatterns.equals(that.urlPatterns) : that.urlPatterns != null) return false;
 
         return true;
     }
@@ -81,6 +118,7 @@ public class Preferences {
     public int hashCode() {
         int result = booleanProperties != null ? booleanProperties.hashCode() : 0;
         result = 31 * result + (integerProperties != null ? integerProperties.hashCode() : 0);
+        result = 31 * result + (urlPatterns != null ? urlPatterns.hashCode() : 0);
         return result;
     }
 }

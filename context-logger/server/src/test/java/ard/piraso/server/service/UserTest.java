@@ -1,11 +1,11 @@
 package ard.piraso.server.service;
 
 import org.junit.Test;
-import org.springframework.mock.web.MockHttpServletRequest;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import static ard.piraso.server.CommonMockObjects.createUser;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static org.hamcrest.CoreMatchers.is;
@@ -60,20 +60,5 @@ public class UserTest {
 
         // should only be 2 since e3 and e1 is same
         assertThat(set.size(), is(2));
-    }
-
-    public static User createUser(String remoteAddr) {
-        return createUser(remoteAddr, null);
-    }
-
-    public static User createUser(String remoteAddr, String activityId) {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setRemoteAddr(remoteAddr);
-
-        if(activityId != null) {
-            request.addParameter("activity_uuid", activityId);
-        }
-
-        return new User(request);
     }
 }
