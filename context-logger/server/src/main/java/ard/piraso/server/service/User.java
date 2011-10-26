@@ -2,6 +2,7 @@ package ard.piraso.server.service;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
@@ -30,6 +31,11 @@ public class User {
 
     public String getActivityUuid() {
         return activityUuid;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 
     @Override
