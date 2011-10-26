@@ -63,6 +63,7 @@ public class PirasoEntryReaderTest {
 
         reader.start();
 
+        // no entry was read since all passed entries are invalid.
         assertTrue(entriesRead.isEmpty());
         assertTrue(idsRead.isEmpty());
         assertTrue(datesRead.isEmpty());
