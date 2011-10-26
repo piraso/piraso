@@ -13,7 +13,7 @@ public interface ResponseLoggerService {
 
     public User getUser();
 
-    public long getId();
+    public String getId();
 
     public String getMonitoredAddr();
 

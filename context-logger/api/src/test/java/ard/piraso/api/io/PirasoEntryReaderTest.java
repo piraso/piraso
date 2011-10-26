@@ -73,11 +73,12 @@ public class PirasoEntryReaderTest {
     public void testValidRead() throws Exception {
         final MessageEntry expectedEntry1 = new MessageEntry("message_1");
         final MessageEntry expectedEntry2 = new MessageEntry("message_2");
-        final long expectedId = 1l;
+        final String expectedId = "1";
+        final String expectedMonitor = "test";
         final String expectedEntryId1 = "id_1";
         final String expectedEntryId2 = "id_2";
 
-        String xml = createXML(expectedId, new PerformWrite() {
+        String xml = createXML(expectedId, expectedMonitor, new PerformWrite() {
             public void doWrite(PirasoEntryWriter writer) throws Exception {
                 writer.write(expectedEntryId1, expectedEntry1);
                 writer.write(expectedEntryId2, expectedEntry2);
@@ -100,6 +101,7 @@ public class PirasoEntryReaderTest {
         reader.start();
 
         assertEquals(expectedId, reader.getId());
+        assertEquals(expectedMonitor, reader.getMonitor());
         assertEquals(2, entriesRead.size());
         assertEquals(2, idsRead.size());
         assertEquals(2, datesRead.size());
@@ -110,10 +112,10 @@ public class PirasoEntryReaderTest {
         assertEquals(expectedEntryId2, idsRead.get(1));
     }
 
-    private String createXML(long id, PerformWrite performer) throws Exception {
+    private String createXML(String id, String monitor, PerformWrite performer) throws Exception {
         StringWriter buf = new StringWriter();
 
-        PirasoEntryWriter writer = new PirasoEntryWriter(id, new PrintWriter(buf));
+        PirasoEntryWriter writer = new PirasoEntryWriter(id, monitor, new PrintWriter(buf));
         performer.doWrite(writer);
         writer.close();
 

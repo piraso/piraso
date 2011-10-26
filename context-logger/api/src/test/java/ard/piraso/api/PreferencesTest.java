@@ -23,8 +23,10 @@ public class PreferencesTest extends AbstractJacksonTest {
 
         preferences.addProperty("1", 1);
         preferences.addProperty("true", true);
+        preferences.addProperty(GeneralPreferenceEnum.MONITOR_SELF.getPropertyName(), true);
 
         assertThat(preferences.isEnabled("true"), is(true));
+        assertThat(preferences.isEnabled(GeneralPreferenceEnum.MONITOR_SELF.getPropertyName()), is(true));
         assertThat(preferences.isEnabled("not existing"), is(false));
         assertThat(preferences.getIntValue("1"), is(1));
         assertThat(preferences.getIntValue("not existsing"), CoreMatchers.<Object>nullValue());

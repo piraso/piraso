@@ -36,7 +36,7 @@ public class PirasoEntryWriter {
 
     private Transformer transformer;
 
-    public PirasoEntryWriter(long id, PrintWriter writer) throws ParserConfigurationException, TransformerConfigurationException {
+    public PirasoEntryWriter(String id, String monitor, PrintWriter writer) throws ParserConfigurationException, TransformerConfigurationException {
         this.writer = writer;
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -45,12 +45,12 @@ public class PirasoEntryWriter {
         builder = factory.newDocumentBuilder();
         transformer = transformerFactory.newTransformer();
 
-        init(id);
+        init(id, monitor);
     }
 
-    private void init(long id) {
+    private void init(String id, String monitor) {
         writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        writer.println(String.format("<piraso id=\"%d\">", id));
+        writer.println(String.format("<piraso id=\"%s\" monitor=\"%s\">", id, monitor));
         writer.flush();
     }
 

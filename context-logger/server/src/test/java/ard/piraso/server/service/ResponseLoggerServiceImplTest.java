@@ -72,7 +72,7 @@ public class ResponseLoggerServiceImplTest {
         assertSame(user, service.getUser());
         assertEquals(EXPECTED_MONITORED_ADDRESS, service.getMonitoredAddr());
         assertEquals(preferences, service.getPreferences());
-        assertTrue(service.getId() > 0);
+        assertEquals(user.getActivityUuid(), service.getId());
         assertTrue(service.isAlive());
     }
 

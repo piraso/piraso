@@ -17,13 +17,14 @@ public class PirasoEntryWriterTest {
     public void testWrite() throws Exception {
         StringWriter buf = new StringWriter();
 
-        PirasoEntryWriter writer = new PirasoEntryWriter(1l, new PrintWriter(buf));
+        PirasoEntryWriter writer = new PirasoEntryWriter("1", "2", new PrintWriter(buf));
         writer.write("id_1", new MessageEntry("message"));
         writer.close();
 
         String actual = buf.toString();
 
         assertTrue(actual.contains("id=\"1\""));
+        assertTrue(actual.contains("monitor=\"2\""));
         assertTrue(actual.contains("id_1"));
         assertTrue(actual.contains("message"));
         assertTrue(actual.contains(MessageEntry.class.getName()));

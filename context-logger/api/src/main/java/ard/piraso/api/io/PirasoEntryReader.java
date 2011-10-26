@@ -28,7 +28,9 @@ public class PirasoEntryReader extends DefaultHandler {
 
     private ObjectMapper mapper = new ObjectMapper();
 
-    private long id;
+    private String id;
+
+    private String monitor;
 
     private String currentEntryId;
 
@@ -73,7 +75,8 @@ public class PirasoEntryReader extends DefaultHandler {
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         if(qName.equals("piraso")) {
-            id = Long.valueOf(attributes.getValue("id"));
+            id = attributes.getValue("id");
+            monitor = attributes.getValue("monitor");
         } else if(qName.equals("entry")) {
             try {
                 currentEntryClassName = attributes.getValue("className");
@@ -94,8 +97,12 @@ public class PirasoEntryReader extends DefaultHandler {
         content.append(new String(ch, start, length));
     }
 
-    public long getId() {
+    public String getId() {
         return id;
+    }
+
+    public String getMonitor() {
+        return monitor;
     }
 
     public void fireEntryReadEvent(EntryReadEvent evt) {

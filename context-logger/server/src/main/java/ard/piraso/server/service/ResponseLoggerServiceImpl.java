@@ -1,6 +1,6 @@
 package ard.piraso.server.service;
 
-import ard.piraso.api.IDGenerator;
+import ard.piraso.api.GeneralPreferenceEnum;
 import ard.piraso.api.Preferences;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.io.PirasoEntryWriter;
@@ -41,11 +41,6 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
     private static final long MAX_IDLE_TIME_KILL_SIZE = 60 * 60 * 1000;
 
     /**
-     * Service instance id generator.
-     */
-    private static final IDGenerator ID_GENERATOR = new IDGenerator();
-
-    /**
      * Request parameter name for the remote monitored address.
      */
     private static final String MONITORED_ADDR_PARAMETER = "monitoredAddr";
@@ -64,11 +59,6 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
      * The transfer queue. This holds the queue which will be streamed to response writer.
      */
     private List<TransferEntryHolder> transferQueue = Collections.synchronizedList(new LinkedList<TransferEntryHolder>());
-
-    /**
-     * Service instance id.
-     */
-    private long id = ID_GENERATOR.next();
 
     /**
      * The user which monitors.
@@ -135,13 +125,18 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
      * @throws IOException on io error
      */
     public ResponseLoggerServiceImpl(User user, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Validate.notNull(request.getParameter(MONITORED_ADDR_PARAMETER), String.format("Request parameter '%s' is required", MONITORED_ADDR_PARAMETER));
         Validate.notNull(request.getParameter(PREFERENCES_PARAMETER), String.format("Request parameter '%s' is required", PREFERENCES_PARAMETER));
 
+        this.preferences = new ObjectMapper().readValue(request.getParameter(PREFERENCES_PARAMETER), Preferences.class);
         this.user = user;
         this.response = response;
-        this.monitoredAddr = request.getParameter(MONITORED_ADDR_PARAMETER);
-        this.preferences = new ObjectMapper().readValue(request.getParameter(PREFERENCES_PARAMETER), Preferences.class);
+
+        if(this.preferences.isEnabled(GeneralPreferenceEnum.MONITOR_SELF.getPropertyName())) {
+            this.monitoredAddr = request.getRemoteAddr();
+        } else {
+            Validate.notNull(request.getParameter(MONITORED_ADDR_PARAMETER), String.format("Request parameter '%s' is required", MONITORED_ADDR_PARAMETER));
+            this.monitoredAddr = request.getParameter(MONITORED_ADDR_PARAMETER);
+        }
     }
 
     /**
@@ -179,8 +174,8 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
     /**
      * {@inheritDoc}
      */
-    public long getId() {
-        return id;
+    public String getId() {
+        return getUser().getActivityUuid();
     }
 
     /**
@@ -204,7 +199,7 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
         response.setContentType(RESPONSE_CONTENT_TYPE);
 
         try {
-            writer = new PirasoEntryWriter(getId(), response.getWriter());
+            writer = new PirasoEntryWriter(getId(), getMonitoredAddr(), response.getWriter());
             doLogWhileAlive();
         } finally {
             synchronized (this) {
