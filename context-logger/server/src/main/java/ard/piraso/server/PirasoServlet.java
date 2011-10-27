@@ -1,6 +1,9 @@
 package ard.piraso.server;
 
-import ard.piraso.server.service.*;
+import ard.piraso.server.service.ResponseLoggerService;
+import ard.piraso.server.service.ResponseLoggerServiceImpl;
+import ard.piraso.server.service.User;
+import ard.piraso.server.service.UserRegistry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.http.HttpStatus;
@@ -49,7 +52,7 @@ public class PirasoServlet implements HttpRequestHandler {
 
     public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if(request.getParameter(SERVICE_PARAMETER) == null) {
-            response.sendError(HttpStatus.BAD_REQUEST.ordinal(), "Request Parameter 'service' is required.");
+            response.sendError(HttpStatus.BAD_REQUEST.value(), "Request Parameter 'service' is required.");
             return;
         }
 
@@ -82,11 +85,11 @@ public class PirasoServlet implements HttpRequestHandler {
         }
 
         try {
+            // gracefully stop the service
             service.stopAndWait(STOP_TIMEOUT);
 
             if(service.isAlive()) {
                 response.sendError(HttpStatus.REQUEST_TIMEOUT.value(), String.format("Service for user '%s' stop timeout.", user.toString()));
-                return;
             } else {
                 registry.removeUser(user);
             }
@@ -107,15 +110,11 @@ public class PirasoServlet implements HttpRequestHandler {
 
         try {
             registry.associate(user, service);
-
             service.start();
-        } catch (ForcedStoppedException e) {
-            LOG.warn(String.format("User '%s' logging service was forced stopped.", user.toString()), e);
-            registry.removeUser(user);
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
-
-            throw new ServletException(e.getMessage(), e);
+            LOG.warn(e.getMessage(), e);
+        } finally {
+            registry.removeUser(user);
         }
     }
 }

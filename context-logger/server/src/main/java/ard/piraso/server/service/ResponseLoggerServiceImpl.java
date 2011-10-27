@@ -33,12 +33,12 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
     /**
      * If queue size reaches this size, the service will auto stop.
      */
-    private static final int MAX_QUEUE_FORCE_KILL_SIZE = 2000;
+    private static final int DEFAULT_MAX_QUEUE_FORCE_KILL_SIZE = 2000;
 
     /**
      * Maximum of 30 minutes idle time, otherwise the service will auto stop.
      */
-    private static final long MAX_IDLE_TIME_KILL_SIZE = 60 * 60 * 1000;
+    private static final long DEFAULT_MAX_IDLE_TIME_KILL_SIZE = 60 * 60 * 1000;
 
     /**
      * Request parameter name for the remote monitored address.
@@ -109,12 +109,12 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
     /**
      * maximum idle timeout
      */
-    private long maxIdleTimeout = MAX_IDLE_TIME_KILL_SIZE;
+    private long maxIdleTimeout = DEFAULT_MAX_IDLE_TIME_KILL_SIZE;
 
     /**
      * maximum transfer queue force stopped size
      */
-    private int maxQueueForceKillSize = MAX_QUEUE_FORCE_KILL_SIZE;
+    private int maxQueueForceKillSize = DEFAULT_MAX_QUEUE_FORCE_KILL_SIZE;
 
     /**
      * Construct the service given the user, request and response.
@@ -217,7 +217,7 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
      * when the {@link #transferQueue} is empty.
      * <p>
      * This is also responsible for computing for the idle time, which when the idle time exceeds the limit
-     * {@link #MAX_IDLE_TIME_KILL_SIZE} the service will forced stopped.
+     * {@link #DEFAULT_MAX_IDLE_TIME_KILL_SIZE} the service will forced stopped.
      *
      * @throws IOException on io error
      */
