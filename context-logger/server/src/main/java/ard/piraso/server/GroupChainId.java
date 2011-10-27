@@ -16,6 +16,10 @@ public class GroupChainId {
 
     private Map<Class, Object> properties = new HashMap<Class, Object>(3);
 
+    public GroupChainId() {
+       this(String.valueOf(System.currentTimeMillis()));
+    }
+
     public GroupChainId(String id) {
         groupIds = new LinkedList<String>();
         groupIds.add(id);

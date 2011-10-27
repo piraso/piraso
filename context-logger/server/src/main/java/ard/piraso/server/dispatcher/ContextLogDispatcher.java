@@ -27,7 +27,7 @@ public class ContextLogDispatcher {
      * @param message the message
      */
     public static void forward(String message) {
-        forward(new GroupChainId(String.valueOf(System.currentTimeMillis())), new MessageEntry(message));
+        forward(new GroupChainId(), new MessageEntry(message));
     }
 
     /**
