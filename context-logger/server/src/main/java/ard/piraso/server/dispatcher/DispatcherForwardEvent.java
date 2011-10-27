@@ -1,7 +1,7 @@
 package ard.piraso.server.dispatcher;
 
 import ard.piraso.api.entry.Entry;
-import ard.piraso.server.logger.TraceableID;
+import ard.piraso.server.GroupChainId;
 
 import java.util.EventObject;
 
@@ -12,9 +12,9 @@ public class DispatcherForwardEvent extends EventObject {
 
     private Entry entry;
 
-    private TraceableID id;
+    private GroupChainId id;
 
-    public DispatcherForwardEvent(Object source, Entry entry, TraceableID id) {
+    public DispatcherForwardEvent(Object source, Entry entry, GroupChainId id) {
         super(source);
 
         this.entry = entry;
@@ -25,7 +25,7 @@ public class DispatcherForwardEvent extends EventObject {
         return entry;
     }
 
-    public TraceableID getId() {
+    public GroupChainId getId() {
         return id;
     }
 }

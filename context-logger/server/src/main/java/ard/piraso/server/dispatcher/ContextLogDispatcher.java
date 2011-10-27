@@ -1,10 +1,11 @@
 package ard.piraso.server.dispatcher;
 
+import ard.piraso.api.Level;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.MessageEntry;
+import ard.piraso.server.GroupChainId;
 import ard.piraso.server.PirasoContext;
 import ard.piraso.server.PirasoContextHolder;
-import ard.piraso.server.logger.TraceableID;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,28 +27,28 @@ public class ContextLogDispatcher {
      * @param message the message
      */
     public static void forward(String message) {
-        forward(new TraceableID(String.valueOf(System.currentTimeMillis())), new MessageEntry(message));
+        forward(new GroupChainId(String.valueOf(System.currentTimeMillis())), new MessageEntry(message));
     }
 
     /**
-     * Forward log entry for dispatch. Delegates to {@link #forwardEntry(String, ard.piraso.server.logger.TraceableID, ard.piraso.api.entry.Entry)}.
+     * Forward log entry for dispatch.
      *
      * @param id the entry traceable id
      * @param entry the log entry to be dispatched.
      */
-    public static void forward(TraceableID id, Entry entry) {
-        DISPATCHER.forwardEntry(null, id, entry);
+    public static void forward(GroupChainId id, Entry entry) {
+        DISPATCHER.forwardEntry(Level.ALL, id, entry);
     }
 
     /**
-     * Forward log entry for dispatch. Delegates to {@link #forwardEntry(String, ard.piraso.server.logger.TraceableID, ard.piraso.api.entry.Entry)}.
+     * Forward log entry for dispatch.
      *
-     * @param preference property preference
+     * @param level log level
      * @param id the entry traceable id
      * @param entry the log entry to be dispatched.
      */
-    public static void forward(String preference, TraceableID id, Entry entry) {
-        DISPATCHER.forwardEntry(preference, id, entry);
+    public static void forward(Level level, GroupChainId id, Entry entry) {
+        DISPATCHER.forwardEntry(level, id, entry);
     }
 
     public static void addListener(DispatcherForwardListener listener) {
@@ -76,20 +77,20 @@ public class ContextLogDispatcher {
     /**
      * Forward log entry for dispatch.
      *
-     * @param preference the preference property
+     * @param level the log level
      * @param id the entry traceable id
      * @param entry the log entry to be dispatched.
      */
-    public void forwardEntry(String preference, TraceableID id, Entry entry) {
+    public void forwardEntry(Level level, GroupChainId id, Entry entry) {
         PirasoContext context = PirasoContextHolder.getContext();
 
         if(context != null) {
-            context.log(preference, id, entry);
+            context.log(level, id, entry);
             fireForwardedEvent(id, entry);
         }
     }
 
-    public void fireForwardedEvent(TraceableID id, Entry entry) {
+    public void fireForwardedEvent(GroupChainId id, Entry entry) {
         DispatcherForwardEvent evt = new DispatcherForwardEvent(this, entry, id);
 
         List<DispatcherForwardListener> tmp = new ArrayList<DispatcherForwardListener>(listeners);

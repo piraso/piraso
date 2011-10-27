@@ -1,6 +1,6 @@
 package ard.piraso.server.sql.logger;
 
-import ard.piraso.server.logger.TraceableID;
+import ard.piraso.server.GroupChainId;
 import ard.piraso.server.proxy.RegexMethodInterceptorAdapter;
 import ard.piraso.server.proxy.RegexMethodInterceptorEvent;
 import ard.piraso.server.proxy.RegexProxyFactory;
@@ -13,7 +13,7 @@ import java.sql.Connection;
  */
 public class DataSourceProxyFactory extends AbstractSQLProxyFactory<DataSource> {
 
-    public DataSourceProxyFactory(TraceableID id) {
+    public DataSourceProxyFactory(GroupChainId id) {
         super(id, new RegexProxyFactory<DataSource>(DataSource.class));
 
         factory.addMethodListener("getConnection", new GetConnectionListener());
@@ -24,11 +24,11 @@ public class DataSourceProxyFactory extends AbstractSQLProxyFactory<DataSource> 
         public void afterCall(RegexMethodInterceptorEvent<DataSource> evt) {
             // the current request retrieves a db connection
             // which means the current request is in logging scope.
-            preference.requestOnScope();
+            evaluator.requestOnScope();
 
             if(getPref().isConnectionEnabled()) {
                 Connection connection = (Connection) evt.getReturnedValue();
-                TraceableID newId = id.create("connection-", connection.hashCode());
+                GroupChainId newId = id.create("connection-", connection.hashCode());
 
                 evt.setReturnedValue(new ConnectionProxyFactory(newId).getProxy(connection));
             }

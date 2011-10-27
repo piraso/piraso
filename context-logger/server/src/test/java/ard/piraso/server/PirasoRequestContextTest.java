@@ -7,32 +7,32 @@ import static junit.framework.Assert.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Test for {@link RequestContextPreference} class.
+ * Test for {@link PirasoRequestContext} class.
  */
-public class RequestContextPreferenceTest {
+public class PirasoRequestContextTest {
 
     private PirasoContext context;
 
-    private RequestContextPreference requestContext;
+    private PirasoRequestContext pirasoRequestContext;
 
     @Before
     public void setUp() throws Exception {
         context = mock(PirasoContext.class);
         PirasoContextHolder.setContext(context);
 
-        requestContext = new RequestContextPreference();
+        pirasoRequestContext = new PirasoRequestContext();
     }
 
     @Test
     public void testNullDelegate() {
         PirasoContextHolder.removeContext();
-        requestContext = new RequestContextPreference();
+        pirasoRequestContext = new PirasoRequestContext();
 
-        assertFalse(requestContext.isMonitored());
-        assertFalse(requestContext.isEnabled("some property"));
-        assertNull(requestContext.getIntValue("some property"));
+        assertFalse(pirasoRequestContext.isMonitored());
+        assertFalse(pirasoRequestContext.isEnabled("some property"));
+        assertNull(pirasoRequestContext.getIntValue("some property"));
 
-        requestContext.requestOnScope(); // nothing will happen here
+        pirasoRequestContext.requestOnScope(); // nothing will happen here
 
         verify(context, times(0)).isMonitored();
         verify(context, times(0)).isEnabled("some property");
@@ -44,7 +44,7 @@ public class RequestContextPreferenceTest {
     public void testIsMonitored() throws Exception {
         doReturn(true).when(context).isMonitored();
 
-        assertTrue(requestContext.isMonitored());
+        assertTrue(pirasoRequestContext.isMonitored());
         verify(context, times(1)).isMonitored();
     }
 
@@ -52,8 +52,8 @@ public class RequestContextPreferenceTest {
     public void testIsEnabled() throws Exception {
         doReturn(true).when(context).isEnabled("property");
 
-        assertTrue(requestContext.isEnabled("property"));
-        assertFalse(requestContext.isEnabled("other property"));
+        assertTrue(pirasoRequestContext.isEnabled("property"));
+        assertFalse(pirasoRequestContext.isEnabled("other property"));
 
         verify(context, times(2)).isEnabled(anyString());
     }
@@ -62,15 +62,15 @@ public class RequestContextPreferenceTest {
     public void testGetIntValue() throws Exception {
         doReturn(1).when(context).getIntValue("property");
 
-        assertEquals(Integer.valueOf(1), requestContext.getIntValue("property"));
-        assertEquals(Integer.valueOf(0), requestContext.getIntValue("other property"));
+        assertEquals(Integer.valueOf(1), pirasoRequestContext.getIntValue("property"));
+        assertEquals(Integer.valueOf(0), pirasoRequestContext.getIntValue("other property"));
 
         verify(context, times(2)).getIntValue(anyString());
     }
 
     @Test
     public void testRequestInScope() throws Exception {
-        requestContext.requestOnScope();
+        pirasoRequestContext.requestOnScope();
 
         verify(context, times(1)).requestOnScope();
     }

@@ -2,9 +2,10 @@ package ard.piraso.server;
 
 import ard.piraso.api.GeneralPreferenceEnum;
 import ard.piraso.api.IDGenerator;
+import ard.piraso.api.Level;
 import ard.piraso.api.Preferences;
 import ard.piraso.api.entry.Entry;
-import ard.piraso.server.logger.TraceableID;
+import ard.piraso.api.entry.GroupEntry;
 import ard.piraso.server.service.ResponseLoggerService;
 import ard.piraso.server.service.UserRegistry;
 import org.apache.commons.collections.CollectionUtils;
@@ -108,7 +109,7 @@ public class PirasoContext implements ContextPreference {
         }
     }
 
-    private void logScoped(TraceableID id, Entry entry, boolean scopedEnabled) {
+    private void logScoped(GroupChainId id, Entry entry, boolean scopedEnabled) {
         try {
             List<ResponseLoggerService> loggers = registry.getContextLoggers(request);
 
@@ -128,21 +129,25 @@ public class PirasoContext implements ContextPreference {
     /**
      * Log the given entry.
      *
-     * @param preferenceProperty preference property
+     * @param level preference property
      * @param id the entry id
      * @param entry the entry to log
      */
-    public void log(String preferenceProperty, TraceableID id, Entry entry) {
+    public void log(Level level, GroupChainId id, Entry entry) {
         if(!isMonitored()) {
             // ignore any logs when current context is not monitored.
             return;
         }
 
+        if(level == null) {
+            level = Level.ALL;
+        }
+
         // only log for those that ignores logging scope
-        if(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName().equals(preferenceProperty) && !requestOnScope) {
+        if(Level.SCOPED.equals(level) && !requestOnScope) {
             logScoped(id, entry, false);
 
-            if(isEnabled(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName())) {
+            if(isEnabled(Level.SCOPED.getName())) {
                 entryQueue.add(new EntryHolder(id, entry));
             }
 
@@ -150,7 +155,7 @@ public class PirasoContext implements ContextPreference {
         }
 
         // when any other log is provided that is not scope aware then enable request for scope logging
-        if(!requestOnScope && !GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName().equals(preferenceProperty)) {
+        if(!requestOnScope && !GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName().equals(level.getName())) {
             requestOnScope();
         }
 
@@ -160,9 +165,9 @@ public class PirasoContext implements ContextPreference {
             for(ResponseLoggerService logger : loggers) {
                 Preferences preferences = logger.getPreferences();
 
-                if(preferenceProperty == null) {
+                if(Level.ALL.equals(level)) {
                     doLog(logger, id, entry);
-                } else if(preferences.isEnabled(preferenceProperty)) {
+                } else if(preferences.isEnabled(level.getName())) {
                     doLog(logger, id, entry);
                 }
             }
@@ -171,17 +176,19 @@ public class PirasoContext implements ContextPreference {
         }
     }
 
-    private void doLog(ResponseLoggerService logger, TraceableID id, Entry entry) throws IOException {
+    private void doLog(ResponseLoggerService logger, GroupChainId id, Entry entry) throws IOException {
         entry.setRequestId(requestId);
-        logger.log(id, entry);
+        entry.setGroup(new GroupEntry(id.getGroupIds()));
+
+        logger.log(entry);
     }
 
     private class EntryHolder {
-        private TraceableID id;
+        private GroupChainId id;
 
         private Entry entry;
 
-        private EntryHolder(TraceableID id, Entry entry) {
+        private EntryHolder(GroupChainId id, Entry entry) {
             this.id = id;
             this.entry = entry;
         }

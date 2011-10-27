@@ -21,7 +21,7 @@ public class MessageEntryTest extends AbstractJacksonTest {
         long endTime = System.currentTimeMillis() + elapseTime;
 
         ElapseTimeEntry expectedElapseTime = new ElapseTimeEntry(startTime, endTime);
-        MessageEntry expectedMessage = new MessageEntry("message");
+        MessageEntry expectedMessage = new MessageEntry(1l, "message");
         expectedMessage.setElapseTime(expectedElapseTime);
 
         String jsonValue = mapper.writeValueAsString(expectedMessage);
@@ -34,8 +34,8 @@ public class MessageEntryTest extends AbstractJacksonTest {
 
     @Test
     public void testEquals() {
-        MessageEntry entry = new MessageEntry("message");
-        MessageEntry other = new MessageEntry("not same");
+        MessageEntry entry = new MessageEntry(1l, "message");
+        MessageEntry other = new MessageEntry(1l, "not same");
 
         assertThat(entry.equals(entry), is(true)); // same instance
         assertThat(entry.equals("string"), is(false)); // not same class
@@ -52,12 +52,12 @@ public class MessageEntryTest extends AbstractJacksonTest {
 
     @Test
     public void testHashCode() {
-        MessageEntry e1 = new MessageEntry("test");
-        MessageEntry e2 = new MessageEntry("test2") {{
+        MessageEntry e1 = new MessageEntry(1l, "test");
+        MessageEntry e2 = new MessageEntry(1l, "test2") {{
             setElapseTime(new ElapseTimeEntry());
         }};
 
-        MessageEntry e3 = new MessageEntry("test");
+        MessageEntry e3 = new MessageEntry(1l, "test");
         MessageEntry e4 = new MessageEntry();
 
         Set<MessageEntry> set = new HashSet<MessageEntry>();

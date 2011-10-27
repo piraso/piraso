@@ -1,10 +1,8 @@
 package ard.piraso.server.service;
 
-import ard.piraso.api.GeneralPreferenceEnum;
 import ard.piraso.api.Preferences;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.io.PirasoEntryWriter;
-import ard.piraso.server.logger.TraceableID;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
@@ -43,7 +41,7 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
     /**
      * Request parameter name for the remote monitored address.
      */
-    private static final String MONITORED_ADDR_PARAMETER = "monitoredAddr";
+    private static final String WATCHED_ADDR_PARAMETER = "watchedAddr";
 
     /**
      * Request parameter name for the logging preferences.
@@ -58,7 +56,7 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
     /**
      * The transfer queue. This holds the queue which will be streamed to response writer.
      */
-    private List<TransferEntryHolder> transferQueue = Collections.synchronizedList(new LinkedList<TransferEntryHolder>());
+    private List<Entry> transferQueue = Collections.synchronizedList(new LinkedList<Entry>());
 
     /**
      * The user which monitors.
@@ -68,7 +66,7 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
     /**
      * The user monitor remote address.
      */
-    private String monitoredAddr;
+    private String watchedAddr;
 
     /**
      * The response transfer.
@@ -131,11 +129,10 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
         this.user = user;
         this.response = response;
 
-        if(this.preferences.isEnabled(GeneralPreferenceEnum.MONITOR_SELF.getPropertyName())) {
-            this.monitoredAddr = request.getRemoteAddr();
+        if(request.getParameter(WATCHED_ADDR_PARAMETER) == null) {
+            this.watchedAddr = request.getRemoteAddr();
         } else {
-            Validate.notNull(request.getParameter(MONITORED_ADDR_PARAMETER), String.format("Request parameter '%s' is required", MONITORED_ADDR_PARAMETER));
-            this.monitoredAddr = request.getParameter(MONITORED_ADDR_PARAMETER);
+            this.watchedAddr = request.getParameter(WATCHED_ADDR_PARAMETER);
         }
     }
 
@@ -167,8 +164,8 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
     /**
      * {@inheritDoc}
      */
-    public String getMonitoredAddr() {
-        return monitoredAddr;
+    public String getWatchedAddr() {
+        return watchedAddr;
     }
 
     /**
@@ -199,7 +196,7 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
         response.setContentType(RESPONSE_CONTENT_TYPE);
 
         try {
-            writer = new PirasoEntryWriter(getId(), getMonitoredAddr(), response.getWriter());
+            writer = new PirasoEntryWriter(getId(), getWatchedAddr(), response.getWriter());
             doLogWhileAlive();
         } finally {
             synchronized (this) {
@@ -265,9 +262,9 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
     private void writeAllTransfer() {
         while(CollectionUtils.isNotEmpty(transferQueue) && !isForcedStopped()) {
             try {
-                TransferEntryHolder holder = transferQueue.remove(0);
+                Entry entry = transferQueue.remove(0);
 
-                writer.write(holder.id.toString(), holder.entry);
+                writer.write(entry);
                 currentIdleTime = 0;
             } catch (Exception e) {
                 LOG.warn(e.getMessage(), e);
@@ -322,9 +319,9 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
     /**
      * {@inheritDoc}
      */
-    public void log(TraceableID id, Entry entry) throws IOException {
+    public void log(Entry entry) throws IOException {
         synchronized (this) {
-            Validate.notNull(entry.getId(), "Entry id should not be null.");
+            Validate.notNull(entry.getRequestId(), "Entry id should not be null.");
 
             if(transferQueue.size() + 1 >= maxQueueForceKillSize) {
                 forcedStopped = true;
@@ -334,7 +331,7 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
                 return;
             }
 
-            transferQueue.add(new TransferEntryHolder(id, entry));
+            transferQueue.add(entry);
             notifyAll();
         }
     }

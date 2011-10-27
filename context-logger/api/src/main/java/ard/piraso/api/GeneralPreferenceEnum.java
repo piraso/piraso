@@ -15,12 +15,7 @@ public enum GeneralPreferenceEnum {
      * Example: for sql logging, only when the request requires {@link javax.sql.DataSource} will be monitored.
      * Any other request like, resources, will not result to any logs.
      */
-    SCOPE_ENABLED("general.scoped.enabled"),
-
-    /**
-     * determines if current user is monitoring self
-     */
-    MONITOR_SELF("general.monitor.self");
+    SCOPE_ENABLED("general.scoped.enabled");
 
     /**
      * the preference property name.

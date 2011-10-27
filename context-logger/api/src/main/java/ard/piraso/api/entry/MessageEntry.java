@@ -12,12 +12,22 @@ public class MessageEntry extends Entry implements ElapseTimeAware {
     public MessageEntry() {}
 
     public MessageEntry(String message) {
-        this(message, null);
+        this(null, message);
+    }
+
+    public MessageEntry(Long requestId, String message) {
+        this(requestId, message, null);
     }
 
     public MessageEntry(String message, ElapseTimeEntry elapseTime) {
+        this(null, message, elapseTime);
+    }
+
+    public MessageEntry(Long requestId, String message, ElapseTimeEntry elapseTime) {
         this.message = message;
         this.elapseTime = elapseTime;
+
+        setRequestId(requestId);
     }
 
     public String getMessage() {

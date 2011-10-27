@@ -32,7 +32,7 @@ public class CommonMockObjects {
         Preferences preferences = new Preferences();
 
         doReturn(preferences).when(service).getPreferences();
-        doReturn(monitoredAddr).when(service).getMonitoredAddr();
+        doReturn(monitoredAddr).when(service).getWatchedAddr();
         doReturn(alive).when(service).isAlive();
 
         return service;

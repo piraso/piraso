@@ -8,14 +8,24 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  */
 public class Entry {
 
-    protected long requestId;
+    protected Long requestId;
 
-    public long getRequestId() {
+    protected GroupEntry group;
+
+    public Long getRequestId() {
         return requestId;
     }
 
-    public void setRequestId(long requestId) {
+    public void setRequestId(Long requestId) {
         this.requestId = requestId;
+    }
+
+    public GroupEntry getGroup() {
+        return group;
+    }
+
+    public void setGroup(GroupEntry group) {
+        this.group = group;
     }
 
     @Override

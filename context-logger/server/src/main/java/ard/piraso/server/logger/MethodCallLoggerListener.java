@@ -1,7 +1,9 @@
 package ard.piraso.server.logger;
 
+import ard.piraso.api.Level;
 import ard.piraso.api.entry.*;
 import ard.piraso.server.GeneralPreferenceEvaluator;
+import ard.piraso.server.GroupChainId;
 import ard.piraso.server.dispatcher.ContextLogDispatcher;
 import ard.piraso.server.proxy.RegexMethodInterceptorEvent;
 import ard.piraso.server.proxy.RegexMethodInterceptorListener;
@@ -15,16 +17,16 @@ public class MethodCallLoggerListener<T> implements RegexMethodInterceptorListen
 
     private MethodCallEntry entry;
 
-    private TraceableID id;
+    private GroupChainId id;
 
     private GeneralPreferenceEvaluator preference;
 
-    private String preferenceProperty;
+    private Level level;
 
-    public MethodCallLoggerListener(String preferenceProperty, TraceableID id, GeneralPreferenceEvaluator preference) {
+    public MethodCallLoggerListener(Level level, GroupChainId id) {
         this.id = id;
-        this.preference = preference;
-        this.preferenceProperty = preferenceProperty;
+        this.preference = new GeneralPreferenceEvaluator();
+        this.level = level;
     }
 
     public void beforeCall(RegexMethodInterceptorEvent<T> evt) {
@@ -45,13 +47,13 @@ public class MethodCallLoggerListener<T> implements RegexMethodInterceptorListen
         elapseTime.stop();
         entry.setReturnedValue(new ObjectEntry(evt.getReturnedValue()));
 
-        ContextLogDispatcher.forward(preferenceProperty, id, entry);
+        ContextLogDispatcher.forward(level, id, entry);
     }
 
     public void exceptionCall(RegexMethodInterceptorEvent<T> evt) {
         entry.setThrown(new ThrowableEntry(evt.getException()));
         elapseTime.stop();
 
-        ContextLogDispatcher.forward(preferenceProperty, id, entry);
+        ContextLogDispatcher.forward(level, id, entry);
     }
 }

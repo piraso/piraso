@@ -1,7 +1,9 @@
 package ard.piraso.server.logger;
 
+import ard.piraso.api.Level;
 import ard.piraso.api.entry.ElapseTimeEntry;
 import ard.piraso.api.entry.MessageEntry;
+import ard.piraso.server.GroupChainId;
 import ard.piraso.server.dispatcher.ContextLogDispatcher;
 import ard.piraso.server.proxy.RegexMethodInterceptorEvent;
 import ard.piraso.server.proxy.RegexMethodInterceptorListener;
@@ -11,7 +13,7 @@ import ard.piraso.server.proxy.RegexMethodInterceptorListener;
  */
 public class MessageLoggerListener<T> implements RegexMethodInterceptorListener<T> {
 
-    private TraceableID id;
+    private GroupChainId id;
 
     private ElapseTimeEntry elapseTime;
 
@@ -19,16 +21,16 @@ public class MessageLoggerListener<T> implements RegexMethodInterceptorListener<
 
     private String message;
 
-    private String preferenceProperty;
+    private Level level;
 
-    public MessageLoggerListener(String preferenceProperty, TraceableID id, String message) {
-        this(preferenceProperty, id, message, null);
+    public MessageLoggerListener(Level level, GroupChainId id, String message) {
+        this(level, id, message, null);
     }
 
-    public MessageLoggerListener(String preferenceProperty, TraceableID id, String message, ElapseTimeEntry elapseTime) {
+    public MessageLoggerListener(Level level, GroupChainId id, String message, ElapseTimeEntry elapseTime) {
         this.id = id;
         this.message = message;
-        this.preferenceProperty = preferenceProperty;
+        this.level = level;
 
         if(elapseTime == null) {
             this.elapseTime = new ElapseTimeEntry();
@@ -44,13 +46,14 @@ public class MessageLoggerListener<T> implements RegexMethodInterceptorListener<
 
     public void afterCall(RegexMethodInterceptorEvent<T> evt) {
         entry.getElapseTime().stop();
-        ContextLogDispatcher.forward(id, entry);
+
+        ContextLogDispatcher.forward(level, id, entry);
     }
 
     public void exceptionCall(RegexMethodInterceptorEvent<T> evt) {
         entry.getElapseTime().stop();
         entry.setMessage(evt.getInvocation().getMethod().getName() + ":" + evt.getException().getClass().getName());
 
-        ContextLogDispatcher.forward(preferenceProperty, id, entry);
+        ContextLogDispatcher.forward(level, id, entry);
     }
 }

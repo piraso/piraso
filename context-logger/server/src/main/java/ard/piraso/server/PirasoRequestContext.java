@@ -3,7 +3,7 @@ package ard.piraso.server;
 /**
  * Http request context preference.
  */
-public class RequestContextPreference implements ContextPreference {
+public class PirasoRequestContext implements ContextPreference {
 
     /**
      * The delegate instance
@@ -13,7 +13,7 @@ public class RequestContextPreference implements ContextPreference {
     /**
      * Construct this request context
      */
-    public RequestContextPreference() {
+    public PirasoRequestContext() {
         this.delegate = PirasoContextHolder.getContext();
     }
 

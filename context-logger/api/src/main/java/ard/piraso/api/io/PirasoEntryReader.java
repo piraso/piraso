@@ -30,9 +30,9 @@ public class PirasoEntryReader extends DefaultHandler {
 
     private String id;
 
-    private String monitor;
+    private String watchedAddr;
 
-    private String currentEntryId;
+    private Long currentEntryId;
 
     private Date currentEntryDate;
 
@@ -76,13 +76,13 @@ public class PirasoEntryReader extends DefaultHandler {
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         if(qName.equals("piraso")) {
             id = attributes.getValue("id");
-            monitor = attributes.getValue("monitor");
+            watchedAddr = attributes.getValue("watched-address");
         } else if(qName.equals("entry")) {
             try {
-                currentEntryClassName = attributes.getValue("className");
+                currentEntryClassName = attributes.getValue("class-name");
                 currentEntryDate = mapper.readValue(attributes.getValue("date"), Date.class);
-                currentEntryId = attributes.getValue("id");
-            } catch (IOException e) {
+                currentEntryId = Long.valueOf(attributes.getValue("id"));
+            } catch (Exception e) {
                 LOG.warn(String.format("Unable to parse entry with attributes '%s'", attributes.toString()));
 
                 currentEntryClassName = null;
@@ -101,8 +101,8 @@ public class PirasoEntryReader extends DefaultHandler {
         return id;
     }
 
-    public String getMonitor() {
-        return monitor;
+    public String getWatchedAddr() {
+        return watchedAddr;
     }
 
     public void fireEntryReadEvent(EntryReadEvent evt) {

@@ -36,7 +36,7 @@ public class PirasoEntryWriter {
 
     private Transformer transformer;
 
-    public PirasoEntryWriter(String id, String monitor, PrintWriter writer) throws ParserConfigurationException, TransformerConfigurationException {
+    public PirasoEntryWriter(String id, String watchedAddr, PrintWriter writer) throws ParserConfigurationException, TransformerConfigurationException {
         this.writer = writer;
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -45,18 +45,18 @@ public class PirasoEntryWriter {
         builder = factory.newDocumentBuilder();
         transformer = transformerFactory.newTransformer();
 
-        init(id, monitor);
+        init(id, watchedAddr);
     }
 
-    private void init(String id, String monitor) {
+    private void init(String id, String watchedAddr) {
         writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        writer.println(String.format("<piraso id=\"%s\" monitor=\"%s\">", id, monitor));
+        writer.println(String.format("<piraso id=\"%s\" watched-address=\"%s\">", id, watchedAddr));
         writer.flush();
     }
 
-    private String createXMLString(String id, Date date, Entry entry) throws ParserConfigurationException, SAXException, IOException, TransformerException {
-        StringReader reader = new StringReader(String.format("<entry id=\"%s\" date=\"%s\" className=\"%s\"></entry>",
-                id, mapper.writeValueAsString(date), entry.getClass().getName()));
+    private String createXMLString(Date date, Entry entry) throws ParserConfigurationException, SAXException, IOException, TransformerException {
+        StringReader reader = new StringReader(String.format("<entry id=\"%d\" date=\"%s\" class-name=\"%s\"></entry>",
+                entry.getRequestId(), mapper.writeValueAsString(date), entry.getClass().getName()));
 
         Document document = builder.parse(new InputSource(reader));
 
@@ -74,8 +74,8 @@ public class PirasoEntryWriter {
         return buf.substring(buf.indexOf("<entry"));
     }
 
-    public void write(String id, Entry entry) throws ParserConfigurationException, SAXException, IOException, TransformerException {
-        writer.println(createXMLString(id, new Date(), entry));
+    public void write(Entry entry) throws ParserConfigurationException, SAXException, IOException, TransformerException {
+        writer.println(createXMLString(new Date(), entry));
         writer.flush();
     }
 

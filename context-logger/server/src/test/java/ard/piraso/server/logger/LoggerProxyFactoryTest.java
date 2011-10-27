@@ -1,5 +1,6 @@
 package ard.piraso.server.logger;
 
+import ard.piraso.server.GroupChainId;
 import ard.piraso.server.PirasoContext;
 import ard.piraso.server.PirasoContextHolder;
 import ard.piraso.server.proxy.RegexMethodInterceptorAdapter;
@@ -21,11 +22,11 @@ public class LoggerProxyFactoryTest {
 
     protected PirasoContext context;
 
-    protected TraceableID id;
+    protected GroupChainId id;
 
     @Before
     public void setUp() throws Exception {
-        id = new TraceableID("test");
+        id = new GroupChainId("test");
         context = mock(PirasoContext.class);
 
         PirasoContextHolder.setContext(context);
@@ -87,7 +88,7 @@ public class LoggerProxyFactoryTest {
     }
 
     protected  class LoggerProxyFactory<T> extends AbstractLoggerProxyFactory<T> {
-        public LoggerProxyFactory(TraceableID id, RegexProxyFactory<T> regexProxyFactory) {
+        public LoggerProxyFactory(GroupChainId id, RegexProxyFactory<T> regexProxyFactory) {
             super(id, regexProxyFactory);
         }
     }

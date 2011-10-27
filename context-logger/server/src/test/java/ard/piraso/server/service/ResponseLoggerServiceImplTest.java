@@ -7,7 +7,6 @@ import ard.piraso.api.entry.MessageEntry;
 import ard.piraso.api.io.EntryReadEvent;
 import ard.piraso.api.io.EntryReadListener;
 import ard.piraso.api.io.PirasoEntryReader;
-import ard.piraso.server.logger.TraceableID;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,7 +35,7 @@ import static junit.framework.Assert.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Test for {@link ResponseLoggerServiceImpl} class.
+ * Test for {@link ResponseLoggerServiceImpl} class
  */
 public class ResponseLoggerServiceImplTest {
 
@@ -70,7 +69,7 @@ public class ResponseLoggerServiceImplTest {
     @Test
     public void testGetters() throws Exception {
         assertSame(user, service.getUser());
-        assertEquals(EXPECTED_MONITORED_ADDRESS, service.getMonitoredAddr());
+        assertEquals(EXPECTED_MONITORED_ADDRESS, service.getWatchedAddr());
         assertEquals(preferences, service.getPreferences());
         assertEquals(user.getActivityUuid(), service.getId());
         assertTrue(service.isAlive());
@@ -85,8 +84,8 @@ public class ResponseLoggerServiceImplTest {
     @Test(expected = ForcedStoppedException.class)
     public void testMaxTransferSize() throws Exception {
         service.setMaxQueueForceKillSize(2);
-        service.log(new TraceableID("id_1"), new MessageEntry("test"));
-        service.log(new TraceableID("id_2"), new MessageEntry("test2"));
+        service.log(new MessageEntry(1l, "test"));
+        service.log(new MessageEntry(1l, "test2"));
 
         service.start();
     }
@@ -138,7 +137,7 @@ public class ResponseLoggerServiceImplTest {
 
         final List<MessageEntry> expectedEntries = new ArrayList<MessageEntry>() {{
             for(int i = 0; i < 100; i++) {
-                add(new MessageEntry("test_" + (i + 1)));
+                add(new MessageEntry(1l, "test_" + (i + 1)));
             }
         }};
 
@@ -160,11 +159,11 @@ public class ResponseLoggerServiceImplTest {
             public void run() {
                 try {
                     // this entry should be ignored since this will throw an exception
-                    service.log(new TraceableID("error"), new ExceptionThrowEntry());
+                    service.log(new ExceptionThrowEntry(1l));
 
                     // these entries should succeed
                     for(MessageEntry entry : expectedEntries) {
-                        service.log(new TraceableID(entry.getMessage()), entry);
+                        service.log(entry);
                     }
                 } catch (IOException e) {
                     fail.set(true);
@@ -222,6 +221,11 @@ public class ResponseLoggerServiceImplTest {
     }
 
     private class ExceptionThrowEntry extends Entry {
+
+        private ExceptionThrowEntry(Long requestId) {
+            setRequestId(requestId);
+        }
+
         public String getPropertyThatThrowException() {
             throw new IllegalStateException("always thrown");
         }

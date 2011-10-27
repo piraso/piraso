@@ -1,6 +1,6 @@
 package ard.piraso.server.sql;
 
-import ard.piraso.server.logger.TraceableID;
+import ard.piraso.server.GroupChainId;
 import ard.piraso.server.sql.logger.DataSourceProxyFactory;
 
 import javax.sql.DataSource;
@@ -18,8 +18,9 @@ public class SQLContextLogger {
      * @return the proxy {@link DataSource} with context logging support.
      */
     public static DataSource create(DataSource dataSource, String id) {
-        DataSourceProxyFactory factory = new DataSourceProxyFactory(new TraceableID(id));
+        DataSourceProxyFactory factory = new DataSourceProxyFactory(new GroupChainId(id));
 
         return factory.getProxy(dataSource);
     }
+
 }

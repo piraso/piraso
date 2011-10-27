@@ -12,14 +12,14 @@ public class EntryReadEvent<T> extends EventObject {
 
     private Entry entry;
 
-    private String id;
+    private Long requestId;
 
     private Date date;
 
-    public EntryReadEvent(Object o, String id, Entry entry, Date date) {
+    public EntryReadEvent(Object o, Long requestId, Entry entry, Date date) {
         super(o);
 
-        this.id = id;
+        this.requestId = requestId;
         this.entry = entry;
         this.date = date;
     }
@@ -28,8 +28,8 @@ public class EntryReadEvent<T> extends EventObject {
         return entry;
     }
 
-    public String getId() {
-        return id;
+    public Long getRequestId() {
+        return requestId;
     }
 
     public Date getDate() {

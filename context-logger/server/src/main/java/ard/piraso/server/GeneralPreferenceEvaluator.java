@@ -7,7 +7,7 @@ import ard.piraso.api.GeneralPreferenceEnum;
  */
 public class GeneralPreferenceEvaluator {
 
-    protected ContextPreference preference = new RequestContextPreference();
+    protected ContextPreference preference = new PirasoRequestContext();
 
     private boolean isEnabled(GeneralPreferenceEnum pref) {
         return preference != null && preference.isEnabled(pref.getPropertyName());

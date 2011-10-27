@@ -43,20 +43,20 @@ public class PirasoEntryReaderTest {
     public void testInvalidDateAndClassNameRead() throws Exception {
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<piraso id=\"1\">\n" +
-                "<entry className=\"ard.piraso.api.entry.MessageEntry\" date=\"invalid\" id=\"id_1\">{\"message\":\"message\",\"elapseTime\":null}</entry>\n" +
-                "<entry className=\"invalidClassName\" date=\"1319349832439\" id=\"id_1\">{\"message\":\"message\",\"elapseTime\":null}</entry>\n" +
+                "<entry class-name=\"ard.piraso.api.entry.MessageEntry\" date=\"invalid\" id=\"id_1\">{\"message\":\"message\",\"elapseTime\":null}</entry>\n" +
+                "<entry class-name=\"invalidClassName\" date=\"1319349832439\" id=\"id_1\">{\"message\":\"message\",\"elapseTime\":null}</entry>\n" +
                 "<not-entry>ignored</not-entry>" +
                 "</piraso>";
 
         final List<Entry> entriesRead = new ArrayList<Entry>();
-        final List<String> idsRead = new ArrayList<String>();
+        final List<Long> idsRead = new ArrayList<Long>();
         final List<Date> datesRead = new ArrayList<Date>();
 
         PirasoEntryReader reader = new PirasoEntryReader(new ByteArrayInputStream(xml.getBytes()));
         reader.addListener(new EntryReadListener() {
             public void readEntry(EntryReadEvent evt) {
                 datesRead.add(evt.getDate());
-                idsRead.add(evt.getId());
+                idsRead.add(evt.getRequestId());
                 entriesRead.add(evt.getEntry());
             }
         });
@@ -71,29 +71,32 @@ public class PirasoEntryReaderTest {
 
     @Test
     public void testValidRead() throws Exception {
-        final MessageEntry expectedEntry1 = new MessageEntry("message_1");
-        final MessageEntry expectedEntry2 = new MessageEntry("message_2");
-        final String expectedId = "1";
-        final String expectedMonitor = "test";
-        final String expectedEntryId1 = "id_1";
-        final String expectedEntryId2 = "id_2";
+        final Long expectedRequestId = 1l;
 
-        String xml = createXML(expectedId, expectedMonitor, new PerformWrite() {
+        final MessageEntry expectedEntry1 = new MessageEntry(1l, "message_1");
+        final MessageEntry expectedEntry2 = new MessageEntry(1l, "message_2");
+        expectedEntry1.setRequestId(expectedRequestId);
+        expectedEntry2.setRequestId(expectedRequestId);
+
+        final String expectedId = "1";
+        final String expectedWatchedAddr = "test";
+
+        String xml = createXML(expectedId, expectedWatchedAddr, new PerformWrite() {
             public void doWrite(PirasoEntryWriter writer) throws Exception {
-                writer.write(expectedEntryId1, expectedEntry1);
-                writer.write(expectedEntryId2, expectedEntry2);
+                writer.write(expectedEntry1);
+                writer.write(expectedEntry2);
             }
         });
 
         final List<Entry> entriesRead = new ArrayList<Entry>();
-        final List<String> idsRead = new ArrayList<String>();
+        final List<Long> idsRead = new ArrayList<Long>();
         final List<Date> datesRead = new ArrayList<Date>();
 
         PirasoEntryReader reader = new PirasoEntryReader(new ByteArrayInputStream(xml.getBytes()));
         reader.addListener(new EntryReadListener() {
             public void readEntry(EntryReadEvent evt) {
                 datesRead.add(evt.getDate());
-                idsRead.add(evt.getId());
+                idsRead.add(evt.getRequestId());
                 entriesRead.add(evt.getEntry());
             }
         });
@@ -101,15 +104,15 @@ public class PirasoEntryReaderTest {
         reader.start();
 
         assertEquals(expectedId, reader.getId());
-        assertEquals(expectedMonitor, reader.getMonitor());
+        assertEquals(expectedWatchedAddr, reader.getWatchedAddr());
         assertEquals(2, entriesRead.size());
         assertEquals(2, idsRead.size());
         assertEquals(2, datesRead.size());
 
         assertEquals(expectedEntry1, entriesRead.get(0));
         assertEquals(expectedEntry2, entriesRead.get(1));
-        assertEquals(expectedEntryId1, idsRead.get(0));
-        assertEquals(expectedEntryId2, idsRead.get(1));
+        assertEquals(expectedRequestId, idsRead.get(0));
+        assertEquals(expectedRequestId, idsRead.get(1));
     }
 
     private String createXML(String id, String monitor, PerformWrite performer) throws Exception {

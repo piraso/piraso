@@ -1,14 +1,14 @@
 package ard.piraso.server;
 
+import ard.piraso.api.Level;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.server.dispatcher.ContextLogDispatcher;
-import ard.piraso.server.logger.TraceableID;
 import org.junit.Before;
+import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 
@@ -21,11 +21,11 @@ public abstract class AbstractLoggerListenerTest {
 
     protected Entry caughtEntry;
 
-    protected TraceableID id;
+    protected GroupChainId id;
 
     @Before
     public void setUp() throws Exception {
-        id = new TraceableID("test");
+        id = new GroupChainId("test");
         context = mock(PirasoContext.class);
 
         doAnswer(new Answer() {
@@ -33,7 +33,7 @@ public abstract class AbstractLoggerListenerTest {
                 caughtEntry = (Entry) invocationOnMock.getArguments()[2];
                 return invocationOnMock.callRealMethod();
             }
-        }).when(context).log(anyString(), any(TraceableID.class), any(Entry.class));
+        }).when(context).log(Matchers.<Level>any(), any(GroupChainId.class), any(Entry.class));
 
         PirasoContextHolder.setContext(context);
         ContextLogDispatcher.clearListeners();

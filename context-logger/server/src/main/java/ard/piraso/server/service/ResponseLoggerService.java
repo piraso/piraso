@@ -2,7 +2,6 @@ package ard.piraso.server.service;
 
 import ard.piraso.api.Preferences;
 import ard.piraso.api.entry.Entry;
-import ard.piraso.server.logger.TraceableID;
 
 import java.io.IOException;
 
@@ -15,7 +14,7 @@ public interface ResponseLoggerService {
 
     public String getId();
 
-    public String getMonitoredAddr();
+    public String getWatchedAddr();
 
     public Preferences getPreferences();
 
@@ -29,5 +28,5 @@ public interface ResponseLoggerService {
 
     public void stopAndWait(long timeout) throws InterruptedException, IOException;
 
-    public void log(TraceableID id, Entry entry) throws IOException;
+    public void log(Entry entry) throws IOException;
 }

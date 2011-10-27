@@ -37,7 +37,7 @@ public class UserRegistry {
         List<ResponseLoggerService> tmp = new ArrayList<ResponseLoggerService>(userLoggerMap.values());
         for(ResponseLoggerService rl : tmp) {
             Preferences preferences = rl.getPreferences();
-            if(rl.isAlive() && rl.getMonitoredAddr().equals(getMonitoredAddr(request)) &&
+            if(rl.isAlive() && rl.getWatchedAddr().equals(getMonitoredAddr(request)) &&
                     preferences.isUrlAcceptable(request.getRequestURI())) {
                 list.add(preferences);
             }
@@ -59,7 +59,7 @@ public class UserRegistry {
         List<ResponseLoggerService> tmp = new ArrayList<ResponseLoggerService>(userLoggerMap.values());
         for(ResponseLoggerService rl : tmp) {
             Preferences preferences = rl.getPreferences();
-            if(rl.isAlive() && rl.getMonitoredAddr().equals(getMonitoredAddr(request)) &&
+            if(rl.isAlive() && rl.getWatchedAddr().equals(getMonitoredAddr(request)) &&
                     preferences.isUrlAcceptable(request.getRequestURI())) {
                 list.add(rl);
             }

@@ -1,9 +1,8 @@
 package ard.piraso.server;
 
-import ard.piraso.api.GeneralPreferenceEnum;
+import ard.piraso.api.Level;
 import ard.piraso.api.entry.ResponseEntry;
 import ard.piraso.server.dispatcher.ContextLogDispatcher;
-import ard.piraso.server.logger.TraceableID;
 import ard.piraso.server.service.UserRegistry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,8 +23,6 @@ public class PirasoFilter extends OncePerRequestFilter {
      * final class logging instance.
      */
     private static final Log LOG = LogFactory.getLog(PirasoFilter.class);
-
-    private static final String SCOPED_LOG = GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName();
 
     private UserRegistry registry;
 
@@ -52,7 +49,7 @@ public class PirasoFilter extends OncePerRequestFilter {
                 PirasoContextHolder.setContext(context);
 
                 // forward a scoped context log for request entry point
-                ContextLogDispatcher.forward(SCOPED_LOG, new TraceableID("request-" + request.hashCode()),
+                ContextLogDispatcher.forward(Level.SCOPED, new GroupChainId("request-" + request.hashCode()),
                         WebEntryUtils.toEntry(request));
             }
         } catch(Exception e) {
@@ -66,7 +63,7 @@ public class PirasoFilter extends OncePerRequestFilter {
                 responseEntry.getElapseTime().stop();
 
                 // forward a scoped context log for response exit point
-                ContextLogDispatcher.forward(SCOPED_LOG, new TraceableID("response-" + request.hashCode()),
+                ContextLogDispatcher.forward(Level.SCOPED, new GroupChainId("response-" + request.hashCode()),
                         responseEntry);
 
                 PirasoContextHolder.removeContext();

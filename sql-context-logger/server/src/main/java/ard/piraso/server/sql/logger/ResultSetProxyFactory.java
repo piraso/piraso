@@ -1,15 +1,16 @@
 package ard.piraso.server.sql.logger;
 
 import ard.piraso.api.IDGenerator;
+import ard.piraso.api.Level;
 import ard.piraso.api.entry.ElapseTimeEntry;
 import ard.piraso.api.sql.SQLDataTotalRowsEntry;
 import ard.piraso.api.sql.SQLDataViewEntry;
 import ard.piraso.api.sql.SQLParameterEntry;
 import ard.piraso.api.sql.SQLPreferenceEnum;
+import ard.piraso.server.GroupChainId;
 import ard.piraso.server.dispatcher.ContextLogDispatcher;
 import ard.piraso.server.logger.MessageLoggerListener;
 import ard.piraso.server.logger.MethodCallLoggerListener;
-import ard.piraso.server.logger.TraceableID;
 import ard.piraso.server.proxy.RegexMethodInterceptorAdapter;
 import ard.piraso.server.proxy.RegexMethodInterceptorEvent;
 import ard.piraso.server.proxy.RegexProxyFactory;
@@ -33,9 +34,9 @@ public class ResultSetProxyFactory extends AbstractSQLProxyFactory<ResultSet> {
 
     private static final IDGenerator GENERATOR = new IDGenerator();
 
-    private static final String METHOD_CALL_PROPERTY = SQLPreferenceEnum.RESULTSET_METHOD_CALL_ENABLED.getPropertyName();
+    private static final Level METHOD_CALL_LEVEL = Level.get(SQLPreferenceEnum.CONNECTION_METHOD_CALL_ENABLED.getPropertyName());
 
-    private static final String ENABLED_PROPERTY = SQLPreferenceEnum.RESULTSET_ENABLED.getPropertyName();
+    private static final Level BASE_LEVEL = Level.get(SQLPreferenceEnum.CONNECTION_ENABLED.getPropertyName());
 
     private ResultSetParameterListener parameterCollector;
 
@@ -49,20 +50,20 @@ public class ResultSetProxyFactory extends AbstractSQLProxyFactory<ResultSet> {
 
     private int totalRowCount = 0;
 
-    public ResultSetProxyFactory(TraceableID id) {
+    public ResultSetProxyFactory(GroupChainId id) {
         super(id, new RegexProxyFactory<ResultSet>(ResultSet.class));
 
         ElapseTimeEntry elapseTime = new ElapseTimeEntry();
         elapseTime.start();
 
         if(getPref().isResultSetMethodCallEnabled()) {
-            factory.addMethodListener(".*", new MethodCallLoggerListener<ResultSet>(METHOD_CALL_PROPERTY, id, preference));
+            factory.addMethodListener(".*", new MethodCallLoggerListener<ResultSet>(METHOD_CALL_LEVEL, id));
         }
 
         parameterCollector = new ResultSetParameterListener();
 
         factory.addMethodListener("get.*", parameterCollector);
-        factory.addMethodListener("close", new MessageLoggerListener<ResultSet>(ENABLED_PROPERTY, id, "Fetch Elapse Time", elapseTime));
+        factory.addMethodListener("close", new MessageLoggerListener<ResultSet>(BASE_LEVEL, id, "Fetch Elapse Time", elapseTime));
         factory.addMethodListener("next|close", new NextCloseListener());
     }
 
@@ -88,18 +89,18 @@ public class ResultSetProxyFactory extends AbstractSQLProxyFactory<ResultSet> {
                 }
 
                 if(CollectionUtils.isNotEmpty(recordQueue)) {
-                    ContextLogDispatcher.forward(ENABLED_PROPERTY, id, new SQLDataViewEntry(resultSetId, recordQueue));
+                    ContextLogDispatcher.forward(BASE_LEVEL, id, new SQLDataViewEntry(resultSetId, recordQueue));
                     recordQueue.clear();
                 }
             }
 
             if(!parameterCollector.isDisabled() && method.getName().equals("close") && CollectionUtils.isNotEmpty(recordQueue)) {
-                ContextLogDispatcher.forward(ENABLED_PROPERTY, id, new SQLDataViewEntry(resultSetId, recordQueue));
+                ContextLogDispatcher.forward(BASE_LEVEL, id, new SQLDataViewEntry(resultSetId, recordQueue));
                 recordQueue.clear();
             }
 
             if(method.getName().equals("close")) {
-                ContextLogDispatcher.forward(ENABLED_PROPERTY, id, new SQLDataTotalRowsEntry(totalRowCount));
+                ContextLogDispatcher.forward(BASE_LEVEL, id, new SQLDataTotalRowsEntry(totalRowCount));
             }
         }
     }
