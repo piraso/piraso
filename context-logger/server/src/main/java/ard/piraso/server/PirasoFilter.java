@@ -49,7 +49,7 @@ public class PirasoFilter extends OncePerRequestFilter {
                 PirasoContextHolder.setContext(context);
 
                 // forward a scoped context log for request entry point
-                ContextLogDispatcher.forward(Level.SCOPED, new GroupChainId("request-" + request.hashCode()),
+                ContextLogDispatcher.forward(Level.SCOPED, new GroupChainId("request", request.hashCode()),
                         WebEntryUtils.toEntry(request));
             }
         } catch(Exception e) {
@@ -63,7 +63,7 @@ public class PirasoFilter extends OncePerRequestFilter {
                 responseEntry.getElapseTime().stop();
 
                 // forward a scoped context log for response exit point
-                ContextLogDispatcher.forward(Level.SCOPED, new GroupChainId("response-" + request.hashCode()),
+                ContextLogDispatcher.forward(Level.SCOPED, new GroupChainId("response", request.hashCode()),
                         responseEntry);
 
                 PirasoContextHolder.removeContext();

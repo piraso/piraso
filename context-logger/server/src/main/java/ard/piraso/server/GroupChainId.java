@@ -21,6 +21,11 @@ public class GroupChainId {
         groupIds.add(id);
     }
 
+    public GroupChainId(String id, int hashCode) {
+        groupIds = new LinkedList<String>();
+        groupIds.add(id + "-" + Integer.toHexString(hashCode));
+    }
+
     private GroupChainId(String id, LinkedList<String> groupIds) {
         this.groupIds = new LinkedList<String>(groupIds);
         this.groupIds.add(id);
