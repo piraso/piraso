@@ -1,6 +1,7 @@
 package ard.piraso.server;
 
 import ard.piraso.api.GeneralPreferenceEnum;
+import ard.piraso.api.IDGenerator;
 import ard.piraso.api.Preferences;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.server.logger.TraceableID;
@@ -25,6 +26,8 @@ public class PirasoContext implements ContextPreference {
      */
     private static final Log LOG = LogFactory.getLog(PirasoContext.class);
 
+    private static final IDGenerator ID_GENERATOR = new IDGenerator();
+
     private UserRegistry registry;
 
     private HttpServletRequest request;
@@ -35,8 +38,8 @@ public class PirasoContext implements ContextPreference {
 
     private LinkedList<EntryHolder> entryQueue = new LinkedList<EntryHolder>();
 
-    PirasoContext(long requestId, HttpServletRequest request, UserRegistry registry) {
-        this.requestId = requestId;
+    PirasoContext(HttpServletRequest request, UserRegistry registry) {
+        this.requestId = ID_GENERATOR.next();
         this.registry = registry;
         this.request = request;
     }
@@ -169,7 +172,7 @@ public class PirasoContext implements ContextPreference {
     }
 
     private void doLog(ResponseLoggerService logger, TraceableID id, Entry entry) throws IOException {
-        entry.setId(requestId);
+        entry.setRequestId(requestId);
         logger.log(id, entry);
     }
 

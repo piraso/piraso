@@ -1,7 +1,6 @@
 package ard.piraso.server;
 
 import ard.piraso.api.GeneralPreferenceEnum;
-import ard.piraso.api.IDGenerator;
 import ard.piraso.api.entry.ResponseEntry;
 import ard.piraso.server.dispatcher.ContextLogDispatcher;
 import ard.piraso.server.logger.TraceableID;
@@ -26,8 +25,6 @@ public class PirasoFilter extends OncePerRequestFilter {
      */
     private static final Log LOG = LogFactory.getLog(PirasoFilter.class);
 
-    private static final IDGenerator ID_GENERATOR = new IDGenerator();
-
     private static final String SCOPED_LOG = GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName();
 
     private UserRegistry registry;
@@ -43,22 +40,19 @@ public class PirasoFilter extends OncePerRequestFilter {
         boolean requestIsWatched = registry.isWatched(request);
         ResponseEntry responseEntry = null;
 
-        long requestId = 0;
-
         try {
             if(requestIsWatched) {
                 responseEntry = new ResponseEntry();
-                requestId = ID_GENERATOR.next();
 
                 responseEntry.getElapseTime().start();
 
                 response = new PirasoResponseWrapper(response, responseEntry);
-                PirasoContext context = new PirasoContext(requestId, request, registry);
+                PirasoContext context = new PirasoContext(request, registry);
 
                 PirasoContextHolder.setContext(context);
 
                 // forward a scoped context log for request entry point
-                ContextLogDispatcher.forward(SCOPED_LOG, new TraceableID("request-" + requestId),
+                ContextLogDispatcher.forward(SCOPED_LOG, new TraceableID("request-" + request.hashCode()),
                         WebEntryUtils.toEntry(request));
             }
         } catch(Exception e) {
@@ -72,7 +66,7 @@ public class PirasoFilter extends OncePerRequestFilter {
                 responseEntry.getElapseTime().stop();
 
                 // forward a scoped context log for response exit point
-                ContextLogDispatcher.forward(SCOPED_LOG, new TraceableID("response-" + requestId),
+                ContextLogDispatcher.forward(SCOPED_LOG, new TraceableID("response-" + request.hashCode()),
                         responseEntry);
 
                 PirasoContextHolder.removeContext();

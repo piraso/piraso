@@ -8,14 +8,14 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  */
 public class Entry {
 
-    protected long id;
+    protected long requestId;
 
-    public long getId() {
-        return id;
+    public long getRequestId() {
+        return requestId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setRequestId(long requestId) {
+        this.requestId = requestId;
     }
 
     @Override
