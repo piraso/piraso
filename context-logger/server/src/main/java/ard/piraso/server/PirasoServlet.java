@@ -19,13 +19,14 @@ public class PirasoServlet implements HttpRequestHandler {
     /**
      * final class logging instance.
      */
-    private static final Log LOG = LogFactory.getLog(ResponseLoggerServiceImpl.class);
+    private static final Log LOG = LogFactory.getLog(PirasoServlet.class);
 
     private static final String START_OPERATION = "start";
 
     private static final String STOP_OPERATION = "stop";
 
     private static final String SERVICE_PARAMETER = "service";
+
     public static final long STOP_TIMEOUT = 10000l;
 
     private Integer maxQueueForceKillSize;

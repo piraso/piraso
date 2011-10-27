@@ -34,7 +34,7 @@ public class PirasoContextTest {
     public void setUp() throws Exception {
         registry = spy(new UserRegistry());
         request = mockRequest(MONITORED_ADDR);
-        context = new PirasoContext(request, registry);
+        context = new PirasoContext(1l, request, registry);
     }
 
     @Test

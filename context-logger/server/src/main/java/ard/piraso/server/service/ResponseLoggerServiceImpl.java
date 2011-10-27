@@ -324,6 +324,8 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
      */
     public void log(TraceableID id, Entry entry) throws IOException {
         synchronized (this) {
+            Validate.notNull(entry.getId(), "Entry id should not be null.");
+
             if(transferQueue.size() + 1 >= maxQueueForceKillSize) {
                 forcedStopped = true;
                 forcedStoppedReason = String.format("Max queue force kill size '%d' was reached.", maxQueueForceKillSize);

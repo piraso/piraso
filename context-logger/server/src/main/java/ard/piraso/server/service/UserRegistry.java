@@ -1,6 +1,7 @@
 package ard.piraso.server.service;
 
 import ard.piraso.api.Preferences;
+import org.apache.commons.collections.CollectionUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -69,6 +70,10 @@ public class UserRegistry {
 
     private String getMonitoredAddr(HttpServletRequest request) {
         return request.getRemoteAddr();
+    }
+
+    public boolean isWatched(HttpServletRequest request) throws IOException {
+        return CollectionUtils.isNotEmpty(getContextLoggers(request));
     }
 
     public boolean isUserExist(User user) {

@@ -31,9 +31,12 @@ public class PirasoContext implements ContextPreference {
 
     private boolean requestOnScope;
 
+    private long requestId;
+
     private LinkedList<EntryHolder> entryQueue = new LinkedList<EntryHolder>();
 
-    PirasoContext(HttpServletRequest request, UserRegistry registry) {
+    PirasoContext(long requestId, HttpServletRequest request, UserRegistry registry) {
+        this.requestId = requestId;
         this.registry = registry;
         this.request = request;
     }
@@ -111,7 +114,7 @@ public class PirasoContext implements ContextPreference {
 
                 boolean actual = preferences.isEnabled(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName());
                 if(actual == scopedEnabled) {
-                    logger.log(id, entry);
+                    doLog(logger, id, entry);
                 }
             }
         } catch (IOException e) {
@@ -155,14 +158,19 @@ public class PirasoContext implements ContextPreference {
                 Preferences preferences = logger.getPreferences();
 
                 if(preferenceProperty == null) {
-                    logger.log(id, entry);
+                    doLog(logger, id, entry);
                 } else if(preferences.isEnabled(preferenceProperty)) {
-                    logger.log(id, entry);
+                    doLog(logger, id, entry);
                 }
             }
         } catch (IOException e) {
             LOG.warn(e.getMessage(), e);
         }
+    }
+
+    private void doLog(ResponseLoggerService logger, TraceableID id, Entry entry) throws IOException {
+        entry.setId(requestId);
+        logger.log(id, entry);
     }
 
     private class EntryHolder {
