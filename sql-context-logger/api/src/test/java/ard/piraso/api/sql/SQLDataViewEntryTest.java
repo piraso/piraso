@@ -21,7 +21,7 @@ public class SQLDataViewEntryTest extends AbstractJacksonTest {
         List<List<SQLParameterEntry>> records = new ArrayList<List<SQLParameterEntry>>();
 
         Method method = ResultSet.class.getMethod("getString", new Class[] { String.class });
-        records.add(Arrays.asList(new SQLParameterEntry("column1", method, new Object[] {"column1"}, "test")));
+        records.add(Arrays.asList(new SQLParameterEntry("column1", method, new Object[] {"column1"})));
 
         SQLDataViewEntry expected = new SQLDataViewEntry(1l, records);
 
