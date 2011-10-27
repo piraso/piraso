@@ -13,6 +13,9 @@ public class SQLDataViewEntry extends Entry {
 
     private long resultSetId;
 
+    public SQLDataViewEntry() {
+    }
+
     public SQLDataViewEntry(long resultSetId, List<List<SQLParameterEntry>> records) {
         this.records = records;
         this.resultSetId = resultSetId;

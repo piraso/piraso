@@ -1,6 +1,7 @@
 package ard.piraso.api.io;
 
 import ard.piraso.api.entry.Entry;
+import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -28,7 +29,7 @@ import java.util.Date;
  */
 public class PirasoEntryWriter {
 
-    private ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper mapper;
 
     private PrintWriter writer;
 
@@ -38,6 +39,8 @@ public class PirasoEntryWriter {
 
     public PirasoEntryWriter(String id, String watchedAddr, PrintWriter writer) throws ParserConfigurationException, TransformerConfigurationException {
         this.writer = writer;
+        mapper = new ObjectMapper();
+        mapper.disable(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES);
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         TransformerFactory transformerFactory = TransformerFactory.newInstance();

@@ -1,11 +1,8 @@
 package ard.piraso.api.entry;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-
 /**
  * An entry with elapse time.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class ElapseTimeEntry extends Entry {
 
     private long startTime;

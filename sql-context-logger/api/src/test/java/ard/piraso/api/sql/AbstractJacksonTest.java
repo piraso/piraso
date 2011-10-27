@@ -1,4 +1,4 @@
-package ard.piraso.api;
+package ard.piraso.api.sql;
 
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
