@@ -52,7 +52,7 @@ public class HttpPirasoStartHandler extends AbstractHttpHandler {
         this.watchedAddr = watchedAddr;
     }
 
-    public void execute() throws IOException {
+    public void execute() throws IOException, SAXException, ParserConfigurationException {
         Validate.notNull(uri, "uri should not be null.");
         Validate.notNull(preferences, "preferences should not be null.");
 
@@ -90,10 +90,6 @@ public class HttpPirasoStartHandler extends AbstractHttpHandler {
 
         try {
             reader.start();
-        } catch (SAXException e) {
-            throw new HttpPirasoException(e.getMessage(), e);
-        } catch (ParserConfigurationException e) {
-            throw new HttpPirasoException(e.getMessage(), e);
         } finally {
             EntityUtils.consume(responseEntity);
         }

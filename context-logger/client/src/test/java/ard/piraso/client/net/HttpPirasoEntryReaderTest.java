@@ -16,7 +16,9 @@ import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -71,7 +73,7 @@ public class HttpPirasoEntryReaderTest {
         successStart();
     }
 
-    private void successStart() throws IOException {
+    private void successStart() throws IOException, SAXException, ParserConfigurationException {
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<piraso id=\"1\">\n" +
                 "<entry class-name=\"ard.piraso.api.entry.MessageEntry\" date=\"1319349832439\" id=\"1\">{\"message\":\"message\",\"elapseTime\":null}</entry>\n" +
@@ -125,7 +127,6 @@ public class HttpPirasoEntryReaderTest {
         doReturn("json/application").when(contentTypeHeader).getValue();
 
         reader.getStartHandler().setPreferences(preferences);
-        reader.getStartHandler().setWatchedAddr("127.0.0.1");
 
         reader.start();
     }
@@ -138,6 +139,23 @@ public class HttpPirasoEntryReaderTest {
         doReturn(line).when(response).getStatusLine();
 
         reader.stop();
+    }
+
+    @Test
+    public void testEntryListener() throws Exception {
+        EntryReadListener listener = mock(EntryReadListener.class);
+
+        reader.getStartHandler().addListener(listener);
+        assertEquals(1, reader.getStartHandler().getListeners().size());
+
+        reader.getStartHandler().removeListener(listener);
+        assertTrue(reader.getStartHandler().getListeners().isEmpty());
+
+        reader.getStartHandler().addListener(listener);
+        assertEquals(1, reader.getStartHandler().getListeners().size());
+
+        reader.getStartHandler().clearListeners();
+        assertTrue(reader.getStartHandler().getListeners().isEmpty());
     }
 
     @Test

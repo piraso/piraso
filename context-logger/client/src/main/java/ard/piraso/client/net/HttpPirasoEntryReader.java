@@ -3,7 +3,9 @@ package ard.piraso.client.net;
 import org.apache.http.HttpHost;
 import org.apache.http.client.HttpClient;
 import org.apache.http.protocol.HttpContext;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.net.URI;
 
@@ -34,13 +36,10 @@ public class HttpPirasoEntryReader {
         return startHandler;
     }
 
-    public HttpPirasoStopHandler getStopHandler() {
-        return stopHandler;
-    }
-
-    public void start() throws IOException {
+    public void start() throws IOException, SAXException, ParserConfigurationException {
         startHandler.setTargetHost(targetHost);
         startHandler.setUri(uri);
+
         startHandler.execute();
     }
 
@@ -48,6 +47,7 @@ public class HttpPirasoEntryReader {
         stopHandler.setTargetHost(targetHost);
         stopHandler.setUri(uri);
         stopHandler.setId(startHandler.getId());
+
         stopHandler.execute();
     }
 

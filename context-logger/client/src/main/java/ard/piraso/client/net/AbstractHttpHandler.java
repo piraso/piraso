@@ -3,7 +3,9 @@ package ard.piraso.client.net;
 import org.apache.http.HttpHost;
 import org.apache.http.client.HttpClient;
 import org.apache.http.protocol.HttpContext;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.net.URI;
 
@@ -32,5 +34,5 @@ public abstract class AbstractHttpHandler {
         this.targetHost = targetHost;
     }
 
-    public abstract void execute() throws IOException;
+    public abstract void execute() throws IOException, SAXException, ParserConfigurationException;
 }
