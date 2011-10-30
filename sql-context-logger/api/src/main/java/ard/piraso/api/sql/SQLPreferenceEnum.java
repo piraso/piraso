@@ -22,6 +22,7 @@ public enum SQLPreferenceEnum {
 
     RESULTSET_METHOD_CALL_ENABLED("sql.resultset.method.call.enabled");
 
+    // register enum as level
     static {
         for(SQLPreferenceEnum flag : SQLPreferenceEnum.values()) {
             if(flag.isLevel()) {

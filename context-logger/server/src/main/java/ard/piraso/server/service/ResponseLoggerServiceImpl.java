@@ -51,7 +51,7 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
     /**
      * The response content type.
      */
-    private static final String RESPONSE_CONTENT_TYPE = "xml/plain";
+    private static final String RESPONSE_CONTENT_TYPE = "xml/plain; charset=UTF-8";
 
     /**
      * The transfer queue. This holds the queue which will be streamed to response writer.
@@ -194,6 +194,7 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
      */
     public void start() throws IOException, TransformerConfigurationException, ParserConfigurationException {
         response.setContentType(RESPONSE_CONTENT_TYPE);
+        response.setCharacterEncoding("UTF-8");
 
         try {
             writer = new PirasoEntryWriter(getId(), getWatchedAddr(), response.getWriter());
