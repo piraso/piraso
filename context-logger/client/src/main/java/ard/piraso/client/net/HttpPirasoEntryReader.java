@@ -1,7 +1,7 @@
 package ard.piraso.client.net;
 
 import org.apache.http.HttpHost;
-import org.apache.http.impl.client.AbstractHttpClient;
+import org.apache.http.client.HttpClient;
 import org.apache.http.protocol.HttpContext;
 
 import java.io.IOException;
@@ -19,7 +19,7 @@ public class HttpPirasoEntryReader {
 
     private HttpPirasoStopHandler stopHandler;
 
-    public HttpPirasoEntryReader(AbstractHttpClient client, HttpContext context) {
+    public HttpPirasoEntryReader(HttpClient client, HttpContext context) {
         startHandler = new HttpPirasoStartHandler(client, context);
         stopHandler = new HttpPirasoStopHandler(client, context);
     }

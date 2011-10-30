@@ -5,9 +5,9 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HttpContext;
 
@@ -22,7 +22,7 @@ public class HttpPirasoStopHandler extends AbstractHttpHandler {
 
     protected String id;
 
-    public HttpPirasoStopHandler(AbstractHttpClient client, HttpContext context) {
+    public HttpPirasoStopHandler(HttpClient client, HttpContext context) {
         super(client, context);
     }
 

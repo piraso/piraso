@@ -1,8 +1,10 @@
 package ard.piraso.client.net;
 
+import org.apache.commons.lang.Validate;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.AuthCache;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.AbstractHttpClient;
@@ -14,8 +16,13 @@ import org.apache.http.protocol.HttpContext;
  */
 public class HttpBasicAuthentication extends AbstractHttpAuthentication {
 
-    public HttpBasicAuthentication(AbstractHttpClient client, HttpContext context) {
+    private AbstractHttpClient httpClient;
+
+    public HttpBasicAuthentication(HttpClient client, HttpContext context) {
         super(client, context);
+        Validate.isTrue(AbstractHttpClient.class.isInstance(client), "client must be an instance of AbstractHttpClient.");
+
+        httpClient = (AbstractHttpClient) client;
     }
 
     public void authenticate() {
@@ -23,7 +30,7 @@ public class HttpBasicAuthentication extends AbstractHttpAuthentication {
 
         UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(userName, password);
 
-        client.getCredentialsProvider().setCredentials(new AuthScope(targetHost.getHostName(), targetHost.getPort()), credentials);
+        httpClient.getCredentialsProvider().setCredentials(new AuthScope(targetHost.getHostName(), targetHost.getPort()), credentials);
 
         // Create AuthCache instance
         AuthCache authCache = new BasicAuthCache();

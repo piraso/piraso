@@ -1,18 +1,148 @@
 package ard.piraso.client.net;
 
+import ard.piraso.api.Preferences;
+import ard.piraso.api.entry.Entry;
+import ard.piraso.api.io.EntryReadEvent;
+import ard.piraso.api.io.EntryReadListener;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.http.*;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.message.BasicStatusLine;
+import org.apache.http.protocol.HttpContext;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Matchers;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
+import static org.mockito.Mockito.*;
 
 /**
  * Test for {@link HttpPirasoEntryReader} class.
  */
 public class HttpPirasoEntryReaderTest {
-    @Test
-    public void testStart() throws Exception {
 
+    private HttpClient client;
+
+    private HttpPirasoEntryReader reader;
+
+    private HttpPost capturedPost;
+
+    private HttpResponse response;
+
+    private HttpEntity entity;
+
+    private Header contentTypeHeader;
+
+    @Before
+    public void setUp() throws Exception {
+        HttpContext context = mock(HttpContext.class);
+        client = mock(HttpClient.class);
+        response = mock(HttpResponse.class);
+        contentTypeHeader = mock(Header.class);
+        entity = mock(HttpEntity.class);
+
+        doReturn(entity).when(response).getEntity();
+        doReturn(contentTypeHeader).when(entity).getContentType();
+
+        doAnswer(new Answer() {
+            public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
+                capturedPost = (HttpPost) invocationOnMock.getArguments()[1];
+
+                return response;
+            }
+        }).when(client).execute(Matchers.<HttpHost>any(), Matchers.<HttpRequest>any(), Matchers.<HttpContext>any());
+
+        reader = new HttpPirasoEntryReader(client, context);
+        reader.setUri("http://localhost:8080/piraso/context/logging");
     }
 
     @Test
-    public void testStop() throws Exception {
+    public void testStartOnSuccess() throws Exception {
+        successStart();
+    }
 
+    private void successStart() throws IOException {
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<piraso id=\"1\">\n" +
+                "<entry class-name=\"ard.piraso.api.entry.MessageEntry\" date=\"1319349832439\" id=\"1\">{\"message\":\"message\",\"elapseTime\":null}</entry>\n" +
+                "</piraso>";
+
+        Preferences preferences = new Preferences();
+
+        StatusLine line = new BasicStatusLine(new ProtocolVersion("http", 1, 0), HttpStatus.SC_OK, "");
+        doReturn(line).when(response).getStatusLine();
+
+        doReturn(new ByteArrayInputStream(xml.getBytes())).when(entity).getContent();
+        doReturn("xml/plain").when(contentTypeHeader).getValue();
+
+        reader.getStartHandler().setPreferences(preferences);
+        reader.getStartHandler().setWatchedAddr("127.0.0.1");
+
+        final List<Entry> entries = new ArrayList<Entry>();
+
+        reader.getStartHandler().addListener(new EntryReadListener() {
+            public void readEntry(EntryReadEvent evt) {
+                entries.add(evt.getEntry());
+            }
+        });
+
+        reader.start();
+
+        assertEquals(1, CollectionUtils.size(entries));
+        assertTrue(UrlEncodedFormEntity.class.isInstance(capturedPost.getEntity()));
+        verify(client).execute(Matchers.<HttpHost>any(), Matchers.<HttpRequest>any(), Matchers.<HttpContext>any());
+    }
+
+    @Test(expected = HttpPirasoException.class)
+    public void testStartInvalidStatusCode() throws Exception {
+        Preferences preferences = new Preferences();
+
+        StatusLine line = new BasicStatusLine(new ProtocolVersion("http", 1, 0), HttpStatus.SC_BAD_REQUEST, "Bad Request");
+        doReturn(line).when(response).getStatusLine();
+
+        reader.getStartHandler().setPreferences(preferences);
+        reader.getStartHandler().setWatchedAddr("127.0.0.1");
+
+        reader.start();
+    }
+
+    @Test(expected = HttpPirasoException.class)
+    public void testStartInvalidContentType() throws Exception {
+        Preferences preferences = new Preferences();
+
+        StatusLine line = new BasicStatusLine(new ProtocolVersion("http", 1, 0), HttpStatus.SC_OK, "");
+        doReturn(line).when(response).getStatusLine();
+        doReturn("json/application").when(contentTypeHeader).getValue();
+
+        reader.getStartHandler().setPreferences(preferences);
+        reader.getStartHandler().setWatchedAddr("127.0.0.1");
+
+        reader.start();
+    }
+
+    @Test(expected = HttpPirasoException.class)
+    public void testStopInvalidStatusCode() throws Exception {
+        successStart();
+
+        StatusLine line = new BasicStatusLine(new ProtocolVersion("http", 1, 0), HttpStatus.SC_BAD_REQUEST, "Bad Request");
+        doReturn(line).when(response).getStatusLine();
+
+        reader.stop();
+    }
+
+    @Test
+    public void testStopSuccess() throws Exception {
+        successStart();
+        reader.stop();
     }
 }

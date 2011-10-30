@@ -1,7 +1,7 @@
 package ard.piraso.client.net;
 
 import org.apache.commons.lang.Validate;
-import org.apache.http.impl.client.AbstractHttpClient;
+import org.apache.http.client.HttpClient;
 import org.apache.http.protocol.HttpContext;
 
 import java.io.IOException;
@@ -15,7 +15,7 @@ public abstract class AbstractHttpAuthentication extends AbstractHttpHandler {
 
     protected String password;
 
-    public AbstractHttpAuthentication(AbstractHttpClient client, HttpContext context) {
+    public AbstractHttpAuthentication(HttpClient client, HttpContext context) {
         super(client, context);
     }
 
