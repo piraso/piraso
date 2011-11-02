@@ -21,7 +21,7 @@ public class MessageEntryTest extends AbstractJacksonTest {
         long endTime = System.currentTimeMillis() + elapseTime;
 
         ElapseTimeEntry expectedElapseTime = new ElapseTimeEntry(startTime, endTime);
-        MessageEntry expectedMessage = new MessageEntry(1l, "message");
+        MessageEntry expectedMessage = new MessageEntry("message");
         expectedMessage.setElapseTime(expectedElapseTime);
 
         String jsonValue = mapper.writeValueAsString(expectedMessage);
@@ -58,7 +58,7 @@ public class MessageEntryTest extends AbstractJacksonTest {
         }};
 
         MessageEntry e3 = new MessageEntry(1l, "test");
-        MessageEntry e4 = new MessageEntry();
+        MessageEntry e4 = new MessageEntry("test", new ElapseTimeEntry());
 
         Set<MessageEntry> set = new HashSet<MessageEntry>();
         set.add(e1);

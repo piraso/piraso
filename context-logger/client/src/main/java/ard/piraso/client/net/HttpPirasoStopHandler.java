@@ -32,7 +32,6 @@ public class HttpPirasoStopHandler extends AbstractHttpHandler {
 
     @Override
     public void execute() throws IOException {
-        Validate.notNull(id, "id should not be null.");
         Validate.notNull(uri, "uri should not be null.");
 
         HttpPost post = new HttpPost(uri.getPath());

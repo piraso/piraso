@@ -43,12 +43,18 @@ public class HttpPirasoEntryReader {
         startHandler.execute();
     }
 
-    public void stop() throws IOException {
-        stopHandler.setTargetHost(targetHost);
-        stopHandler.setUri(uri);
-        stopHandler.setId(startHandler.getId());
+    public boolean isComplete() {
+        return startHandler.isComplete();
+    }
 
-        stopHandler.execute();
+    public void stop() throws IOException {
+        if(!startHandler.isComplete()) {
+            stopHandler.setTargetHost(targetHost);
+            stopHandler.setUri(uri);
+            stopHandler.setId(startHandler.getId());
+
+            stopHandler.execute();
+        }
     }
 
 }

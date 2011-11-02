@@ -43,8 +43,8 @@ public class PirasoEntryReaderTest {
     public void testInvalidDateAndClassNameRead() throws Exception {
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<piraso id=\"1\">\n" +
-                "<entry class-name=\"ard.piraso.api.entry.MessageEntry\" date=\"invalid\" id=\"id_1\">{\"message\":\"message\",\"elapseTime\":null}</entry>\n" +
-                "<entry class-name=\"invalidClassName\" date=\"1319349832439\" id=\"id_1\">{\"message\":\"message\",\"elapseTime\":null}</entry>\n" +
+                "<entry class-name=\"ard.piraso.api.entry.MessageEntry\" date=\"invalid\" id=\"1\">{\"message\":\"message\",\"elapseTime\":null}</entry>\n" +
+                "<entry class-name=\"invalidClassName\" date=\"1319349832439\" id=\"1\">{\"message\":\"message\",\"elapseTime\":null}</entry>\n" +
                 "<not-entry>ignored</not-entry>" +
                 "</piraso>";
 

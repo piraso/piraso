@@ -35,6 +35,10 @@ public class HttpPirasoStartHandler extends AbstractHttpHandler {
 
     private PirasoEntryReader reader;
 
+    private boolean complete;
+
+    private HttpEntity responseEntity;
+
     private List<EntryReadListener> listeners = Collections.synchronizedList(new LinkedList<EntryReadListener>());
 
     public HttpPirasoStartHandler(HttpClient client, HttpContext context) {
@@ -53,6 +57,15 @@ public class HttpPirasoStartHandler extends AbstractHttpHandler {
     }
 
     public void execute() throws IOException, SAXException, ParserConfigurationException {
+        try {
+            doExecute();
+        } finally {
+            complete = true;
+            EntityUtils.consume(responseEntity);
+        }
+    }
+
+    private void doExecute() throws IOException, SAXException, ParserConfigurationException {
         Validate.notNull(uri, "uri should not be null.");
         Validate.notNull(preferences, "preferences should not be null.");
 
@@ -75,7 +88,7 @@ public class HttpPirasoStartHandler extends AbstractHttpHandler {
             throw new HttpPirasoException(status.toString());
         }
 
-        HttpEntity responseEntity = response.getEntity();
+        responseEntity = response.getEntity();
         String contentType = responseEntity.getContentType().getValue().toLowerCase();
 
         if(!contentType.contains("xml/plain")) {
@@ -88,17 +101,21 @@ public class HttpPirasoStartHandler extends AbstractHttpHandler {
             reader.addListener(listener);
         }
 
-        try {
-            reader.start();
-        } finally {
-            EntityUtils.consume(responseEntity);
-        }
+        reader.start();
+    }
+
+    public boolean isComplete() {
+        return complete;
     }
 
     public String getId() {
         Validate.notNull("#start() should be invoked before retrieving the id.");
 
-        return reader.getId();
+        if(reader == null) {
+            return null;
+        } else {
+            return reader.getId();
+        }
     }
 
     public List<EntryReadListener> getListeners() {

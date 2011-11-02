@@ -16,16 +16,12 @@ import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 import static org.mockito.Mockito.*;
 
 /**
@@ -70,10 +66,6 @@ public class HttpPirasoEntryReaderTest {
 
     @Test
     public void testStartOnSuccess() throws Exception {
-        successStart();
-    }
-
-    private void successStart() throws IOException, SAXException, ParserConfigurationException {
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<piraso id=\"1\">\n" +
                 "<entry class-name=\"ard.piraso.api.entry.MessageEntry\" date=\"1319349832439\" id=\"1\">{\"message\":\"message\",\"elapseTime\":null}</entry>\n" +
@@ -100,8 +92,15 @@ public class HttpPirasoEntryReaderTest {
 
         reader.start();
 
+        assertNotNull(reader.getStartHandler().getId());
+        assertTrue(reader.isComplete());
         assertEquals(1, CollectionUtils.size(entries));
         assertTrue(UrlEncodedFormEntity.class.isInstance(capturedPost.getEntity()));
+        verify(client).execute(Matchers.<HttpHost>any(), Matchers.<HttpRequest>any(), Matchers.<HttpContext>any());
+
+        reader.stop();
+
+        // still once since already complete
         verify(client).execute(Matchers.<HttpHost>any(), Matchers.<HttpRequest>any(), Matchers.<HttpContext>any());
     }
 
@@ -133,8 +132,6 @@ public class HttpPirasoEntryReaderTest {
 
     @Test(expected = HttpPirasoException.class)
     public void testStopInvalidStatusCode() throws Exception {
-        successStart();
-
         StatusLine line = new BasicStatusLine(new ProtocolVersion("http", 1, 0), HttpStatus.SC_BAD_REQUEST, "Bad Request");
         doReturn(line).when(response).getStatusLine();
 
@@ -160,7 +157,9 @@ public class HttpPirasoEntryReaderTest {
 
     @Test
     public void testStopSuccess() throws Exception {
-        successStart();
+        StatusLine line = new BasicStatusLine(new ProtocolVersion("http", 1, 0), HttpStatus.SC_OK, "");
+        doReturn(line).when(response).getStatusLine();
+
         reader.stop();
     }
 }
