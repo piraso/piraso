@@ -42,6 +42,13 @@ public class GroupChainIdTest {
     }
 
     @Test
+    public void testCreateWithStringAndHashCode() throws Exception {
+        GroupChainId id = new GroupChainId("test", "test".hashCode());
+
+        assertEquals(1, id.getGroupIds().size());
+    }
+
+    @Test
     public void testCreateWithStringArg() throws Exception {
         GroupChainId id = new GroupChainId("test");
         GroupChainId id2 = id.create("test2");

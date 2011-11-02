@@ -43,6 +43,13 @@ public class PirasoContextTest {
     }
 
     @Test
+    public void testIsMonitoredException() throws Exception {
+        doThrow(new IOException()).when(registry).getContextPreferences(request);
+
+        assertFalse(context.isMonitored());
+    }
+
+    @Test
     public void testIsMonitoredWithAssociatedUser() throws Exception {
         associateUser(request);
         assertTrue(context.isMonitored());

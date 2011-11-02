@@ -35,12 +35,10 @@ public class PirasoFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         boolean requestIsWatched = registry.isWatched(request);
-        ResponseEntry responseEntry = null;
+        ResponseEntry responseEntry = new ResponseEntry();
 
         try {
             if(requestIsWatched) {
-                responseEntry = new ResponseEntry();
-
                 responseEntry.getElapseTime().start();
 
                 response = new PirasoResponseWrapper(response, responseEntry);
@@ -59,7 +57,7 @@ public class PirasoFilter extends OncePerRequestFilter {
         try {
             chain.doFilter(request, response);
         } finally {
-            if(requestIsWatched && responseEntry != null) {
+            if(requestIsWatched) {
                 responseEntry.getElapseTime().stop();
 
                 // forward a scoped context log for response exit point

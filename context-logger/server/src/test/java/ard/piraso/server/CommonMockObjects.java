@@ -5,8 +5,7 @@ import ard.piraso.server.service.ResponseLoggerService;
 import ard.piraso.server.service.User;
 import org.springframework.mock.web.MockHttpServletRequest;
 
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 /**
  * Contains helper method for mocking common objects
@@ -17,7 +16,7 @@ public class CommonMockObjects {
     }
 
     public static MockHttpServletRequest mockRequest(String monitoredAddr, String activityId) {
-        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletRequest request = spy(new MockHttpServletRequest());
         request.setRemoteAddr(monitoredAddr);
 
         if(activityId != null) {

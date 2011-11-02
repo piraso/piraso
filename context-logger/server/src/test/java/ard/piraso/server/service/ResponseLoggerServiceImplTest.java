@@ -49,10 +49,12 @@ public class ResponseLoggerServiceImplTest {
 
     private User user;
 
+    private MockHttpServletRequest request;
+
     @Before
     public void setUp() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        MockHttpServletRequest request = new MockHttpServletRequest();
+        request = new MockHttpServletRequest();
 
         response = spy(new MockHttpServletResponse());
         user = new User(request);
@@ -60,10 +62,24 @@ public class ResponseLoggerServiceImplTest {
         preferences = new Preferences();
         preferences.addProperty(GeneralPreferenceEnum.STACK_TRACE_ENABLED.getPropertyName(), true);
 
-        request.addParameter("monitoredAddr", EXPECTED_MONITORED_ADDRESS);
+        request.addParameter("watchedAddr", EXPECTED_MONITORED_ADDRESS);
         request.addParameter("preferences", mapper.writeValueAsString(preferences));
 
         service = new ResponseLoggerServiceImpl(user, request, response);
+    }
+
+    @Test
+    public void testMonitoredAddress() throws Exception {
+        request.removeParameter("watchedAddr");
+        request.setRemoteAddr("remoteAddr");
+
+        service = new ResponseLoggerServiceImpl(user, request, response);
+        assertEquals("remoteAddr", service.getWatchedAddr());
+
+        request.addParameter("watchedAddr", EXPECTED_MONITORED_ADDRESS);
+
+        service = new ResponseLoggerServiceImpl(user, request, response);
+        assertEquals(EXPECTED_MONITORED_ADDRESS, service.getWatchedAddr());
     }
 
     @Test
@@ -109,6 +125,8 @@ public class ResponseLoggerServiceImplTest {
         Runnable logMessagesRunnable = new Runnable() {
             public void run() {
                 try {
+
+
                     service.stopAndWait(3000l);
                 } catch (Exception e) {
                     fail.set(true);
@@ -127,6 +145,9 @@ public class ResponseLoggerServiceImplTest {
             fail("failure see exception trace.");
         }
 
+        // no harm invoking it again
+        service.stopAndWait(1000l);
+
         assertFalse(service.isAlive());
     }
 
@@ -136,7 +157,7 @@ public class ResponseLoggerServiceImplTest {
         ExecutorService executor = Executors.newFixedThreadPool(2);
 
         final List<MessageEntry> expectedEntries = new ArrayList<MessageEntry>() {{
-            for(int i = 0; i < 100; i++) {
+            for(int i = 0; i < 1000; i++) {
                 add(new MessageEntry(1l, "test_" + (i + 1)));
             }
         }};

@@ -49,7 +49,7 @@ public class SimpleMethodLoggerListener<T> implements RegexMethodInterceptorList
 
     public void exceptionCall(RegexMethodInterceptorEvent<T> evt) {
         entry.getElapseTime().stop();
-        entry.setMessage(evt.getInvocation().getMethod().getName() + ":" + evt.getException().getClass().getName());
+        entry.setMessage(evt.getInvocation().getMethod().getName() + ": " + evt.getException().getClass().getName());
 
         ContextLogDispatcher.forward(level, id, entry);
     }

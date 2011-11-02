@@ -6,7 +6,6 @@ import ard.piraso.server.service.User;
 import ard.piraso.server.service.UserRegistry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.HttpRequestHandler;
 
 import javax.servlet.ServletException;
@@ -30,11 +29,13 @@ public class PirasoServlet implements HttpRequestHandler {
 
     private static final String SERVICE_PARAMETER = "service";
 
-    public static final long STOP_TIMEOUT = 10000l;
+    public static final long DEFAULT_STOP_TIMEOUT = 10000l;
 
     private Integer maxQueueForceKillSize;
 
     private Long maxIdleTimeout;
+
+    private Long stopTimeout = DEFAULT_STOP_TIMEOUT;
 
     private UserRegistry registry;
 
@@ -50,9 +51,13 @@ public class PirasoServlet implements HttpRequestHandler {
         this.maxQueueForceKillSize = maxQueueForceKillSize;
     }
 
+    public void setStopTimeout(Long stopTimeout) {
+        this.stopTimeout = stopTimeout;
+    }
+
     public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if(request.getParameter(SERVICE_PARAMETER) == null) {
-            response.sendError(HttpStatus.BAD_REQUEST.value(), "Request Parameter 'service' is required.");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Request Parameter 'service' is required.");
             return;
         }
 
@@ -63,7 +68,7 @@ public class PirasoServlet implements HttpRequestHandler {
         } else if(STOP_OPERATION.equals(request.getParameter(SERVICE_PARAMETER))) {
             stopService(response, user);
         } else {
-            response.sendError(HttpStatus.BAD_REQUEST.value(),
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                     String.format("Request Parameter 'service' with value '%s' is invalid.",
                             request.getParameter(SERVICE_PARAMETER)));
         }
@@ -73,12 +78,12 @@ public class PirasoServlet implements HttpRequestHandler {
         ResponseLoggerService service = registry.getLogger(user);
 
         if(service == null) {
-            response.sendError(HttpStatus.NOT_FOUND.value(), String.format("Service for user '%s' not found.", user.toString()));
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, String.format("Service for user '%s' not found.", user.toString()));
             return;
         }
 
         if(!service.isAlive()) {
-            response.sendError(HttpStatus.CONFLICT.value(), String.format("Service for user '%s' not active.", user.toString()));
+            response.sendError(HttpServletResponse.SC_CONFLICT, String.format("Service for user '%s' not active.", user.toString()));
             registry.removeUser(user);
 
             return;
@@ -86,15 +91,14 @@ public class PirasoServlet implements HttpRequestHandler {
 
         try {
             // gracefully stop the service
-            service.stopAndWait(STOP_TIMEOUT);
+            service.stopAndWait(stopTimeout);
 
             if(service.isAlive()) {
-                response.sendError(HttpStatus.REQUEST_TIMEOUT.value(), String.format("Service for user '%s' stop timeout.", user.toString()));
+                response.sendError(HttpServletResponse.SC_REQUEST_TIMEOUT, String.format("Service for user '%s' stop timeout.", user.toString()));
             } else {
                 registry.removeUser(user);
             }
-        } catch (InterruptedException ignored) {
-        }
+        } catch (InterruptedException ignored) {}
     }
 
     private void startLoggerService(HttpServletRequest request, HttpServletResponse response, User user) throws IOException, ServletException {

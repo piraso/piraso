@@ -18,16 +18,13 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.Date;
 
 /**
  * Piraso entry stream writer.
  */
-public class PirasoEntryWriter {
+public class PirasoEntryWriter implements Closeable {
 
     private ObjectMapper mapper;
 

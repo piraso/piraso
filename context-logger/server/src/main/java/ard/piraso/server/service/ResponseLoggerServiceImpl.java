@@ -3,6 +3,7 @@ package ard.piraso.server.service;
 import ard.piraso.api.Preferences;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.io.PirasoEntryWriter;
+import ard.piraso.server.IOUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
@@ -36,7 +37,7 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
     /**
      * Maximum of 30 minutes idle time, otherwise the service will auto stop.
      */
-    private static final long DEFAULT_MAX_IDLE_TIME_KILL_SIZE = 60 * 60 * 1000;
+    private static final long DEFAULT_MAX_IDLE_TIME_OUT = 60 * 60 * 1000;
 
     /**
      * Request parameter name for the remote monitored address.
@@ -107,7 +108,7 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
     /**
      * maximum idle timeout
      */
-    private long maxIdleTimeout = DEFAULT_MAX_IDLE_TIME_KILL_SIZE;
+    private long maxIdleTimeout = DEFAULT_MAX_IDLE_TIME_OUT;
 
     /**
      * maximum transfer queue force stopped size
@@ -201,10 +202,7 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
             doLogWhileAlive();
         } finally {
             synchronized (this) {
-                if(writer != null) {
-                    writer.close();
-                }
-
+                IOUtils.closeQuitely(writer);
                 notifyAll();
             }
         }
@@ -215,12 +213,14 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
      * when the {@link #transferQueue} is empty.
      * <p>
      * This is also responsible for computing for the idle time, which when the idle time exceeds the limit
-     * {@link #DEFAULT_MAX_IDLE_TIME_KILL_SIZE} the service will forced stopped.
+     * {@link #DEFAULT_MAX_IDLE_TIME_OUT} the service will forced stopped.
      *
      * @throws IOException on io error
      */
     private void waitTillNoEntry() throws IOException {
-        if(transferQueue.isEmpty() && !isForcedStopped()) {
+        if(transferQueue.isEmpty()) {
+            long start = System.currentTimeMillis();
+
             try {
                 long timeout = 1800000l;
 
@@ -228,18 +228,15 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
                     timeout = maxIdleTimeout;
                 }
 
-                long start = System.currentTimeMillis();
-
                 wait(timeout);
+            } catch (InterruptedException ignored) {}
 
-                // compute for idle time
-                currentIdleTime += System.currentTimeMillis() - start;
+            // compute for idle time
+            currentIdleTime += System.currentTimeMillis() - start;
 
-                if(currentIdleTime >= maxIdleTimeout) {
-                    forcedStopped = true;
-                    forcedStoppedReason = String.format("Idle timeout '%d' was reached.", maxIdleTimeout);
-                }
-            } catch (InterruptedException ignored) {
+            if(currentIdleTime >= maxIdleTimeout) {
+                forcedStopped = true;
+                forcedStoppedReason = String.format("Idle timeout '%d' was reached.", maxIdleTimeout);
             }
         }
     }
@@ -280,7 +277,7 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
      */
     private void doLogWhileAlive() throws IOException {
         synchronized (this) {
-            while(isAlive() || isForcedStopped()) {
+            while(isAlive()) {
                 waitTillNoEntry();
                 writeAllTransfer();
                 throwWhenForcedStopped();

@@ -52,7 +52,7 @@ public class MessageLoggerListener<T> implements RegexMethodInterceptorListener<
 
     public void exceptionCall(RegexMethodInterceptorEvent<T> evt) {
         entry.getElapseTime().stop();
-        entry.setMessage(evt.getInvocation().getMethod().getName() + ":" + evt.getException().getClass().getName());
+        entry.setMessage(message + ": " + evt.getException().getClass().getName());
 
         ContextLogDispatcher.forward(level, id, entry);
     }

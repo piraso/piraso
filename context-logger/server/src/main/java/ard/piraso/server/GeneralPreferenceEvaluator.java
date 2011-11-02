@@ -10,7 +10,7 @@ public class GeneralPreferenceEvaluator {
     protected ContextPreference preference = new PirasoRequestContext();
 
     private boolean isEnabled(GeneralPreferenceEnum pref) {
-        return preference != null && preference.isEnabled(pref.getPropertyName());
+        return preference.isEnabled(pref.getPropertyName());
     }
 
     public boolean isStackTraceEnabled() {

@@ -10,6 +10,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test for {@link User} class.
@@ -60,5 +61,13 @@ public class UserTest {
 
         // should only be 2 since e3 and e1 is same
         assertThat(set.size(), is(2));
+    }
+
+    @Test
+    public void testToString() throws Exception {
+        User e1 = createUser(EXPECTED_REMOTE_ADDRESS, "a1");
+
+        assertTrue(e1.toString().contains("a1"));
+        assertTrue(e1.toString().contains(EXPECTED_REMOTE_ADDRESS));
     }
 }

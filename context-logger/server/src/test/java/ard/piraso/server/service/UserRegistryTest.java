@@ -44,6 +44,20 @@ public class UserRegistryTest {
     }
 
     @Test
+    public void testIsWatched() throws Exception {
+        MockHttpServletRequest request = mockRequest("test", "a1");
+
+        assertFalse(registry.isWatched(request));
+
+        User user = registry.createOrGetUser(request);
+        ResponseLoggerService service = mockService(request.getRemoteAddr(), true);
+
+        registry.associate(user, service);
+
+        assertTrue(registry.isWatched(request));
+    }
+
+    @Test
     public void testRemove() throws Exception {
         MockHttpServletRequest request = mockRequest("test", "a1");
 

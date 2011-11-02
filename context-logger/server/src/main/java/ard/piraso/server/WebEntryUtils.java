@@ -11,7 +11,9 @@ import java.util.LinkedHashMap;
 /**
  * Coverts web objects to Entry types.
  */
-public class WebEntryUtils {
+public final class WebEntryUtils {
+
+    private WebEntryUtils() {}
 
     public static CookieEntry toEntry(Cookie cookie) {
         CookieEntry entry = new CookieEntry();
