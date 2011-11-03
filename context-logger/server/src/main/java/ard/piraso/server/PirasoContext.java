@@ -121,7 +121,7 @@ public class PirasoContext implements ContextPreference {
                     doLog(logger, id, entry);
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             LOG.warn(e.getMessage(), e);
         }
     }
@@ -169,9 +169,11 @@ public class PirasoContext implements ContextPreference {
                     doLog(logger, id, entry);
                 } else if(preferences.isEnabled(level.getName())) {
                     doLog(logger, id, entry);
+                } else if(Level.SCOPED.equals(level) && requestOnScope) {
+                    doLog(logger, id, entry);
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             LOG.warn(e.getMessage(), e);
         }
     }

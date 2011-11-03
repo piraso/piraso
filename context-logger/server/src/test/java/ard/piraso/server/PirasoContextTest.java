@@ -2,12 +2,14 @@ package ard.piraso.server;
 
 import ard.piraso.api.GeneralPreferenceEnum;
 import ard.piraso.api.Level;
+import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.MessageEntry;
 import ard.piraso.server.service.ResponseLoggerService;
 import ard.piraso.server.service.User;
 import ard.piraso.server.service.UserRegistry;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Matchers;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 import java.io.IOException;
@@ -107,11 +109,16 @@ public class PirasoContextTest {
 
         User user2 = associateUser(request2);
         ResponseLoggerService service2 = registry.getLogger(user2);
-        service2.getPreferences().addProperty("1Property", 11);
-        service2.getPreferences().addProperty("2Property", 12);
+        service2.getPreferences().addProperty("1Property", 21);
+        service2.getPreferences().addProperty("2Property", 22);
 
-        assertEquals(Integer.valueOf(11), context.getIntValue("1Property"));
-        assertEquals(Integer.valueOf(12), context.getIntValue("2Property"));
+        MockHttpServletRequest request3 = mockRequest(MONITORED_ADDR);
+        User user3 = associateUser(request3);
+        ResponseLoggerService service3 = registry.getLogger(user3);
+        service3.getPreferences().addProperty("1Property", 11);
+
+        assertEquals(Integer.valueOf(21), context.getIntValue("1Property"));
+        assertEquals(Integer.valueOf(22), context.getIntValue("2Property"));
         assertNull(context.getIntValue("3Property"));
     }
 
@@ -195,6 +202,12 @@ public class PirasoContextTest {
         User user2 = associateUser(request);
         ResponseLoggerService service2 = registry.getLogger(user2);
 
+        MockHttpServletRequest request3 = mockRequest(MONITORED_ADDR);
+
+        User user3 = associateUser(request3);
+        ResponseLoggerService service3 = registry.getLogger(user3);
+        service3.getPreferences().addProperty(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName(), false);
+
         context.log(Level.SCOPED, id, entry);
 
         verify(service, times(0)).log(entry);
@@ -204,6 +217,65 @@ public class PirasoContextTest {
 
         verify(service, times(2)).log(entry);
         verify(service2, times(2)).log(entry);
+    }
+
+    @Test
+    public void testLogQueueEntryWithRequestOnScopeAllNoneScopeEnabled() throws IOException {
+        User user = associateUser(request);
+        ResponseLoggerService service = registry.getLogger(user);
+
+        service.getPreferences().addProperty(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName(), false);
+
+        GroupChainId id = new GroupChainId("test");
+        MessageEntry entry = new MessageEntry("test");
+
+        User user2 = associateUser(request);
+        ResponseLoggerService service2 = registry.getLogger(user2);
+
+        MockHttpServletRequest request3 = mockRequest(MONITORED_ADDR);
+
+        User user3 = associateUser(request3);
+        ResponseLoggerService service3 = registry.getLogger(user3);
+        service3.getPreferences().addProperty(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName(), false);
+
+        doThrow(new IOException()).when(service3).log(Matchers.<Entry>any());
+
+        context.log(Level.SCOPED, id, entry);
+
+        // all should be invoked since all are non-scoped aware
+        verify(service, times(1)).log(entry);
+        verify(service2, times(1)).log(entry);
+        verify(service3, times(1)).log(entry);
+    }
+
+    @Test
+    public void testLogQueueEntryWithRequestOnScopeAllNoneScopeEnabledAlreadyOnScoped() throws IOException {
+        User user = associateUser(request);
+        ResponseLoggerService service = registry.getLogger(user);
+
+        service.getPreferences().addProperty(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName(), false);
+
+        GroupChainId id = new GroupChainId("test");
+        MessageEntry entry = new MessageEntry("test");
+
+        User user2 = associateUser(request);
+        ResponseLoggerService service2 = registry.getLogger(user2);
+
+        MockHttpServletRequest request3 = mockRequest(MONITORED_ADDR);
+
+        User user3 = associateUser(request3);
+        ResponseLoggerService service3 = registry.getLogger(user3);
+        service3.getPreferences().addProperty(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName(), false);
+
+        doThrow(new IOException()).when(service3).log(Matchers.<Entry>any());
+
+        context.requestOnScope();
+        context.log(Level.SCOPED, id, entry);
+
+        // all should be invoked since all are non-scoped aware
+        verify(service, times(1)).log(entry);
+        verify(service2, times(1)).log(entry);
+        verify(service3, times(1)).log(entry);
     }
 
     private User associateUser(MockHttpServletRequest request) throws IOException {
