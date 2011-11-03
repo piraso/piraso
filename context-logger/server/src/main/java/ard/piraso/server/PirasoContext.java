@@ -152,10 +152,8 @@ public class PirasoContext implements ContextPreference {
             }
 
             return;
-        }
-
-        // when any other log is provided that is not scope aware then enable request for scope logging
-        if(!requestOnScope && !GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName().equals(level.getName())) {
+        } else if(!requestOnScope && !Level.SCOPED.equals(level)) {
+            // when any other log is provided that is not scope aware then enable request for scope logging
             requestOnScope();
         }
 
