@@ -178,6 +178,14 @@ public class PirasoContext implements ContextPreference {
         }
     }
 
+    /**
+     * Ensure to populate the group and request id.
+     *
+     * @param logger the logger service
+     * @param id the chain group
+     * @param entry the log entry
+     * @throws IOException on error
+     */
     private void doLog(ResponseLoggerService logger, GroupChainId id, Entry entry) throws IOException {
         entry.setRequestId(requestId);
         entry.setGroup(new GroupEntry(id.getGroupIds()));
