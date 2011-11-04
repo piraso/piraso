@@ -163,6 +163,8 @@ public class PirasoEntryReaderTest {
             }
         }
 
+        executor.shutdown();
+
         reader.stop();
 
         writer.write(new MessageEntry(1l, "hello"));
