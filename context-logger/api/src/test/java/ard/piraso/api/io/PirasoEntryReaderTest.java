@@ -146,13 +146,10 @@ public class PirasoEntryReaderTest {
                 try {
                     reader.start();
                 } catch (SAXException e) {
-                    e.printStackTrace();
                     // no failure here this is expected
                 } catch (Exception e) {
                     e.printStackTrace();
                     fail.set(true);
-                } finally {
-                    System.out.println("done");
                 }
             }
         });
@@ -168,10 +165,10 @@ public class PirasoEntryReaderTest {
 
         reader.stop();
 
-//        writer.write(new MessageEntry(1l, "hello"));
-//        writer.write(new MessageEntry(1l, "hello"));
+        writer.write(new MessageEntry(1l, "hello"));
+        writer.write(new MessageEntry(1l, "hello"));
 
-//        writer.close();
+        writer.close();
 
         if(fail.get()) {
             fail("failure see exception trace.");
