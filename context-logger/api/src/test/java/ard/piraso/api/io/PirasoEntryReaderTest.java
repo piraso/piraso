@@ -3,22 +3,25 @@ package ard.piraso.api.io;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.MessageEntry;
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
-import java.io.ByteArrayInputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 import static org.mockito.Mockito.mock;
 
 /**
  * Test for {@link PirasoEntryReader} class.
  */
 public class PirasoEntryReaderTest {
+
+    private final Object monitor = new Object();
 
     @Test
     public void testRemoveListener() throws Exception {
@@ -113,6 +116,68 @@ public class PirasoEntryReaderTest {
         assertEquals(expectedEntry2, entriesRead.get(1));
         assertEquals(expectedRequestId, idsRead.get(0));
         assertEquals(expectedRequestId, idsRead.get(1));
+    }
+
+    @Test
+    public void testStop() throws Exception {
+        PipedInputStream pi = new PipedInputStream();
+        PipedOutputStream po = new PipedOutputStream(pi);
+
+        PrintWriter prw = new PrintWriter(new OutputStreamWriter(po));
+        PirasoEntryWriter writer = new PirasoEntryWriter("1", "1", prw);
+        final PirasoEntryReader reader = new PirasoEntryReader(pi);
+
+
+        final List<Entry> entriesRead = new ArrayList<Entry>();
+        reader.addListener(new EntryReadListener() {
+            public void readEntry(EntryReadEvent evt) {
+                synchronized (monitor) {
+                    entriesRead.add(evt.getEntry());
+                    monitor.notifyAll();
+                }
+            }
+        });
+
+        final AtomicBoolean fail = new AtomicBoolean(false);
+
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+        executor.submit(new Runnable() {
+            public void run() {
+                try {
+                    reader.start();
+                } catch (SAXException e) {
+                    e.printStackTrace();
+                    // no failure here this is expected
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    fail.set(true);
+                } finally {
+                    System.out.println("done");
+                }
+            }
+        });
+
+        writer.write(new MessageEntry(1l, "hello"));
+        writer.write(new MessageEntry(1l, "hello2"));
+
+        while(entriesRead.size() != 2) {
+            synchronized (monitor) {
+                monitor.wait(1000l);
+            }
+        }
+
+        reader.stop();
+
+//        writer.write(new MessageEntry(1l, "hello"));
+//        writer.write(new MessageEntry(1l, "hello"));
+
+//        writer.close();
+
+        if(fail.get()) {
+            fail("failure see exception trace.");
+        }
+
+        assertEquals(2, entriesRead.size());
     }
 
     private String createXML(String id, String monitor, PerformWrite performer) throws Exception {

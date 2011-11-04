@@ -56,6 +56,10 @@ public class HttpPirasoStartHandler extends AbstractHttpHandler {
         this.watchedAddr = watchedAddr;
     }
 
+    public String getWatchedAddr() {
+        return reader.getWatchedAddr();
+    }
+
     public void execute() throws IOException, SAXException, ParserConfigurationException {
         try {
             doExecute();

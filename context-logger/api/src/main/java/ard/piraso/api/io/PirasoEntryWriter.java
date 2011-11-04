@@ -74,9 +74,12 @@ public class PirasoEntryWriter implements Closeable {
         return buf.substring(buf.indexOf("<entry"));
     }
 
-    public void write(Entry entry) throws ParserConfigurationException, SAXException, IOException, TransformerException {
-        writer.println(createXMLString(new Date(), entry));
+    public void write(Date date, Entry entry) throws ParserConfigurationException, SAXException, IOException, TransformerException {
+        writer.println(createXMLString(date, entry));
         writer.flush();
+    }
+    public void write(Entry entry) throws ParserConfigurationException, SAXException, IOException, TransformerException {
+        write(new Date(), entry);
     }
 
     public void close() {

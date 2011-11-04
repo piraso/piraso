@@ -40,8 +40,13 @@ public class PirasoEntryReader extends DefaultHandler {
 
     private InputStream in;
 
+    private Thread owningThread;
+
+    private boolean stopped;
+
     public PirasoEntryReader(InputStream in) {
         this.in = in;
+        this.owningThread = Thread.currentThread();
     }
 
     public void start() throws SAXException, ParserConfigurationException, IOException {
@@ -51,9 +56,22 @@ public class PirasoEntryReader extends DefaultHandler {
         parser.parse(in, this);
     }
 
+    public void stop() {
+        stopped = true;
+        owningThread.interrupt();
+    }
+
+    private void validateStopped() throws SAXException {
+        if(stopped) {
+            throw new SAXException("Reader was stopped");
+        }
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public void endElement(String uri, String localName, String qName) throws SAXException {
+        validateStopped();
+
         if(qName.equals("entry")) {
             try {
                 if(currentEntryClassName != null) {
@@ -74,6 +92,8 @@ public class PirasoEntryReader extends DefaultHandler {
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+        validateStopped();
+
         if(qName.equals("piraso")) {
             id = attributes.getValue("id");
             watchedAddr = attributes.getValue("watched-address");
@@ -94,6 +114,8 @@ public class PirasoEntryReader extends DefaultHandler {
 
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
+        validateStopped();
+
         content.append(new String(ch, start, length));
     }
 

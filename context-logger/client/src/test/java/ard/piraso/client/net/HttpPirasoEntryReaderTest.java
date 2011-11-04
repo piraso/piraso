@@ -67,7 +67,7 @@ public class HttpPirasoEntryReaderTest {
     @Test
     public void testStartOnSuccess() throws Exception {
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<piraso id=\"1\">\n" +
+                "<piraso id=\"1\" watched-address=\"127.0.0.1\">\n" +
                 "<entry class-name=\"ard.piraso.api.entry.MessageEntry\" date=\"1319349832439\" id=\"1\">{\"message\":\"message\",\"elapseTime\":null}</entry>\n" +
                 "</piraso>";
 
@@ -92,8 +92,10 @@ public class HttpPirasoEntryReaderTest {
 
         reader.start();
 
+        assertNotNull(reader.getStartHandler().getWatchedAddr());
         assertNotNull(reader.getStartHandler().getId());
         assertTrue(reader.isComplete());
+
         assertEquals(1, CollectionUtils.size(entries));
         assertTrue(UrlEncodedFormEntity.class.isInstance(capturedPost.getEntity()));
         verify(client).execute(Matchers.<HttpHost>any(), Matchers.<HttpRequest>any(), Matchers.<HttpContext>any());
