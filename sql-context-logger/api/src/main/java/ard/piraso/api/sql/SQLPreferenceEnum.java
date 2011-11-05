@@ -32,13 +32,13 @@ public enum SQLPreferenceEnum {
 
     PREPARED_STATEMENT_METHOD_CALL_ENABLED("sql.prepared.statement.method.call.enabled"),
 
-    VIEW_SQL_ENABLED("sql.view.enabled"),
-
     RESULTSET_ENABLED("sql.resultset.enabled"),
 
-    VIEW_DATA_SIZE("sql.data.size", false),
+    RESULTSET_METHOD_CALL_ENABLED("sql.resultset.method.call.enabled"),
 
-    RESULTSET_METHOD_CALL_ENABLED("sql.resultset.method.call.enabled");
+    VIEW_SQL_ENABLED("sql.view.enabled"),
+
+    VIEW_DATA_SIZE("sql.data.size", false);
 
     // register enum as level
     static {
