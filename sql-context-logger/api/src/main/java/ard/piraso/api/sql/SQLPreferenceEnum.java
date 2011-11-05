@@ -24,9 +24,9 @@ import ard.piraso.api.Level;
  * SQL preferences enum
  */
 public enum SQLPreferenceEnum {
-    CONNECTION_METHOD_CALL_ENABLED("sql.connection.method.call.enabled"),
-
     CONNECTION_ENABLED("sql.connection.enabled"),
+
+    CONNECTION_METHOD_CALL_ENABLED("sql.connection.method.call.enabled"),
 
     PREPARED_STATEMENT_ENABLED("sql.prepared.statement.enabled"),
 
