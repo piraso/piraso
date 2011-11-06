@@ -136,7 +136,7 @@ public class PirasoContext implements ContextPreference {
 
                 boolean actual = preferences.isEnabled(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName());
                 if(actual == scopedEnabled) {
-                    doLog(logger, id, entry);
+                    doLog(logger, Level.SCOPED, id, entry);
                 }
             }
         } catch (Exception e) {
@@ -182,11 +182,11 @@ public class PirasoContext implements ContextPreference {
                 Preferences preferences = logger.getPreferences();
 
                 if(Level.ALL.equals(level)) {
-                    doLog(logger, id, entry);
+                    doLog(logger, level, id, entry);
                 } else if(preferences.isEnabled(level.getName())) {
-                    doLog(logger, id, entry);
+                    doLog(logger, level, id, entry);
                 } else if(Level.SCOPED.equals(level) && requestOnScope) {
-                    doLog(logger, id, entry);
+                    doLog(logger, level, id, entry);
                 }
             }
         } catch (Exception e) {
@@ -198,12 +198,14 @@ public class PirasoContext implements ContextPreference {
      * Ensure to populate the group and request id.
      *
      * @param logger the logger service
+     * @param level the log level
      * @param id the chain group
      * @param entry the log entry
      * @throws IOException on error
      */
-    private void doLog(ResponseLoggerService logger, GroupChainId id, Entry entry) throws IOException {
+    private void doLog(ResponseLoggerService logger, Level level, GroupChainId id, Entry entry) throws IOException {
         entry.setRequestId(requestId);
+        entry.setLevel(level.getName());
         entry.setGroup(new GroupEntry(id.getGroupIds()));
 
         logger.log(entry);
