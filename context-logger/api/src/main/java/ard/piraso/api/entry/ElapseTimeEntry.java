@@ -75,4 +75,39 @@ public class ElapseTimeEntry extends Entry {
     public long getElapseTime() {
         return endTime - startTime;
     }
+
+    public String prettyPrint() {
+        long time = getElapseTime();
+        long days = 0;
+        long hours = 0;
+        long minutes = 0;
+        long seconds = 0;
+
+        if(time > 0) {
+            days = time / (1000 * 60 * 60 * 24);
+            time -= days * (1000 * 60 * 60 * 24);
+        }
+        if(time > 0) {
+            hours = time / (1000 * 60 * 60);
+            time -= hours * (1000 * 60 * 60);
+        }
+        if(time > 0) {
+            minutes = time / (1000 * 60);
+            time -= minutes * (1000 * 60);
+        }
+        if(time > 0) {
+            seconds = time / 1000;
+            time -= seconds * 1000;
+        }
+
+        StringBuilder buf = new StringBuilder();
+
+        if(days > 0)    buf.append(days).append("d");
+        if(hours > 0)   buf.append(buf.length() > 0 ? " " : "").append(hours).append("h");
+        if(minutes > 0) buf.append(buf.length() > 0 ? " " : "").append(minutes).append("m");
+        if(seconds > 0) buf.append(buf.length() > 0 ? " " : "").append(seconds).append("s");
+        if(time > 0)    buf.append(buf.length() > 0 ? " " : "").append(time).append("ms");
+
+        return buf.toString();
+    }
 }

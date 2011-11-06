@@ -37,6 +37,24 @@ import static org.junit.Assert.assertTrue;
 public class ElapseTimeEntryTest extends AbstractJacksonTest {
 
     @Test
+    public void testPrettyPrint() throws Exception {
+        testPrintElapseTime(1001 + (1000 * 60 * 60 * 24) + (1000 * 60 * 60) + (1000 * 60), "1d 1h 1m 1s 1ms");
+        testPrintElapseTime(1001 + (1000 * 60 * 60) + (1000 * 60), "1h 1m 1s 1ms");
+        testPrintElapseTime(1001 + (1000 * 60), "1m 1s 1ms");
+        testPrintElapseTime(1001, "1s 1ms");
+        testPrintElapseTime(1, "1ms");
+    }
+
+    private void testPrintElapseTime(long elapseTime, String value) {
+        long startTime = System.currentTimeMillis();
+        long endTime = System.currentTimeMillis() + elapseTime;
+
+        ElapseTimeEntry entry = new ElapseTimeEntry(startTime, endTime);
+
+        assertThat("pretty print", entry.prettyPrint(), is(value));
+    }
+
+    @Test
     public void testTimer() throws InterruptedException {
         ElapseTimeEntry entry = new ElapseTimeEntry();
         entry.start();
@@ -51,7 +69,7 @@ public class ElapseTimeEntryTest extends AbstractJacksonTest {
         assertTrue(entry.getStartTime() > 0);
         assertTrue(entry.getEndTime() > 0);
 
-        long elapseTime = 3000l;
+        long elapseTime = 1001 + (1000 * 60 * 60 * 24) + (1000 * 60 * 60) + (1000 * 60);
         long startTime = System.currentTimeMillis();
         long endTime = System.currentTimeMillis() + elapseTime;
 
