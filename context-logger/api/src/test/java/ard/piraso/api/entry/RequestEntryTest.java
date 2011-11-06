@@ -26,6 +26,7 @@ import java.util.LinkedHashMap;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test for {@link RequestEntry} class.
@@ -48,6 +49,7 @@ public class RequestEntryTest extends AbstractJacksonTest {
         RequestEntry actual = mapper.readValue(jsonValue, RequestEntry.class);
 
         assertThat("same entry", actual, is(expected));
+        assertTrue(actual.toString().contains(expected.getUri()));
     }
 
     private CookieEntry createCookie() {

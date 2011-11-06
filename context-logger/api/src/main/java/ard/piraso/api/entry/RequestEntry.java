@@ -120,4 +120,15 @@ public class RequestEntry extends Entry {
     public void setRemoteAddr(String remoteAddr) {
         this.remoteAddr = remoteAddr;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder buf = new StringBuilder();
+
+        buf.append(getRequestId());
+        buf.append(":");
+        buf.append(getUri());
+
+        return buf.toString();
+    }
 }
