@@ -63,7 +63,7 @@ public class PirasoEntryReaderTest {
     @Test
     public void testInvalidDateAndClassNameRead() throws Exception {
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<piraso id=\"1\">\n" +
+                "<piraso id=\"1\" watched-address=\"127.0.0.1\">\n" +
                 "<entry class-name=\"ard.piraso.api.entry.MessageEntry\" date=\"invalid\" id=\"1\">{\"message\":\"message\",\"elapseTime\":null}</entry>\n" +
                 "<entry class-name=\"invalidClassName\" date=\"1319349832439\" id=\"1\">{\"message\":\"message\",\"elapseTime\":null}</entry>\n" +
                 "<not-entry>ignored</not-entry>" +
@@ -75,6 +75,11 @@ public class PirasoEntryReaderTest {
 
         PirasoEntryReader reader = new PirasoEntryReader(new ByteArrayInputStream(xml.getBytes()));
         reader.addListener(new EntryReadListener() {
+            public void started(EntryReadEvent evt) {
+                assertNotNull(evt.getId());
+                assertNotNull(evt.getWatchedAddr());
+            }
+
             public void readEntry(EntryReadEvent evt) {
                 datesRead.add(evt.getDate());
                 idsRead.add(evt.getRequestId());
@@ -114,7 +119,8 @@ public class PirasoEntryReaderTest {
         final List<Date> datesRead = new ArrayList<Date>();
 
         PirasoEntryReader reader = new PirasoEntryReader(new ByteArrayInputStream(xml.getBytes()));
-        reader.addListener(new EntryReadListener() {
+        reader.addListener(new EntryReadAdapter() {
+            @Override
             public void readEntry(EntryReadEvent evt) {
                 datesRead.add(evt.getDate());
                 idsRead.add(evt.getRequestId());
@@ -147,7 +153,8 @@ public class PirasoEntryReaderTest {
 
 
         final List<Entry> entriesRead = new ArrayList<Entry>();
-        reader.addListener(new EntryReadListener() {
+        reader.addListener(new EntryReadAdapter() {
+            @Override
             public void readEntry(EntryReadEvent evt) {
                 synchronized (monitor) {
                     entriesRead.add(evt.getEntry());

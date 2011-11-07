@@ -115,6 +115,8 @@ public class PirasoEntryReader extends DefaultHandler {
         if(qName.equals("piraso")) {
             id = attributes.getValue("id");
             watchedAddr = attributes.getValue("watched-address");
+
+            fireEntryReadStartedEvent(new EntryReadEvent(this, id, watchedAddr));
         } else if(qName.equals("entry")) {
             try {
                 currentEntryClassName = attributes.getValue("class-name");
@@ -143,6 +145,13 @@ public class PirasoEntryReader extends DefaultHandler {
 
     public String getWatchedAddr() {
         return watchedAddr;
+    }
+
+    public void fireEntryReadStartedEvent(EntryReadEvent evt) {
+        List<EntryReadListener> tmp = new ArrayList<EntryReadListener>(listeners);
+        for(EntryReadListener listener : tmp) {
+            listener.started(evt);
+        }
     }
 
     public void fireEntryReadEvent(EntryReadEvent evt) {

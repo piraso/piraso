@@ -18,24 +18,11 @@
 
 package ard.piraso.api.io;
 
-import java.util.EventListener;
-
 /**
- * Defines an interface of entry read listener.
+ * Adapter for {@link EntryReadListener}
  */
-public interface EntryReadListener extends EventListener {
+public class EntryReadAdapter implements EntryReadListener {
+    public void started(EntryReadEvent evt) {}
 
-    /**
-     * Triggered when an entry was read.
-     *
-     * @param evt the entry read event object.
-     */
-    public void started(EntryReadEvent evt);
-
-    /**
-     * Triggered when an entry was read.
-     *
-     * @param evt the entry read event object.
-     */
-    public void readEntry(EntryReadEvent evt);
+    public void readEntry(EntryReadEvent evt) {}
 }

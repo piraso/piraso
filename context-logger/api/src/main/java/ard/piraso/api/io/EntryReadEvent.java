@@ -34,12 +34,30 @@ public class EntryReadEvent<T> extends EventObject {
 
     private Date date;
 
+    private String watchedAddr;
+
+    private String id;
+
+    public EntryReadEvent(Object o, String id, String watchedAddr) {
+        super(o);
+        this.id = id;
+        this.watchedAddr = watchedAddr;
+    }
+
     public EntryReadEvent(Object o, Long requestId, Entry entry, Date date) {
         super(o);
 
         this.requestId = requestId;
         this.entry = entry;
         this.date = date;
+    }
+
+    public String getWatchedAddr() {
+        return watchedAddr;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public Entry getEntry() {

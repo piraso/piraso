@@ -22,8 +22,8 @@ import ard.piraso.api.GeneralPreferenceEnum;
 import ard.piraso.api.Preferences;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.MessageEntry;
+import ard.piraso.api.io.EntryReadAdapter;
 import ard.piraso.api.io.EntryReadEvent;
-import ard.piraso.api.io.EntryReadListener;
 import ard.piraso.api.io.PirasoEntryReader;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
@@ -224,7 +224,8 @@ public class ResponseLoggerServiceImplTest {
 
         final List<Entry> entriesRead = new ArrayList<Entry>();
         PirasoEntryReader reader = new PirasoEntryReader(new ByteArrayInputStream(response.getContentAsByteArray()));
-        reader.addListener(new EntryReadListener() {
+        reader.addListener(new EntryReadAdapter() {
+            @Override
             public void readEntry(EntryReadEvent evt) {
                 entriesRead.add(evt.getEntry());
             }

@@ -20,6 +20,7 @@ package ard.piraso.client.net;
 
 import ard.piraso.api.Preferences;
 import ard.piraso.api.entry.Entry;
+import ard.piraso.api.io.EntryReadAdapter;
 import ard.piraso.api.io.EntryReadEvent;
 import ard.piraso.api.io.EntryReadListener;
 import org.apache.commons.collections.CollectionUtils;
@@ -102,7 +103,8 @@ public class HttpPirasoEntryReaderTest {
 
         final List<Entry> entries = new ArrayList<Entry>();
 
-        reader.getStartHandler().addListener(new EntryReadListener() {
+        reader.getStartHandler().addListener(new EntryReadAdapter() {
+            @Override
             public void readEntry(EntryReadEvent evt) {
                 entries.add(evt.getEntry());
             }
