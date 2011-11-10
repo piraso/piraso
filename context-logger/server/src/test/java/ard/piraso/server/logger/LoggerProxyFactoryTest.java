@@ -18,6 +18,7 @@
 
 package ard.piraso.server.logger;
 
+import ard.piraso.server.GeneralPreferenceEvaluator;
 import ard.piraso.server.GroupChainId;
 import ard.piraso.server.PirasoContext;
 import ard.piraso.server.PirasoContextHolder;
@@ -105,9 +106,9 @@ public class LoggerProxyFactoryTest {
         verify(adapter2, times(1)).exceptionCall(Matchers.<RegexMethodInterceptorEvent<Connection>>any());
     }
 
-    protected  class LoggerProxyFactory<T> extends AbstractLoggerProxyFactory<T> {
+    protected  class LoggerProxyFactory<T> extends AbstractLoggerProxyFactory<T, GeneralPreferenceEvaluator> {
         public LoggerProxyFactory(GroupChainId id, RegexProxyFactory<T> regexProxyFactory) {
-            super(id, regexProxyFactory);
+            super(id, regexProxyFactory, new GeneralPreferenceEvaluator());
         }
     }
 }

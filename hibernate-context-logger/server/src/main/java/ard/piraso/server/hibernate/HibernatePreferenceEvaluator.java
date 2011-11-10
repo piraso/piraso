@@ -16,20 +16,20 @@
  * limitations under the License.
  */
 
-package ard.piraso.server;
+package ard.piraso.server.hibernate;
 
-import ard.piraso.api.GeneralPreferenceEnum;
+import ard.piraso.api.hibernate.HibernatePreferenceEnum;
+import ard.piraso.server.GeneralPreferenceEvaluator;
 
 /**
- * General preferences evaluator
+ * Hibernate preference evaluator.
  */
-public class GeneralPreferenceEvaluator extends PreferenceEvaluator {
-
-    public boolean isStackTraceEnabled() {
-        return isEnabled(GeneralPreferenceEnum.STACK_TRACE_ENABLED);
+public class HibernatePreferenceEvaluator extends GeneralPreferenceEvaluator {
+    public boolean isSessionMethodCallEnabled() {
+        return isEnabled(HibernatePreferenceEnum.SESSION_METHOD_CALL_ENABLED);
     }
 
-    public boolean isLoggingScopedEnabled() {
-        return isEnabled(GeneralPreferenceEnum.SCOPE_ENABLED);
+    public boolean isSessionEnabled() {
+        return isEnabled(HibernatePreferenceEnum.SESSION_METHOD_CALL_ENABLED);
     }
 }

@@ -52,6 +52,7 @@
     <modules>
         <module>context-logger</module>
         <module>sql-context-logger</module>
+        <module>hibernate-context-logger</module>
     </modules>
 
     <properties>

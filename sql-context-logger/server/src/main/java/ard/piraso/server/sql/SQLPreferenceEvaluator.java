@@ -62,16 +62,4 @@ public class SQLPreferenceEvaluator extends GeneralPreferenceEvaluator {
 
         return value == null ? DEFAULT_RETURN_SIZE : value;
     }
-
-    private boolean isEnabled(SQLPreferenceEnum pref) {
-        return preference != null && preference.isEnabled(pref.getPropertyName());
-    }
-
-    private Integer getIntValue(SQLPreferenceEnum pref) {
-        if(preference == null) {
-            return null;
-        }
-
-        return preference.getIntValue(pref.getPropertyName());
-    }
 }

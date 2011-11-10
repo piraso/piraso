@@ -21,7 +21,7 @@ package ard.piraso.api;
 /**
  * General preference enumeration.
  */
-public enum GeneralPreferenceEnum {
+public enum GeneralPreferenceEnum implements PreferenceEnum {
     /**
      *  property name for enabling stack trace.
      */
@@ -56,5 +56,9 @@ public enum GeneralPreferenceEnum {
      */
     public String getPropertyName() {
         return propertyName;
+    }
+
+    public boolean isLevel() {
+        return true;
     }
 }

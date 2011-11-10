@@ -16,34 +16,22 @@
  * limitations under the License.
  */
 
-package ard.piraso.api.sql;
+package ard.piraso.api.hibernate;
 
 import ard.piraso.api.Level;
 import ard.piraso.api.PreferenceEnum;
 
 /**
- * SQL preferences enum
+ * Hibernate preferences enumeration
  */
-public enum SQLPreferenceEnum  implements PreferenceEnum {
-    CONNECTION_ENABLED("sql.connection.enabled"),
+public enum HibernatePreferenceEnum implements PreferenceEnum {
+    SESSION_ENABLED("hibernate.session.enabled"),
 
-    CONNECTION_METHOD_CALL_ENABLED("sql.connection.method.call.enabled"),
-
-    PREPARED_STATEMENT_ENABLED("sql.prepared.statement.enabled"),
-
-    PREPARED_STATEMENT_METHOD_CALL_ENABLED("sql.prepared.statement.method.call.enabled"),
-
-    RESULTSET_ENABLED("sql.resultset.enabled"),
-
-    RESULTSET_METHOD_CALL_ENABLED("sql.resultset.method.call.enabled"),
-
-    VIEW_SQL_ENABLED("sql.view.enabled"),
-
-    VIEW_DATA_SIZE("sql.data.size", false);
+    SESSION_METHOD_CALL_ENABLED("hibernate.session.method.call.enabled");
 
     // register enum as level
     static {
-        for(PreferenceEnum flag : SQLPreferenceEnum.values()) {
+        for(PreferenceEnum flag : HibernatePreferenceEnum.values()) {
             if(flag.isLevel()) {
                 Level.addLevel(flag.getPropertyName());
             }
@@ -54,11 +42,11 @@ public enum SQLPreferenceEnum  implements PreferenceEnum {
 
     private boolean level;
 
-    private SQLPreferenceEnum(String propertyName) {
+    private HibernatePreferenceEnum(String propertyName) {
         this(propertyName, true);
     }
 
-    private SQLPreferenceEnum(String propertyName, boolean level) {
+    private HibernatePreferenceEnum(String propertyName, boolean level) {
         this.propertyName = propertyName;
         this.level = level;
     }

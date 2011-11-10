@@ -16,20 +16,19 @@
  * limitations under the License.
  */
 
-package ard.piraso.server;
+package ard.piraso.server.hibernate.logger;
 
-import ard.piraso.api.GeneralPreferenceEnum;
+import ard.piraso.server.GroupChainId;
+import ard.piraso.server.hibernate.HibernatePreferenceEvaluator;
+import ard.piraso.server.logger.AbstractLoggerProxyFactory;
+import ard.piraso.server.proxy.RegexProxyFactory;
 
 /**
- * General preferences evaluator
+ * Base Hibernate logger factory
  */
-public class GeneralPreferenceEvaluator extends PreferenceEvaluator {
+public class AbstractHibernateProxyFactory<T> extends AbstractLoggerProxyFactory<T, HibernatePreferenceEvaluator> {
 
-    public boolean isStackTraceEnabled() {
-        return isEnabled(GeneralPreferenceEnum.STACK_TRACE_ENABLED);
-    }
-
-    public boolean isLoggingScopedEnabled() {
-        return isEnabled(GeneralPreferenceEnum.SCOPE_ENABLED);
+    public AbstractHibernateProxyFactory(GroupChainId id, RegexProxyFactory<T> factory) {
+        super(id, factory, new HibernatePreferenceEvaluator());
     }
 }

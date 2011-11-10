@@ -18,18 +18,28 @@
 
 package ard.piraso.server;
 
-import ard.piraso.api.GeneralPreferenceEnum;
+import ard.piraso.api.PreferenceEnum;
 
 /**
- * General preferences evaluator
+ * Preference evaluator
  */
-public class GeneralPreferenceEvaluator extends PreferenceEvaluator {
+public abstract class PreferenceEvaluator {
 
-    public boolean isStackTraceEnabled() {
-        return isEnabled(GeneralPreferenceEnum.STACK_TRACE_ENABLED);
+    protected ContextPreference preference = new PirasoRequestContext();
+
+    public void requestOnScope() {
+        preference.requestOnScope();
     }
 
-    public boolean isLoggingScopedEnabled() {
-        return isEnabled(GeneralPreferenceEnum.SCOPE_ENABLED);
+    public boolean isEnabled(PreferenceEnum pref) {
+        return preference != null && preference.isEnabled(pref.getPropertyName());
+    }
+
+    public Integer getIntValue(PreferenceEnum pref) {
+        if(preference == null) {
+            return null;
+        }
+
+        return preference.getIntValue(pref.getPropertyName());
     }
 }

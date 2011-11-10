@@ -26,15 +26,9 @@ import ard.piraso.server.sql.SQLPreferenceEvaluator;
 /**
  * Base SQL logger factory.
  */
-public class AbstractSQLProxyFactory<T> extends AbstractLoggerProxyFactory<T> {
-
-    SQLPreferenceEvaluator evaluator = new SQLPreferenceEvaluator();
+public class AbstractSQLProxyFactory<T> extends AbstractLoggerProxyFactory<T, SQLPreferenceEvaluator> {
 
     public AbstractSQLProxyFactory(GroupChainId id, RegexProxyFactory<T> factory) {
-        super(id, factory);
-    }
-
-    public SQLPreferenceEvaluator getPref() {
-        return evaluator;
+        super(id, factory, new SQLPreferenceEvaluator());
     }
 }

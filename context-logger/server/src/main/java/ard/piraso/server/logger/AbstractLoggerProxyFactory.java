@@ -19,13 +19,14 @@
 package ard.piraso.server.logger;
 
 import ard.piraso.server.GroupChainId;
+import ard.piraso.server.PreferenceEvaluator;
 import ard.piraso.server.proxy.ProxyAware;
 import ard.piraso.server.proxy.RegexProxyFactory;
 
 /**
  * Base class for logger factory.
  */
-public abstract class AbstractLoggerProxyFactory<T> implements ProxyAware<T> {
+public abstract class AbstractLoggerProxyFactory<T, E extends PreferenceEvaluator> implements ProxyAware<T> {
 
     protected RegexProxyFactory<T> factory;
 
@@ -33,13 +34,20 @@ public abstract class AbstractLoggerProxyFactory<T> implements ProxyAware<T> {
 
     protected GroupChainId id;
 
-    public AbstractLoggerProxyFactory(GroupChainId id, RegexProxyFactory<T> factory) {
+    protected E evaluator;
+
+    public AbstractLoggerProxyFactory(GroupChainId id, RegexProxyFactory<T> factory, E evaluator) {
         this.factory = factory;
         this.id = id;
+        this.evaluator = evaluator;
     }
 
     public T getProxy(T wrappedObject) {
         this.wrappedObject = wrappedObject;
         return factory.getProxy(wrappedObject);
+    }
+
+    public E getPref() {
+        return evaluator;
     }
 }

@@ -30,19 +30,12 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     
-    <artifactId>context-logger</artifactId>
+    <artifactId>hibernate-context-logger</artifactId>
     <packaging>pom</packaging>
-    <name>context-logger</name>
+    <name>hibernate-context-logger</name>
 
     <modules>
         <module>api</module>
-        <module>client</module>
         <module>server</module>
     </modules>
-
-    <properties>
-        <commons.collections.version>3.2.1</commons.collections.version>
-        <jackson.version>1.9.0</jackson.version>
-        <spring.version>3.0.4.RELEASE</spring.version>
-    </properties>
 </project>
