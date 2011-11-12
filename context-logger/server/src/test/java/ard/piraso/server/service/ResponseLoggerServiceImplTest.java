@@ -19,6 +19,7 @@
 package ard.piraso.server.service;
 
 import ard.piraso.api.GeneralPreferenceEnum;
+import ard.piraso.api.JacksonUtils;
 import ard.piraso.api.Preferences;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.MessageEntry;
@@ -71,7 +72,7 @@ public class ResponseLoggerServiceImplTest {
 
     @Before
     public void setUp() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = JacksonUtils.createMapper();
         request = new MockHttpServletRequest();
 
         response = spy(new MockHttpServletResponse());

@@ -18,7 +18,7 @@
 
 package ard.piraso.api.sql;
 
-import org.codehaus.jackson.map.DeserializationConfig;
+import ard.piraso.api.JacksonUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
 
@@ -30,7 +30,6 @@ public abstract class AbstractJacksonTest {
 
     @Before
     public void setUp() throws Exception {
-        mapper = new ObjectMapper();
-        mapper.disable(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES);
+        mapper = JacksonUtils.createMapper();
     }
 }

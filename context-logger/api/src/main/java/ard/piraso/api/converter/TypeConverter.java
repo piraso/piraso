@@ -18,7 +18,7 @@
 
 package ard.piraso.api.converter;
 
-import org.codehaus.jackson.map.DeserializationConfig;
+import ard.piraso.api.JacksonUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
@@ -37,9 +37,7 @@ public class TypeConverter<T> implements ObjectConverter {
     public TypeConverter(Class<T> clazz) {
         this.clazz = clazz;
 
-        mapper = new ObjectMapper();
-        mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.configure(DeserializationConfig.Feature.FAIL_ON_NULL_FOR_PRIMITIVES, false);
+        mapper = JacksonUtils.createMapper();
     }
 
     /**

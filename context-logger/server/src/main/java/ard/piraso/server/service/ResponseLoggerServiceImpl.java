@@ -18,6 +18,7 @@
 
 package ard.piraso.server.service;
 
+import ard.piraso.api.JacksonUtils;
 import ard.piraso.api.Preferences;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.io.PirasoEntryWriter;
@@ -144,7 +145,8 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
     public ResponseLoggerServiceImpl(User user, HttpServletRequest request, HttpServletResponse response) throws IOException {
         Validate.notNull(request.getParameter(PREFERENCES_PARAMETER), String.format("Request parameter '%s' is required", PREFERENCES_PARAMETER));
 
-        this.preferences = new ObjectMapper().readValue(request.getParameter(PREFERENCES_PARAMETER), Preferences.class);
+        ObjectMapper mapper = JacksonUtils.createMapper();
+        this.preferences = mapper.readValue(request.getParameter(PREFERENCES_PARAMETER), Preferences.class);
         this.user = user;
         this.response = response;
 

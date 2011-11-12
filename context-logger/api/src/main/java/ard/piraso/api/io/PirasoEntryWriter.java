@@ -18,8 +18,8 @@
 
 package ard.piraso.api.io;
 
+import ard.piraso.api.JacksonUtils;
 import ard.piraso.api.entry.Entry;
-import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -54,8 +54,7 @@ public class PirasoEntryWriter implements Closeable {
 
     public PirasoEntryWriter(String id, String watchedAddr, PrintWriter writer) throws ParserConfigurationException, TransformerConfigurationException {
         this.writer = writer;
-        mapper = new ObjectMapper();
-        mapper.disable(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES);
+        mapper = JacksonUtils.createMapper();
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         TransformerFactory transformerFactory = TransformerFactory.newInstance();

@@ -55,7 +55,7 @@ public class SimpleMethodLoggerListener<T> implements RegexMethodInterceptorList
     }
 
     public void beforeCall(RegexMethodInterceptorEvent<T> evt) {
-        entry = new MessageEntry(evt.getInvocation().getMethod().toGenericString(), elapseTime);
+        entry = new MessageEntry(evt.getInvocation().getMethod().getName(), elapseTime);
         entry.getElapseTime().start();
     }
 
@@ -67,7 +67,7 @@ public class SimpleMethodLoggerListener<T> implements RegexMethodInterceptorList
 
     public void exceptionCall(RegexMethodInterceptorEvent<T> evt) {
         entry.getElapseTime().stop();
-        entry.setMessage(evt.getInvocation().getMethod().toGenericString() + ": " + evt.getException().getClass().getName());
+        entry.setMessage(evt.getInvocation().getMethod().getName() + ": " + evt.getException().getClass().getName());
 
         ContextLogDispatcher.forward(level, id, entry);
     }

@@ -20,6 +20,7 @@ package ard.piraso.server;
 
 import ard.piraso.api.entry.CookieEntry;
 import ard.piraso.api.entry.RequestEntry;
+import org.apache.commons.lang.ArrayUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -64,8 +65,10 @@ public final class WebEntryUtils {
             entry.addHeader(name, value);
         }
 
-        for(Cookie cookie : request.getCookies()) {
-           entry.addCookie(toEntry(cookie));
+        if(ArrayUtils.isNotEmpty(request.getCookies())) {
+            for(Cookie cookie : request.getCookies()) {
+               entry.addCookie(toEntry(cookie));
+            }
         }
 
         return entry;

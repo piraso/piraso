@@ -18,6 +18,7 @@
 
 package ard.piraso.client.net;
 
+import ard.piraso.api.JacksonUtils;
 import ard.piraso.api.Preferences;
 import ard.piraso.api.io.EntryReadListener;
 import ard.piraso.api.io.PirasoEntryReader;
@@ -29,7 +30,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
-import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.xml.sax.SAXException;
 
@@ -62,8 +62,7 @@ public class HttpPirasoStartHandler extends AbstractHttpHandler {
     public HttpPirasoStartHandler(HttpClient client, HttpContext context) {
         super(client, context);
 
-        this.mapper = new ObjectMapper();
-        this.mapper.disable(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES);
+        this.mapper = JacksonUtils.createMapper();
     }
 
     public void setPreferences(Preferences preferences) {

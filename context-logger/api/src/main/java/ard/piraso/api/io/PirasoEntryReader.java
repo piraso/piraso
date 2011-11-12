@@ -18,6 +18,7 @@
 
 package ard.piraso.api.io;
 
+import ard.piraso.api.JacksonUtils;
 import ard.piraso.api.entry.Entry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -44,7 +45,7 @@ public class PirasoEntryReader extends DefaultHandler {
 
     private StringBuilder content = new StringBuilder();
 
-    private ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper mapper;
 
     private String id;
 
@@ -65,6 +66,8 @@ public class PirasoEntryReader extends DefaultHandler {
     public PirasoEntryReader(InputStream in) {
         this.in = in;
         this.owningThread = Thread.currentThread();
+
+        mapper = JacksonUtils.createMapper();
     }
 
     public void start() throws SAXException, ParserConfigurationException, IOException {

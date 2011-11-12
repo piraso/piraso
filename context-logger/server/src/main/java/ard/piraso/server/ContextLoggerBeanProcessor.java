@@ -19,11 +19,12 @@
 package ard.piraso.server;
 
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.core.PriorityOrdered;
 
 /**
  * Defines an interface for context logger bean processor.
  */
-public interface ContextLoggerBeanProcessor<T> extends BeanPostProcessor {
+public interface ContextLoggerBeanProcessor<T> extends BeanPostProcessor, PriorityOrdered {
 
     /**
      * Determines if the given object is a supported context logger object instance.

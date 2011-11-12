@@ -18,11 +18,11 @@
 
 package ard.piraso.server;
 
+import ard.piraso.api.JacksonUtils;
 import ard.piraso.api.Preferences;
 import ard.piraso.server.service.ResponseLoggerService;
 import ard.piraso.server.service.User;
 import ard.piraso.server.service.UserRegistry;
-import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -65,8 +65,7 @@ public class PirasoServletTest {
         registry = spy(new UserRegistry());
         request = mockRequest(MONITORED_ADDR);
         response = spy(new MockHttpServletResponse());
-        mapper = new ObjectMapper();
-        mapper.disable(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES);
+        mapper = JacksonUtils.createMapper();
 
         request.addParameter("activity_uuid", "1");
         servlet = new PirasoServlet();

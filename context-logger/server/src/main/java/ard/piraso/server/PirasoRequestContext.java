@@ -24,56 +24,45 @@ package ard.piraso.server;
 public class PirasoRequestContext implements ContextPreference {
 
     /**
-     * The delegate instance
+     * Retrieves the delegate {@link PirasoContext}.
+     *
+     * @return the {@link PirasoContext} instance
      */
-    private PirasoContext delegate;
-
-    /**
-     * Construct this request context
-     */
-    public PirasoRequestContext() {
-        this.delegate = PirasoContextHolder.getContext();
+    protected PirasoContext getDelegate() {
+        return PirasoContextHolder.getContext();
     }
 
     /**
      * {@inheritDoc}
      */
     public boolean isMonitored() {
-        if(delegate == null) {
-            return false;
-        }
-
-        return delegate.isMonitored();
+        return getDelegate() != null && getDelegate().isMonitored();
     }
 
     /**
      * {@inheritDoc}
      */
     public boolean isEnabled(String property) {
-        if(delegate == null) {
-            return false;
-        }
-
-        return delegate.isEnabled(property);
+        return getDelegate() != null && getDelegate().isEnabled(property);
     }
 
     /**
      * {@inheritDoc}
      */
     public Integer getIntValue(String property) {
-        if(delegate == null) {
+        if(getDelegate() == null) {
             return null;
         }
 
-        return delegate.getIntValue(property);
+        return getDelegate().getIntValue(property);
     }
 
     /**
      *  {@inheritDoc}
      */
     public void requestOnScope() {
-        if(delegate != null) {
-            delegate.requestOnScope();
+        if(getDelegate() != null) {
+            getDelegate().requestOnScope();
         }
     }
 }

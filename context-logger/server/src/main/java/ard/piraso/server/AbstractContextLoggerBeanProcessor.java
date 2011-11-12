@@ -18,6 +18,7 @@
 
 package ard.piraso.server;
 
+import ard.piraso.api.IDGenerator;
 import org.springframework.beans.BeansException;
 
 /**
@@ -25,10 +26,14 @@ import org.springframework.beans.BeansException;
  */
 public abstract class AbstractContextLoggerBeanProcessor<T> implements ContextLoggerBeanProcessor<T> {
 
+    private static final IDGenerator generator = new IDGenerator();
+
     private Class<T> clazz;
+    private int order;
 
     public AbstractContextLoggerBeanProcessor(Class<T> clazz) {
         this.clazz = clazz;
+        order = (int) generator.next();
     }
 
     /**
@@ -41,6 +46,13 @@ public abstract class AbstractContextLoggerBeanProcessor<T> implements ContextLo
      */
     public boolean isSupported(Object o) {
         return o != null && clazz.isInstance(o);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int getOrder() {
+        return order;
     }
 
     /**
