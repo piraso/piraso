@@ -31,13 +31,13 @@ public enum SQLPreferenceEnum  implements PreferenceEnum {
 
     PREPARED_STATEMENT_ENABLED("sql.prepared.statement.enabled"),
 
+    VIEW_SQL_ENABLED("sql.view.enabled"),
+
     PREPARED_STATEMENT_METHOD_CALL_ENABLED("sql.prepared.statement.method.call.enabled"),
 
     RESULTSET_ENABLED("sql.resultset.enabled"),
 
     RESULTSET_METHOD_CALL_ENABLED("sql.resultset.method.call.enabled"),
-
-    VIEW_SQL_ENABLED("sql.view.enabled"),
 
     VIEW_DATA_SIZE("sql.data.size", false);
 

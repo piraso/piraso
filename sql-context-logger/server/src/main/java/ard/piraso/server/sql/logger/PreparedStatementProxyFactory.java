@@ -44,6 +44,9 @@ public class PreparedStatementProxyFactory extends AbstractSQLProxyFactory<Prepa
 
     private static final Level BASE_LEVEL = Level.get(SQLPreferenceEnum.PREPARED_STATEMENT_ENABLED.getPropertyName());
 
+    private static final Level SQL_VIEW_LEVEL = Level.get(SQLPreferenceEnum.VIEW_SQL_ENABLED.getPropertyName());
+
+
     private String sql;
 
     private StatementParameterListener<PreparedStatement> parameterListener;
@@ -87,7 +90,7 @@ public class PreparedStatementProxyFactory extends AbstractSQLProxyFactory<Prepa
             if(getPref().isViewSQLEnabled()) {
                 elapseTime.stop();
 
-                ContextLogDispatcher.forward(BASE_LEVEL, id, new SQLViewEntry(sql, parameterListener.getParameters(), elapseTime));
+                ContextLogDispatcher.forward(SQL_VIEW_LEVEL, id, new SQLViewEntry(sql, parameterListener.getParameters(), elapseTime));
 
                 // to be reused
                 parameterListener.clear();

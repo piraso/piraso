@@ -108,6 +108,10 @@ public class ElapseTimeEntry extends Entry {
         if(seconds > 0) buf.append(buf.length() > 0 ? " " : "").append(seconds).append("s");
         if(time > 0)    buf.append(buf.length() > 0 ? " " : "").append(time).append("ms");
 
+        if(buf.length() <= 0) {
+            buf.append("0ms");
+        }
+
         return buf.toString();
     }
 }
