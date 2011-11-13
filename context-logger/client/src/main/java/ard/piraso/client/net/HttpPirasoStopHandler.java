@@ -55,7 +55,7 @@ public class HttpPirasoStopHandler extends AbstractHttpHandler {
         HttpPost post = new HttpPost(uri.getPath());
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("service", "start"));
+        params.add(new BasicNameValuePair("service", "stop"));
         params.add(new BasicNameValuePair("activity_uuid", id));
 
         post.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
