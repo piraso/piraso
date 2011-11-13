@@ -47,9 +47,7 @@ public class ConnectionProxyFactory extends AbstractSQLProxyFactory<Connection> 
         }
 
         if(getPref().isConnectionEnabled()) {
-            if(!getPref().isConnectionMethodCallEnabled()) {
-                factory.addMethodListener("close|commit|rollback", new SimpleMethodLoggerListener<Connection>(BASE_LEVEL, id));
-            }
+            factory.addMethodListener("close|commit|rollback", new SimpleMethodLoggerListener<Connection>(BASE_LEVEL, id));
 
             if(getPref().isPreparedStatementEnabled()) {
                 factory.addMethodListener("prepareStatement", new PreparedStatementListener());
