@@ -24,10 +24,12 @@ import ard.piraso.api.entry.ObjectEntry;
 
 import java.lang.reflect.Method;
 
+
 /**
  * SQL parameter entry
  */
 public class SQLParameterEntry extends MethodCallEntry {
+
     private String name;
 
     private Integer index;

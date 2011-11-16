@@ -19,7 +19,13 @@
 package ard.piraso.api.sql;
 
 import ard.piraso.api.entry.Entry;
+import au.com.bytecode.opencsv.CSVWriter;
+import org.apache.commons.collections.CollectionUtils;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -53,5 +59,27 @@ public class SQLDataViewEntry extends Entry {
 
     public void setResultSetId(long resultSetId) {
         this.resultSetId = resultSetId;
+    }
+
+    @JsonIgnore
+    public String getCSVString() throws IOException {
+        if(CollectionUtils.isEmpty(records)) {
+            return "";
+        }
+
+        StringWriter writer = new StringWriter();
+        CSVWriter csv = new CSVWriter(writer);
+
+        for(List<SQLParameterEntry> list : records) {
+            List<String> row = new ArrayList<String>(list.size());
+            for(SQLParameterEntry parameter : list) {
+                row.add(SQLParameterUtils.toRSString(parameter));
+            }
+
+            csv.writeNext(row.toArray(new String[list.size()]));
+        }
+
+        csv.flush();
+        return writer.toString();
     }
 }

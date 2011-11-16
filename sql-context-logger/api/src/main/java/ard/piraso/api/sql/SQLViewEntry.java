@@ -21,9 +21,10 @@ package ard.piraso.api.sql;
 import ard.piraso.api.entry.ElapseTimeAware;
 import ard.piraso.api.entry.ElapseTimeEntry;
 import ard.piraso.api.entry.Entry;
+import org.apache.commons.collections.MapUtils;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * SQL View entry
@@ -40,7 +41,7 @@ public class SQLViewEntry extends Entry implements ElapseTimeAware {
 
     public SQLViewEntry(String sql, Map<Integer, SQLParameterEntry> parameters, ElapseTimeEntry elapseTime) {
         this.sql = sql;
-        this.parameters = new HashMap<Integer, SQLParameterEntry>(parameters);
+        this.parameters = new LinkedHashMap<Integer, SQLParameterEntry>();
         this.elapseTime = elapseTime;
     }
 
@@ -62,6 +63,29 @@ public class SQLViewEntry extends Entry implements ElapseTimeAware {
 
     public String getSql() {
         return sql;
+    }
+
+    @JsonIgnore
+    public String getParameterReplacedSql() {
+        if(MapUtils.isEmpty(parameters)) {
+            return sql;
+        }
+
+        List<Integer> sorted = new ArrayList<Integer>(parameters.keySet());
+        Collections.sort(sorted);
+
+        StringBuilder buf = new StringBuilder(sql);
+
+        for(Integer key : sorted) {
+            SQLParameterEntry parameter = parameters.get(key);
+
+            int index = buf.indexOf("?");
+            if(index != -1) {
+                buf.replace(index, index + 1, SQLParameterUtils.toPSLiteral(parameter));
+            }
+        }
+
+        return buf.toString();
     }
 
     public void setSql(String sql) {
