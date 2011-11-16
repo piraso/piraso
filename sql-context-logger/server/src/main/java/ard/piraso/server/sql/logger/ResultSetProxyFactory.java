@@ -52,9 +52,9 @@ public class ResultSetProxyFactory extends AbstractSQLProxyFactory<ResultSet> {
 
     private static final IDGenerator GENERATOR = new IDGenerator();
 
-    private static final Level METHOD_CALL_LEVEL = Level.get(SQLPreferenceEnum.CONNECTION_METHOD_CALL_ENABLED.getPropertyName());
+    private static final Level METHOD_CALL_LEVEL = Level.get(SQLPreferenceEnum.RESULTSET_METHOD_CALL_ENABLED.getPropertyName());
 
-    private static final Level BASE_LEVEL = Level.get(SQLPreferenceEnum.CONNECTION_ENABLED.getPropertyName());
+    private static final Level BASE_LEVEL = Level.get(SQLPreferenceEnum.RESULTSET_ENABLED.getPropertyName());
 
     private ResultSetParameterListener parameterCollector;
 
