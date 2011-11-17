@@ -41,7 +41,7 @@ public class SQLViewEntry extends Entry implements ElapseTimeAware {
 
     public SQLViewEntry(String sql, Map<Integer, SQLParameterEntry> parameters, ElapseTimeEntry elapseTime) {
         this.sql = sql;
-        this.parameters = new LinkedHashMap<Integer, SQLParameterEntry>();
+        this.parameters = new LinkedHashMap<Integer, SQLParameterEntry>(parameters);
         this.elapseTime = elapseTime;
     }
 

@@ -113,8 +113,6 @@ public class PirasoServlet implements HttpRequestHandler {
 
             if(service.isAlive()) {
                 response.sendError(HttpServletResponse.SC_REQUEST_TIMEOUT, String.format("Service for user '%s' stop timeout.", user.toString()));
-            } else {
-                registry.removeUser(user);
             }
         } catch (InterruptedException ignored) {}
     }

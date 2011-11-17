@@ -72,19 +72,8 @@ public class StatementParameterListener<T extends Statement> extends RegexMethod
         parameters.put(index, obj);
     }
 
-
     public Map<Integer, SQLParameterEntry> getParameters() {
         return parameters;
-    }
-
-    private boolean isValidMethod(String methodName) {
-        for(String validName : VALID_METHOD_NAMES) {
-            if(validName.equals(methodName)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     @Override
@@ -92,7 +81,7 @@ public class StatementParameterListener<T extends Statement> extends RegexMethod
         MethodInvocation invocation = evt.getInvocation();
         Method method = invocation.getMethod();
 
-        if(!isValidMethod(method.getName())) {
+        if(!VALID_METHOD_NAMES.contains(method.getName())) {
             return;
         }
 

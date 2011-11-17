@@ -18,8 +18,10 @@
 
 package ard.piraso.server.service;
 
+import ard.piraso.api.PirasoLogger;
 import ard.piraso.api.Preferences;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.logging.Log;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -31,6 +33,8 @@ import java.util.concurrent.locks.ReentrantLock;
  * Registry of piraso users.
  */
 public class UserRegistry {
+
+    private static final Log LOG = PirasoLogger.getUserRegistry();
 
     /**
      * lock instance
@@ -134,6 +138,14 @@ public class UserRegistry {
         lock.lock();
 
         try {
+            if(LOG.isInfoEnabled() && user != null) {
+                LOG.info(String.format(
+                        "[PIRASO USER]: User ASSOCIATED with address '%s' and activity id '%s'.",
+                        user.getRemoteAddr(),
+                        user.getActivityUuid())
+                );
+            }
+
             stopServiceIfExist(user);
             userLoggerMap.put(user, service);
         } finally {
@@ -146,6 +158,14 @@ public class UserRegistry {
 
         try {
             if(isUserExist(user)) {
+                if(LOG.isInfoEnabled() && user != null) {
+                    LOG.info(String.format(
+                            "[PIRASO USER]: User REMOVED with address '%s' and activity id '%s'.",
+                            user.getRemoteAddr(),
+                            user.getActivityUuid())
+                    );
+                }
+
                 stopServiceIfExist(user);
 
                 userLoggerMap.remove(user);

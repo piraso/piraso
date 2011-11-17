@@ -18,10 +18,7 @@
 
 package ard.piraso.server;
 
-import ard.piraso.api.GeneralPreferenceEnum;
-import ard.piraso.api.IDGenerator;
-import ard.piraso.api.Level;
-import ard.piraso.api.Preferences;
+import ard.piraso.api.*;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.GroupEntry;
 import ard.piraso.server.service.ResponseLoggerService;
@@ -45,6 +42,8 @@ public class PirasoContext implements ContextPreference {
      */
     private static final Log LOG = LogFactory.getLog(PirasoContext.class);
 
+    private static final Log LOG_ENTRY_POINT = PirasoLogger.getEntryPoint();
+
     private static final IDGenerator ID_GENERATOR = new IDGenerator();
 
     private UserRegistry registry;
@@ -61,6 +60,17 @@ public class PirasoContext implements ContextPreference {
         this.requestId = ID_GENERATOR.next();
         this.registry = registry;
         this.request = request;
+
+        if(LOG_ENTRY_POINT.isDebugEnabled()) {
+            LOG_ENTRY_POINT.debug(String.format(
+                    "[PIRASO ENTRY POINT]: Request[thread=%s, hash=%s, id=%d, addr=%s] '%s' is being watched.",
+                    Thread.currentThread().getId() + ":" + Thread.currentThread().getName(),
+                    Integer.toHexString(request.hashCode()),
+                    requestId,
+                    request.getRemoteAddr(),
+                    request.getRequestURI())
+            );
+        }
     }
 
     /**

@@ -19,12 +19,16 @@
 package ard.piraso.server;
 
 import ard.piraso.api.IDGenerator;
+import ard.piraso.api.PirasoLogger;
+import org.apache.commons.logging.Log;
 import org.springframework.beans.BeansException;
 
 /**
  * Base class for {@link ContextLoggerBeanProcessor}.
  */
 public abstract class AbstractContextLoggerBeanProcessor<T> implements ContextLoggerBeanProcessor<T> {
+
+    private static final Log LOG = PirasoLogger.getProxyEntry();
 
     private static final IDGenerator generator = new IDGenerator();
 
@@ -61,6 +65,14 @@ public abstract class AbstractContextLoggerBeanProcessor<T> implements ContextLo
     @SuppressWarnings("unchecked")
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         if(isSupported(bean)) {
+            if(LOG.isInfoEnabled()) {
+                LOG.info(String.format(
+                        "[PIRASO PROXY ENTRY]: bean=%s, class=%s",
+                        beanName,
+                        bean.getClass().getName())
+                );
+            }
+
             return createProxy((T) bean, beanName);
         }
 
