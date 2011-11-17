@@ -28,6 +28,18 @@ public final class ObjectEntryUtils {
 
     private ObjectEntryUtils() {}
 
+    public static String toString(ObjectEntry entry) {
+        if(entry == null || entry.isNull()) {
+            return "@null";
+        }
+
+        if(!entry.isSupported()) {
+            return "@not-supported";
+        }
+
+        return entry.getStrValue();
+    }
+
     public static Object toObject(ObjectEntry entry) {
         if(entry == null || entry.isNull()) {
             return null;

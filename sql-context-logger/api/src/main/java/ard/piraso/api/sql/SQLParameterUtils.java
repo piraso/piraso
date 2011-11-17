@@ -42,6 +42,10 @@ public class SQLParameterUtils {
         String parameterClassName = parameter.getParameterClassNames()[1];
         ObjectEntry parameterValue = parameter.getArguments()[1];
 
+        if(!parameterValue.isSupported()) {
+            return "@not-supported";
+        }
+
         if(parameterValue.isNull()) {
             return "is null";
         }
@@ -66,7 +70,11 @@ public class SQLParameterUtils {
     public static String toRSString(SQLParameterEntry parameter) {
         ObjectEntry returnedValue = parameter.getReturnedValue();
         if(returnedValue == null || returnedValue.isNull()) {
-            return "";
+            return "@null";
+        }
+
+        if(!returnedValue.isSupported()) {
+            return "@not-supported";
         }
 
         if(LITERAL_TYPES.contains(parameter.getReturnClassName())) {

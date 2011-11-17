@@ -37,6 +37,7 @@ public class ObjectConverterRegistry {
         register(String.class, new TypeConverter<String>(String.class));
         register(Character.class, new TypeConverter<Character>(Character.class));
         register(Boolean.class, new TypeConverter<Boolean>(Boolean.class));
+        register(Long.class, new TypeConverter<Long>(Long.class));
         register(Integer.class, new TypeConverter<Integer>(Integer.class));
         register(Short.class, new TypeConverter<Short>(Short.class));
         register(Byte.class, new TypeConverter<Byte>(Byte.class));

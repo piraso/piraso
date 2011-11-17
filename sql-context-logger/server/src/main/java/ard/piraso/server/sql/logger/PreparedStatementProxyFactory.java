@@ -46,7 +46,6 @@ public class PreparedStatementProxyFactory extends AbstractSQLProxyFactory<Prepa
 
     private static final Level SQL_VIEW_LEVEL = Level.get(SQLPreferenceEnum.VIEW_SQL_ENABLED.getPropertyName());
 
-
     private String sql;
 
     private StatementParameterListener<PreparedStatement> parameterListener;

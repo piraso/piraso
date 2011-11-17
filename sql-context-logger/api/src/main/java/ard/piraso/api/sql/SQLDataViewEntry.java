@@ -41,7 +41,7 @@ public class SQLDataViewEntry extends Entry {
     }
 
     public SQLDataViewEntry(long resultSetId, List<List<SQLParameterEntry>> records) {
-        this.records = records;
+        this.records = new ArrayList<List<SQLParameterEntry>>(records);
         this.resultSetId = resultSetId;
     }
 
