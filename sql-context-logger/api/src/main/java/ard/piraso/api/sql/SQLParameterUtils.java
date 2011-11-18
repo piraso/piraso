@@ -1,7 +1,9 @@
 package ard.piraso.api.sql;
 
 import ard.piraso.api.entry.ObjectEntry;
+import ard.piraso.api.entry.ObjectEntryUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -11,6 +13,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Helper for generating parameter values.
@@ -92,5 +95,79 @@ public class SQLParameterUtils {
         }
 
         return returnedValue.getStrValue();
+    }
+
+    public static Vector<Vector<String>> createColumnDefinition(SQLDataViewEntry entry) {
+        if(CollectionUtils.isEmpty(entry.getRecords())) {
+            return new Vector<Vector<String>>();
+        }
+
+        List<SQLParameterEntry> firstRow = entry.getRecords().iterator().next();
+        Vector<Vector<String>> data = new Vector<Vector<String>>();
+
+        for (SQLParameterEntry param : firstRow) {
+            Vector<String> v = new Vector<String>(2);
+            v.add(ObjectEntryUtils.toString(param.getArguments()[0]));
+            v.add(param.getReturnClassName());
+
+            data.add(v);
+        }
+
+        return data;
+    }
+
+    public static Vector<String> createHeaders(SQLDataViewEntry entry, int maxColumnToleranceSize) {
+        if(CollectionUtils.isEmpty(entry.getRecords())) {
+            return new Vector<String>();
+        }
+
+        List<SQLParameterEntry> firstRow = entry.getRecords().iterator().next();
+        Vector<String> header = new Vector<String>();
+
+        if(firstRow.size() > maxColumnToleranceSize) {
+            header.add("Column Name/ID");
+            header.add("Value");
+        } else {
+            for(SQLParameterEntry param : firstRow) {
+                header.add(ObjectEntryUtils.toString(param.getArguments()[0]));
+            }
+        }
+
+        return header;
+    }
+
+    public static Vector<Vector<String>> createDataValues(SQLDataViewEntry entry, int maxColumnToleranceSize) {
+        if(CollectionUtils.isEmpty(entry.getRecords())) {
+            return new Vector<Vector<String>>();
+        }
+
+        List<SQLParameterEntry> firstRow = entry.getRecords().iterator().next();
+        Vector<Vector<String>> data = new Vector<Vector<String>>();
+
+        if(firstRow.size() > maxColumnToleranceSize) {
+            int j = 1;
+            for (List<SQLParameterEntry> row : entry.getRecords()) {
+                Vector<String> v = new Vector<String>();
+                v.add("@" + (j++) + "  " + StringUtils.repeat("-", 25));
+                v.add(StringUtils.repeat("-", 100));
+                data.add(v);
+                for (SQLParameterEntry param : row) {
+                    v = new Vector<String>();
+                    v.add(ObjectEntryUtils.toString(param.getArguments()[0]));
+                    v.add(ObjectEntryUtils.toString(param.getReturnedValue()));
+                    data.add(v);
+                }
+            }
+        } else {
+            for (List<SQLParameterEntry> row : entry.getRecords()) {
+                Vector<String> v = new Vector<String>(row.size());
+                for (SQLParameterEntry aRow : row) {
+                    v.add(ObjectEntryUtils.toString(aRow.getReturnedValue()));
+                }
+                data.add(v);
+            }
+        }
+
+        return data;
     }
 }
