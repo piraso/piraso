@@ -20,10 +20,10 @@ package ard.piraso.server.hibernate.logger;
 
 import ard.piraso.api.Level;
 import ard.piraso.api.hibernate.HibernatePreferenceEnum;
+import ard.piraso.proxy.RegexProxyFactory;
 import ard.piraso.server.GroupChainId;
 import ard.piraso.server.logger.MethodCallLoggerListener;
 import ard.piraso.server.logger.SimpleMethodLoggerListener;
-import ard.piraso.server.proxy.RegexProxyFactory;
 import org.hibernate.classic.Session;
 
 /**

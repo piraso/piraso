@@ -27,7 +27,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -48,7 +47,7 @@ public class PirasoContext implements ContextPreference {
 
     private UserRegistry registry;
 
-    private HttpServletRequest request;
+    private PirasoEntryPoint entryPoint;
 
     private boolean requestOnScope;
 
@@ -56,19 +55,19 @@ public class PirasoContext implements ContextPreference {
 
     private LinkedList<EntryHolder> entryQueue = new LinkedList<EntryHolder>();
 
-    PirasoContext(HttpServletRequest request, UserRegistry registry) {
+    public PirasoContext(PirasoEntryPoint entryPoint, UserRegistry registry) {
         this.requestId = ID_GENERATOR.next();
         this.registry = registry;
-        this.request = request;
+        this.entryPoint = entryPoint;
 
         if(LOG_ENTRY_POINT.isDebugEnabled()) {
             LOG_ENTRY_POINT.debug(String.format(
                     "[PIRASO ENTRY POINT]: Request[thread=%s, hash=%s, id=%d, addr=%s] '%s' is being watched.",
                     Thread.currentThread().getId() + ":" + Thread.currentThread().getName(),
-                    Integer.toHexString(request.hashCode()),
+                    Integer.toHexString(entryPoint.hashCode()),
                     requestId,
-                    request.getRemoteAddr(),
-                    request.getRequestURI())
+                    entryPoint.getRemoteAddr(),
+                    entryPoint.getPath())
             );
         }
     }
@@ -78,7 +77,7 @@ public class PirasoContext implements ContextPreference {
      */
     public boolean isMonitored() {
         try {
-            return CollectionUtils.isNotEmpty(registry.getContextPreferences(request));
+            return CollectionUtils.isNotEmpty(registry.getContextPreferences(entryPoint));
         } catch (IOException e) {
             return false;
         }
@@ -89,7 +88,7 @@ public class PirasoContext implements ContextPreference {
      */
     public boolean isEnabled(String property) {
         try {
-            List<Preferences> preferencesList = registry.getContextPreferences(request);
+            List<Preferences> preferencesList = registry.getContextPreferences(entryPoint);
 
             for(Preferences pref : preferencesList) {
                 if(pref.isEnabled(property)) {
@@ -108,7 +107,7 @@ public class PirasoContext implements ContextPreference {
      */
     public Integer getIntValue(String property) {
         try {
-            List<Preferences> preferencesList = registry.getContextPreferences(request);
+            List<Preferences> preferencesList = registry.getContextPreferences(entryPoint);
             Integer max = null;
 
             for(Preferences pref : preferencesList) {
@@ -139,7 +138,7 @@ public class PirasoContext implements ContextPreference {
 
     private void logScoped(GroupChainId id, Entry entry, boolean scopedEnabled) {
         try {
-            List<ResponseLoggerService> loggers = registry.getContextLoggers(request);
+            List<ResponseLoggerService> loggers = registry.getContextLoggers(entryPoint);
 
             for(ResponseLoggerService logger : loggers) {
                 Preferences preferences = logger.getPreferences();
@@ -186,7 +185,7 @@ public class PirasoContext implements ContextPreference {
         }
 
         try {
-            List<ResponseLoggerService> loggers = registry.getContextLoggers(request);
+            List<ResponseLoggerService> loggers = registry.getContextLoggers(entryPoint);
 
             for(ResponseLoggerService logger : loggers) {
                 Preferences preferences = logger.getPreferences();

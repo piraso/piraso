@@ -21,10 +21,10 @@ package ard.piraso.server.logger;
 import ard.piraso.api.Level;
 import ard.piraso.api.entry.ElapseTimeEntry;
 import ard.piraso.api.entry.MessageEntry;
+import ard.piraso.proxy.RegexMethodInterceptorEvent;
+import ard.piraso.proxy.RegexMethodInterceptorListener;
 import ard.piraso.server.GroupChainId;
 import ard.piraso.server.dispatcher.ContextLogDispatcher;
-import ard.piraso.server.proxy.RegexMethodInterceptorEvent;
-import ard.piraso.server.proxy.RegexMethodInterceptorListener;
 
 /**
  * Message logger listener

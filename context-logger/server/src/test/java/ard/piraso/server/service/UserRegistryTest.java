@@ -18,9 +18,9 @@
 
 package ard.piraso.server.service;
 
+import ard.piraso.server.TestPirasoRequest;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.mock.web.MockHttpServletRequest;
 
 import static ard.piraso.server.CommonMockObjects.*;
 import static junit.framework.Assert.*;
@@ -42,14 +42,14 @@ public class UserRegistryTest {
     @Test
     public void testCreateUser() throws Exception {
         User expected = createUser("test", "a1");
-        User actual = registry.createOrGetUser(mockRequest("test", "a1"));
+        User actual = registry.createOrGetUser(mockPirasoRequest("test", "a1"));
 
         assertEquals(expected, actual);
     }
 
     @Test
     public void testAssociate() throws Exception {
-        MockHttpServletRequest request = mockRequest("test", "a1");
+        TestPirasoRequest request = mockPirasoRequest("test", "a1");
 
         User user = registry.createOrGetUser(request);
         ResponseLoggerService service = mockService(request.getRemoteAddr(), true);
@@ -63,7 +63,7 @@ public class UserRegistryTest {
 
     @Test
     public void testIsWatched() throws Exception {
-        MockHttpServletRequest request = mockRequest("test", "a1");
+        TestPirasoRequest request = mockPirasoRequest("test", "a1");
 
         assertFalse(registry.isWatched(request));
 
@@ -77,7 +77,7 @@ public class UserRegistryTest {
 
     @Test
     public void testRemove() throws Exception {
-        MockHttpServletRequest request = mockRequest("test", "a1");
+        TestPirasoRequest request = mockPirasoRequest("test", "a1");
 
         User user = registry.createOrGetUser(request);
         ResponseLoggerService service = mockService(request.getRemoteAddr(), true);
@@ -105,8 +105,8 @@ public class UserRegistryTest {
 
     @Test
     public void testGetContext() throws Exception {
-        MockHttpServletRequest request = mockRequest("test", "a1");
-        MockHttpServletRequest orig = request;
+        TestPirasoRequest request = mockPirasoRequest("test", "a1");
+        TestPirasoRequest orig = request;
 
         User user = registry.createOrGetUser(request);
         ResponseLoggerService service = mockService(request.getRemoteAddr(), true);
@@ -118,7 +118,7 @@ public class UserRegistryTest {
 
         // not valid url
         service.getPreferences().addUrlPattern("/someValidUrl");
-        request.setRequestURI("/notValid");
+        request.getMockRequest().setRequestURI("/notValid");
 
         assertEquals(0, registry.getContextPreferences(orig).size());
         assertEquals(0, registry.getContextLoggers(orig).size());
@@ -127,7 +127,7 @@ public class UserRegistryTest {
         service.getPreferences().setUrlPatterns(null);
 
         // not alive
-        request = mockRequest("test2");
+        request = mockPirasoRequest("test2");
         User user2 = registry.createOrGetUser(request);
         ResponseLoggerService service2 = mockService(request.getRemoteAddr(), false);
 
@@ -137,7 +137,7 @@ public class UserRegistryTest {
         assertEquals(1, registry.getContextLoggers(orig).size());
 
         // not same monitored Addr and alive
-        request = mockRequest("test3");
+        request = mockPirasoRequest("test3");
         User user3 = registry.createOrGetUser(request);
         ResponseLoggerService service3 = mockService(request.getRemoteAddr(), true);
 

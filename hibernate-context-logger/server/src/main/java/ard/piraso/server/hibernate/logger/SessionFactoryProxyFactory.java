@@ -18,10 +18,10 @@
 
 package ard.piraso.server.hibernate.logger;
 
+import ard.piraso.proxy.RegexMethodInterceptorAdapter;
+import ard.piraso.proxy.RegexMethodInterceptorEvent;
+import ard.piraso.proxy.RegexProxyFactory;
 import ard.piraso.server.GroupChainId;
-import ard.piraso.server.proxy.RegexMethodInterceptorAdapter;
-import ard.piraso.server.proxy.RegexMethodInterceptorEvent;
-import ard.piraso.server.proxy.RegexProxyFactory;
 import org.hibernate.SessionFactory;
 import org.hibernate.classic.Session;
 

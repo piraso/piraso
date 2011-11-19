@@ -20,11 +20,11 @@ package ard.piraso.server.logger;
 
 import ard.piraso.api.Level;
 import ard.piraso.api.entry.*;
+import ard.piraso.proxy.RegexMethodInterceptorEvent;
+import ard.piraso.proxy.RegexMethodInterceptorListener;
 import ard.piraso.server.GeneralPreferenceEvaluator;
 import ard.piraso.server.GroupChainId;
 import ard.piraso.server.dispatcher.ContextLogDispatcher;
-import ard.piraso.server.proxy.RegexMethodInterceptorEvent;
-import ard.piraso.server.proxy.RegexMethodInterceptorListener;
 
 /**
  * Method call logger listener.

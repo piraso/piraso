@@ -29,6 +29,14 @@ import static org.mockito.Mockito.*;
  * Contains helper method for mocking common objects
  */
 public class CommonMockObjects {
+    public static TestPirasoRequest mockPirasoRequest(String monitoredAddr) {
+        return new TestPirasoRequest(mockRequest(monitoredAddr));
+    }
+
+    public static TestPirasoRequest mockPirasoRequest(String monitoredAddr, String activityId) {
+        return new TestPirasoRequest(mockRequest(monitoredAddr, activityId));
+    }
+
     public static MockHttpServletRequest mockRequest(String monitoredAddr) {
         return mockRequest(monitoredAddr, null);
     }
@@ -67,6 +75,6 @@ public class CommonMockObjects {
             request.addParameter("activity_uuid", activityId);
         }
 
-        return new User(request);
+        return new User(new TestPirasoRequest(request));
     }
 }

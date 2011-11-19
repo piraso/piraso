@@ -25,13 +25,13 @@ import ard.piraso.api.sql.SQLDataTotalRowsEntry;
 import ard.piraso.api.sql.SQLDataViewEntry;
 import ard.piraso.api.sql.SQLParameterEntry;
 import ard.piraso.api.sql.SQLPreferenceEnum;
+import ard.piraso.proxy.RegexMethodInterceptorAdapter;
+import ard.piraso.proxy.RegexMethodInterceptorEvent;
+import ard.piraso.proxy.RegexProxyFactory;
 import ard.piraso.server.GroupChainId;
 import ard.piraso.server.dispatcher.ContextLogDispatcher;
 import ard.piraso.server.logger.MessageLoggerListener;
 import ard.piraso.server.logger.MethodCallLoggerListener;
-import ard.piraso.server.proxy.RegexMethodInterceptorAdapter;
-import ard.piraso.server.proxy.RegexMethodInterceptorEvent;
-import ard.piraso.server.proxy.RegexProxyFactory;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.lang.reflect.Method;

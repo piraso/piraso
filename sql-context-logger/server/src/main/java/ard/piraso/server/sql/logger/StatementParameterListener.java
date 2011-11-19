@@ -19,8 +19,8 @@
 package ard.piraso.server.sql.logger;
 
 import ard.piraso.api.sql.SQLParameterEntry;
-import ard.piraso.server.proxy.RegexMethodInterceptorAdapter;
-import ard.piraso.server.proxy.RegexMethodInterceptorEvent;
+import ard.piraso.proxy.RegexMethodInterceptorAdapter;
+import ard.piraso.proxy.RegexMethodInterceptorEvent;
 import org.aopalliance.intercept.MethodInvocation;
 
 import java.lang.reflect.Method;

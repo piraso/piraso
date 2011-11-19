@@ -18,19 +18,17 @@
 
 package ard.piraso.server.service;
 
-import ard.piraso.api.JacksonUtils;
 import ard.piraso.api.Preferences;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.io.PirasoEntryWriter;
 import ard.piraso.server.IOUtils;
+import ard.piraso.server.PirasoRequest;
+import ard.piraso.server.PirasoResponse;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.codehaus.jackson.map.ObjectMapper;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import java.io.IOException;
@@ -59,16 +57,6 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
     private static final long DEFAULT_MAX_IDLE_TIME_OUT = 60 * 60 * 1000;
 
     /**
-     * Request parameter name for the remote monitored address.
-     */
-    private static final String WATCHED_ADDR_PARAMETER = "watchedAddr";
-
-    /**
-     * Request parameter name for the logging preferences.
-     */
-    private static final String PREFERENCES_PARAMETER = "preferences";
-
-    /**
      * The response content type.
      */
     private static final String RESPONSE_CONTENT_TYPE = "xml/plain; charset=UTF-8";
@@ -91,7 +79,7 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
     /**
      * The response transfer.
      */
-    private HttpServletResponse response;
+    private PirasoResponse response;
 
     /**
      * Responsible for writing transfer entries to response stream writer.
@@ -142,18 +130,15 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
      * @param response the current response object.
      * @throws IOException on io error
      */
-    public ResponseLoggerServiceImpl(User user, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Validate.notNull(request.getParameter(PREFERENCES_PARAMETER), String.format("Request parameter '%s' is required", PREFERENCES_PARAMETER));
-
-        ObjectMapper mapper = JacksonUtils.createMapper();
-        this.preferences = mapper.readValue(request.getParameter(PREFERENCES_PARAMETER), Preferences.class);
+    public ResponseLoggerServiceImpl(User user, PirasoRequest request, PirasoResponse response) throws IOException {
+        this.preferences = request.getPreferences();
         this.user = user;
         this.response = response;
 
-        if(request.getParameter(WATCHED_ADDR_PARAMETER) == null) {
-            this.watchedAddr = request.getRemoteAddr();
+        if(request.getWatchedAddr() != null) {
+            this.watchedAddr = request.getWatchedAddr();
         } else {
-            this.watchedAddr = request.getParameter(WATCHED_ADDR_PARAMETER);
+            this.watchedAddr = request.getRemoteAddr();
         }
     }
 

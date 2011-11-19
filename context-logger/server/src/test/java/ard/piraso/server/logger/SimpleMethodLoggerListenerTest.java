@@ -21,10 +21,10 @@ package ard.piraso.server.logger;
 import ard.piraso.api.Level;
 import ard.piraso.api.entry.ElapseTimeEntry;
 import ard.piraso.api.entry.MessageEntry;
+import ard.piraso.proxy.ProxyInterceptorAware;
+import ard.piraso.proxy.RegexProxyFactory;
 import ard.piraso.server.AbstractLoggerListenerTest;
 import ard.piraso.server.GroupChainId;
-import ard.piraso.server.proxy.ProxyInterceptorAware;
-import ard.piraso.server.proxy.RegexProxyFactory;
 import org.junit.Test;
 
 import java.sql.Connection;

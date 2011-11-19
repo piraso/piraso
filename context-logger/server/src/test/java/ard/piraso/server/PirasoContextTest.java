@@ -48,13 +48,17 @@ public class PirasoContextTest {
 
     private MockHttpServletRequest request;
 
+    private TestPirasoRequest pirasoRequest;
+
     private PirasoContext context;
 
     @Before
     public void setUp() throws Exception {
         registry = spy(new UserRegistry());
         request = mockRequest(MONITORED_ADDR);
-        context = new PirasoContext(request, registry);
+        pirasoRequest = new TestPirasoRequest(request);
+
+        context = new PirasoContext(pirasoRequest, registry);
     }
 
     @Test
@@ -64,7 +68,7 @@ public class PirasoContextTest {
 
     @Test
     public void testIsMonitoredException() throws Exception {
-        doThrow(new IOException()).when(registry).getContextPreferences(request);
+        doThrow(new IOException()).when(registry).getContextPreferences(pirasoRequest);
 
         assertFalse(context.isMonitored());
     }
@@ -82,7 +86,7 @@ public class PirasoContextTest {
 
     @Test
     public void testIsEnabledIOException() throws Exception {
-        doThrow(new IOException()).when(registry).getContextPreferences(request);
+        doThrow(new IOException()).when(registry).getContextPreferences(pirasoRequest);
 
         assertFalse(context.isEnabled("any property"));
     }
@@ -106,7 +110,7 @@ public class PirasoContextTest {
 
     @Test
     public void testGetIntValueIOException() throws Exception {
-        doThrow(new IOException()).when(registry).getContextPreferences(request);
+        doThrow(new IOException()).when(registry).getContextPreferences(pirasoRequest);
 
         assertNull(context.getIntValue("any property"));
     }
@@ -145,7 +149,7 @@ public class PirasoContextTest {
         context.log(Level.ALL, new GroupChainId("test"), new MessageEntry("test"));
 
         // this will not be invoked since no associated users yet
-        verify(registry, times(0)).getContextLoggers(request);
+        verify(registry, times(0)).getContextLoggers(pirasoRequest);
     }
 
     @Test
@@ -297,7 +301,7 @@ public class PirasoContextTest {
     }
 
     private User associateUser(MockHttpServletRequest request) throws IOException {
-        User user = registry.createOrGetUser(request);
+        User user = registry.createOrGetUser(pirasoRequest);
         ResponseLoggerService service = mockService(request.getRemoteAddr(), true);
 
         registry.associate(user, service);

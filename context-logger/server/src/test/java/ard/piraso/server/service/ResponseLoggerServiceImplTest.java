@@ -26,6 +26,8 @@ import ard.piraso.api.entry.MessageEntry;
 import ard.piraso.api.io.EntryReadAdapter;
 import ard.piraso.api.io.EntryReadEvent;
 import ard.piraso.api.io.PirasoEntryReader;
+import ard.piraso.server.TestPirasoRequest;
+import ard.piraso.server.TestPirasoResponse;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -70,13 +72,19 @@ public class ResponseLoggerServiceImplTest {
 
     private MockHttpServletRequest request;
 
+    private TestPirasoRequest pirasoRequest;
+
+    private TestPirasoResponse pirasoResponse;
+
     @Before
     public void setUp() throws Exception {
         ObjectMapper mapper = JacksonUtils.createMapper();
         request = new MockHttpServletRequest();
+        pirasoRequest = new TestPirasoRequest(request);
 
         response = spy(new MockHttpServletResponse());
-        user = new User(request);
+        pirasoResponse = new TestPirasoResponse(response);
+        user = new User(pirasoRequest);
 
         preferences = new Preferences();
         preferences.addProperty(GeneralPreferenceEnum.STACK_TRACE_ENABLED.getPropertyName(), true);
@@ -84,7 +92,7 @@ public class ResponseLoggerServiceImplTest {
         request.addParameter("watchedAddr", EXPECTED_MONITORED_ADDRESS);
         request.addParameter("preferences", mapper.writeValueAsString(preferences));
 
-        service = new ResponseLoggerServiceImpl(user, request, response);
+        service = new ResponseLoggerServiceImpl(user, pirasoRequest, pirasoResponse);
     }
 
     @Test
@@ -92,12 +100,12 @@ public class ResponseLoggerServiceImplTest {
         request.removeParameter("watchedAddr");
         request.setRemoteAddr("remoteAddr");
 
-        service = new ResponseLoggerServiceImpl(user, request, response);
+        service = new ResponseLoggerServiceImpl(user, pirasoRequest, pirasoResponse);
         assertEquals("remoteAddr", service.getWatchedAddr());
 
         request.addParameter("watchedAddr", EXPECTED_MONITORED_ADDRESS);
 
-        service = new ResponseLoggerServiceImpl(user, request, response);
+        service = new ResponseLoggerServiceImpl(user, pirasoRequest, pirasoResponse);
         assertEquals(EXPECTED_MONITORED_ADDRESS, service.getWatchedAddr());
     }
 

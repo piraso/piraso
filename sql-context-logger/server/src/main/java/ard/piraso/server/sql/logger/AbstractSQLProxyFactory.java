@@ -18,9 +18,9 @@
 
 package ard.piraso.server.sql.logger;
 
+import ard.piraso.proxy.RegexProxyFactory;
 import ard.piraso.server.GroupChainId;
 import ard.piraso.server.logger.AbstractLoggerProxyFactory;
-import ard.piraso.server.proxy.RegexProxyFactory;
 import ard.piraso.server.sql.SQLPreferenceEvaluator;
 
 /**

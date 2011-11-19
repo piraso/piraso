@@ -18,13 +18,13 @@
 
 package ard.piraso.server.logger;
 
+import ard.piraso.proxy.RegexMethodInterceptorAdapter;
+import ard.piraso.proxy.RegexMethodInterceptorEvent;
+import ard.piraso.proxy.RegexProxyFactory;
 import ard.piraso.server.GeneralPreferenceEvaluator;
 import ard.piraso.server.GroupChainId;
 import ard.piraso.server.PirasoContext;
 import ard.piraso.server.PirasoContextHolder;
-import ard.piraso.server.proxy.RegexMethodInterceptorAdapter;
-import ard.piraso.server.proxy.RegexMethodInterceptorEvent;
-import ard.piraso.server.proxy.RegexProxyFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;

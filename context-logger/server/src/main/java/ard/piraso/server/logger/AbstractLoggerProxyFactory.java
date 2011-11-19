@@ -18,10 +18,10 @@
 
 package ard.piraso.server.logger;
 
+import ard.piraso.proxy.ProxyAware;
+import ard.piraso.proxy.RegexProxyFactory;
 import ard.piraso.server.GroupChainId;
 import ard.piraso.server.PreferenceEvaluator;
-import ard.piraso.server.proxy.ProxyAware;
-import ard.piraso.server.proxy.RegexProxyFactory;
 
 /**
  * Base class for logger factory.

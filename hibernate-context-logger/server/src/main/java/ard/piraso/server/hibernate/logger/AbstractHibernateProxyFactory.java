@@ -18,10 +18,10 @@
 
 package ard.piraso.server.hibernate.logger;
 
+import ard.piraso.proxy.RegexProxyFactory;
 import ard.piraso.server.GroupChainId;
 import ard.piraso.server.hibernate.HibernatePreferenceEvaluator;
 import ard.piraso.server.logger.AbstractLoggerProxyFactory;
-import ard.piraso.server.proxy.RegexProxyFactory;
 
 /**
  * Base Hibernate logger factory

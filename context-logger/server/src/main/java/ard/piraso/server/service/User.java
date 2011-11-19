@@ -18,11 +18,11 @@
 
 package ard.piraso.server.service;
 
+import ard.piraso.server.PirasoRequest;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
 
 /**
@@ -33,11 +33,11 @@ public class User {
 
     public String activityUuid;
 
-    public User(HttpServletRequest request) {
+    public User(PirasoRequest request) {
         remoteAddr = request.getRemoteAddr();
 
-        if(request.getParameter("activity_uuid") != null) {
-            activityUuid = request.getParameter("activity_uuid");
+        if(request.getActivityUuid() != null) {
+            activityUuid = request.getActivityUuid();
         } else {
             activityUuid = UUID.randomUUID().toString();
         }

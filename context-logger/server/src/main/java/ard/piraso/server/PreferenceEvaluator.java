@@ -25,7 +25,7 @@ import ard.piraso.api.PreferenceEnum;
  */
 public abstract class PreferenceEvaluator {
 
-    protected ContextPreference preference = new PirasoRequestContext();
+    protected ContextPreference preference = new PirasoEntryPointContext();
 
     public void requestOnScope() {
         preference.requestOnScope();

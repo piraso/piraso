@@ -20,10 +20,11 @@ package ard.piraso.server.service;
 
 import ard.piraso.api.PirasoLogger;
 import ard.piraso.api.Preferences;
+import ard.piraso.server.PirasoEntryPoint;
+import ard.piraso.server.PirasoRequest;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
@@ -49,18 +50,18 @@ public class UserRegistry {
     /**
      * Retrieve all {@link Preferences} given the monitored address.
      *
-     * @param request the http servlet request
+     * @param entryPoint the http servlet request
      * @return list of {@link Preferences}
      * @throws IOException on io error
      */
-    public List<Preferences> getContextPreferences(HttpServletRequest request) throws IOException {
+    public List<Preferences> getContextPreferences(PirasoEntryPoint entryPoint) throws IOException {
         List<Preferences> list = new LinkedList<Preferences>();
 
         List<ResponseLoggerService> tmp = new ArrayList<ResponseLoggerService>(userLoggerMap.values());
         for(ResponseLoggerService rl : tmp) {
             Preferences preferences = rl.getPreferences();
-            if(rl.isAlive() && rl.getWatchedAddr().equals(getMonitoredAddr(request)) &&
-                    preferences.isUrlAcceptable(request.getRequestURI())) {
+            if(rl.isAlive() && rl.getWatchedAddr().equals(getMonitoredAddr(entryPoint)) &&
+                    preferences.isUrlAcceptable(entryPoint.getPath())) {
                 list.add(preferences);
             }
         }
@@ -75,14 +76,14 @@ public class UserRegistry {
      * @return list of {@link ResponseLoggerService}
      * @throws IOException on io error
      */
-    public List<ResponseLoggerService> getContextLoggers(HttpServletRequest request) throws IOException {
+    public List<ResponseLoggerService> getContextLoggers(PirasoEntryPoint request) throws IOException {
         List<ResponseLoggerService> list = new LinkedList<ResponseLoggerService>();
 
         List<ResponseLoggerService> tmp = new ArrayList<ResponseLoggerService>(userLoggerMap.values());
         for(ResponseLoggerService rl : tmp) {
             Preferences preferences = rl.getPreferences();
             if(rl.isAlive() && rl.getWatchedAddr().equals(getMonitoredAddr(request)) &&
-                    preferences.isUrlAcceptable(request.getRequestURI())) {
+                    preferences.isUrlAcceptable(request.getPath())) {
                 list.add(rl);
             }
         }
@@ -90,11 +91,11 @@ public class UserRegistry {
         return list;
     }
 
-    private String getMonitoredAddr(HttpServletRequest request) {
+    private String getMonitoredAddr(PirasoEntryPoint request) {
         return request.getRemoteAddr();
     }
 
-    public boolean isWatched(HttpServletRequest request) throws IOException {
+    public boolean isWatched(PirasoEntryPoint request) throws IOException {
         return CollectionUtils.isNotEmpty(getContextLoggers(request));
     }
 
@@ -108,7 +109,7 @@ public class UserRegistry {
         }
     }
 
-    public User createOrGetUser(HttpServletRequest request) {
+    public User createOrGetUser(PirasoRequest request) {
         return new User(request);
     }
 
