@@ -16,38 +16,24 @@
  * limitations under the License.
  */
 
-package ard.piraso.server;
+package ard.piraso.api.log4j;
 
+import ard.piraso.api.Level;
 import ard.piraso.api.PreferenceEnum;
+import org.junit.Test;
+
+import static junit.framework.Assert.assertTrue;
 
 /**
- * Preference evaluator
+ * Test for {@link Log4jPreferenceEnum}
  */
-public abstract class PreferenceEvaluator {
-
-    protected ContextPreference preference = new PirasoEntryPointContext();
-
-    public void requestOnScope() {
-        preference.requestOnScope();
-    }
-
-    public boolean isRegexEnabled(String property) {
-        return preference != null && preference.isRegexEnabled(property);
-    }
-
-    public boolean isEnabled(String property) {
-        return preference != null && preference.isEnabled(property);
-    }
-
-    public boolean isEnabled(PreferenceEnum pref) {
-        return isEnabled(pref.getPropertyName());
-    }
-
-    public Integer getIntValue(PreferenceEnum pref) {
-        if(preference == null) {
-            return null;
+public class Log4jPreferenceEnumTest {
+    @Test
+    public void testLevels() throws Exception {
+        for(PreferenceEnum flag : Log4jPreferenceEnum.values()) {
+            if(flag.isLevel()) {
+                assertTrue(Level.isLevel(flag.getPropertyName()));
+            }
         }
-
-        return preference.getIntValue(pref.getPropertyName());
     }
 }

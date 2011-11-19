@@ -31,11 +31,7 @@ public enum HibernatePreferenceEnum implements PreferenceEnum {
 
     // register enum as level
     static {
-        for(PreferenceEnum flag : HibernatePreferenceEnum.values()) {
-            if(flag.isLevel()) {
-                Level.addLevel(flag.getPropertyName());
-            }
-        }
+        Level.addLevels(values());
     }
 
     private String propertyName;

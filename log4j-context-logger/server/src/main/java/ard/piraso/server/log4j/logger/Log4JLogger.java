@@ -16,20 +16,16 @@
  * limitations under the License.
  */
 
-package ard.piraso.api;
+package ard.piraso.server.log4j.logger;
 
-import org.codehaus.jackson.map.ObjectMapper;
-import org.junit.Before;
+import org.apache.log4j.Logger;
 
 /**
- * Base test class for testing jackson object mapper for beans.
+ * Log4j Logger wrapper
  */
-public abstract class AbstractJacksonTest {
-    protected ObjectMapper mapper;
+public class Log4JLogger extends Logger {
 
-    @Before
-    public void setUp() throws Exception {
-
-        mapper = JacksonUtils.createMapper();
+    public Log4JLogger() {
+        super(Log4JLogger.class.getName());
     }
 }

@@ -43,11 +43,7 @@ public enum SQLPreferenceEnum  implements PreferenceEnum {
 
     // register enum as level
     static {
-        for(PreferenceEnum flag : SQLPreferenceEnum.values()) {
-            if(flag.isLevel()) {
-                Level.addLevel(flag.getPropertyName());
-            }
-        }
+        Level.addLevels(values());
     }
 
     private String propertyName;

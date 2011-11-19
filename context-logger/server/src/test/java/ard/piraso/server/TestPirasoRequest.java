@@ -60,7 +60,11 @@ public class TestPirasoRequest implements PirasoEntryPoint, PirasoRequest {
     }
 
     public String getWatchedAddr() {
-        return request.getParameter(WATCHED_ADDR_PARAMETER);
+        if(request.getParameter(WATCHED_ADDR_PARAMETER) != null) {
+            return request.getParameter(WATCHED_ADDR_PARAMETER);
+        } else {
+            return request.getRemoteAddr();
+        }
     }
 
     public String getActivityUuid() {

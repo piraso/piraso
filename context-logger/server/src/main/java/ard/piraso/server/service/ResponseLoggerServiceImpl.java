@@ -132,14 +132,9 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
      */
     public ResponseLoggerServiceImpl(User user, PirasoRequest request, PirasoResponse response) throws IOException {
         this.preferences = request.getPreferences();
+        this.watchedAddr = request.getWatchedAddr();
         this.user = user;
         this.response = response;
-
-        if(request.getWatchedAddr() != null) {
-            this.watchedAddr = request.getWatchedAddr();
-        } else {
-            this.watchedAddr = request.getRemoteAddr();
-        }
     }
 
     /**

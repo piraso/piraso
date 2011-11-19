@@ -110,6 +110,20 @@ public class Preferences {
         return MapUtils.isNotEmpty(booleanProperties) && booleanProperties.containsKey(property) && booleanProperties.get(property).getValue();
     }
 
+    public boolean isRegexEnabled(String name) {
+        if(MapUtils.isEmpty(booleanProperties)) {
+            return false;
+        }
+
+        for(Property<Boolean> value : booleanProperties.values()) {
+            if(name.matches(value.getName())) {
+                return value.getValue();
+            }
+        }
+
+        return false;
+    }
+
     public Integer getIntValue(String property) {
         if(MapUtils.isEmpty(integerProperties) || !integerProperties.containsKey(property)) {
             return null;

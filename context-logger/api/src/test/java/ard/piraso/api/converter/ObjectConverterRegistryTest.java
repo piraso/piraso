@@ -21,6 +21,7 @@ package ard.piraso.api.converter;
 import org.junit.Test;
 
 import java.sql.Timestamp;
+import java.util.StringTokenizer;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;
@@ -42,7 +43,6 @@ public class ObjectConverterRegistryTest {
         assertTrue(ObjectConverterRegistry.isSupported(1.0));
         assertTrue(ObjectConverterRegistry.isSupported(Integer.class));
 
-        assertFalse(ObjectConverterRegistry.isSupported(new StringBuffer()));
         assertFalse(ObjectConverterRegistry.isSupported(new Object()));
         assertFalse(ObjectConverterRegistry.isSupported(new SampleBean("test")));
 
@@ -63,7 +63,7 @@ public class ObjectConverterRegistryTest {
 
     @Test(expected = IllegalStateException.class)
     public void testToStringClassNotSupported() throws Exception {
-        ObjectConverterRegistry.convertToString(new StringBuilder());
+        ObjectConverterRegistry.convertToString(new StringTokenizer(""));
     }
 
     @Test(expected = IllegalStateException.class)

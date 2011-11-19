@@ -49,6 +49,13 @@ public class PirasoEntryPointContext implements ContextPreference {
     /**
      * {@inheritDoc}
      */
+    public boolean isRegexEnabled(String property) {
+        return getDelegate() != null && getDelegate().isRegexEnabled(property);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public Integer getIntValue(String property) {
         if(getDelegate() == null) {
             return null;

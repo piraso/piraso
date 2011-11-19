@@ -16,38 +16,40 @@
  * limitations under the License.
  */
 
-package ard.piraso.server;
+package ard.piraso.api.log4j;
 
+import ard.piraso.api.Level;
 import ard.piraso.api.PreferenceEnum;
 
 /**
- * Preference evaluator
+ * Log4j preference enumeration
  */
-public abstract class PreferenceEvaluator {
+public enum Log4jPreferenceEnum implements PreferenceEnum {
+    LOG4J_ENABLED("log4j.enabled");
 
-    protected ContextPreference preference = new PirasoEntryPointContext();
-
-    public void requestOnScope() {
-        preference.requestOnScope();
+    // register enum as level
+    static {
+        Level.addLevels(values());
     }
 
-    public boolean isRegexEnabled(String property) {
-        return preference != null && preference.isRegexEnabled(property);
+    private String propertyName;
+
+    private boolean level;
+
+    private Log4jPreferenceEnum(String propertyName) {
+        this(propertyName, true);
     }
 
-    public boolean isEnabled(String property) {
-        return preference != null && preference.isEnabled(property);
+    private Log4jPreferenceEnum(String propertyName, boolean level) {
+        this.propertyName = propertyName;
+        this.level = level;
     }
 
-    public boolean isEnabled(PreferenceEnum pref) {
-        return isEnabled(pref.getPropertyName());
+    public String getPropertyName() {
+        return propertyName;
     }
 
-    public Integer getIntValue(PreferenceEnum pref) {
-        if(preference == null) {
-            return null;
-        }
-
-        return preference.getIntValue(pref.getPropertyName());
+    public boolean isLevel() {
+        return level;
     }
 }

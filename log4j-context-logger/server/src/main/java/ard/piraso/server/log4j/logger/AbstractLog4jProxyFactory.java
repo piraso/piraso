@@ -16,20 +16,18 @@
  * limitations under the License.
  */
 
-package ard.piraso.api;
+package ard.piraso.server.log4j.logger;
 
-import org.codehaus.jackson.map.ObjectMapper;
-import org.junit.Before;
+import ard.piraso.proxy.RegexProxyFactory;
+import ard.piraso.server.log4j.Log4jPreferenceEvaluator;
+import ard.piraso.server.logger.AbstractLoggerProxyFactory;
 
 /**
- * Base test class for testing jackson object mapper for beans.
+ * Base Log4j logger factory.
  */
-public abstract class AbstractJacksonTest {
-    protected ObjectMapper mapper;
+public class AbstractLog4jProxyFactory<T> extends AbstractLoggerProxyFactory<T, Log4jPreferenceEvaluator> {
 
-    @Before
-    public void setUp() throws Exception {
-
-        mapper = JacksonUtils.createMapper();
+    public AbstractLog4jProxyFactory(RegexProxyFactory<T> factory) {
+        super(null, factory, new Log4jPreferenceEvaluator());
     }
 }

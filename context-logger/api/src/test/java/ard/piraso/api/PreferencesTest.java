@@ -123,4 +123,9 @@ public class PreferencesTest extends AbstractJacksonTest {
         // should only be 2 since e3 and e1 is same
         assertThat(set.size(), is(2));
     }
+
+    @Test
+    public void testIsRegex() throws Exception {
+
+    }
 }

@@ -86,6 +86,25 @@ public class PirasoContext implements ContextPreference {
     /**
      * {@inheritDoc}
      */
+    public boolean isRegexEnabled(String property) {
+        try {
+            List<Preferences> preferencesList = registry.getContextPreferences(entryPoint);
+
+            for(Preferences pref : preferencesList) {
+                if(pref.isRegexEnabled(property)) {
+                    return true;
+                }
+            }
+
+            return false;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public boolean isEnabled(String property) {
         try {
             List<Preferences> preferencesList = registry.getContextPreferences(entryPoint);

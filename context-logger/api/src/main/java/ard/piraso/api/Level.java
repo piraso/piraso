@@ -31,7 +31,7 @@ public class Level {
 
     private static final String ALL_LEVEL = "ALL";
 
-    private static final String SCOPE_LEVEL = GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName();
+    private static final String SCOPE_LEVEL = "general.scoped.enabled";
 
     private static final Map<String, Level> LEVELS = new HashMap<String, Level>() {{
         put(ALL_LEVEL, new Level(ALL_LEVEL));
@@ -56,6 +56,14 @@ public class Level {
         }
 
         LEVELS.put(name, new Level(name));
+    }
+
+    public static void addLevels(PreferenceEnum... enums) {
+        for(PreferenceEnum flag : enums) {
+            if(flag.isLevel()) {
+                Level.addLevel(flag.getPropertyName());
+            }
+        }
     }
 
     private final String name;

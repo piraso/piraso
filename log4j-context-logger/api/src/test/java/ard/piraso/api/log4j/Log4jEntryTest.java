@@ -16,20 +16,29 @@
  * limitations under the License.
  */
 
-package ard.piraso.api;
+package ard.piraso.api.log4j;
 
-import org.codehaus.jackson.map.ObjectMapper;
-import org.junit.Before;
+import ard.piraso.api.AbstractJacksonTest;
+import ard.piraso.api.entry.EntryUtils;
+import org.junit.Test;
+
+import java.io.IOException;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 /**
- * Base test class for testing jackson object mapper for beans.
+ * Test for {@link Log4jEntry} class.
  */
-public abstract class AbstractJacksonTest {
-    protected ObjectMapper mapper;
+public class Log4jEntryTest extends AbstractJacksonTest {
+    @Test
+    public void testJackson() throws IOException {
+        Log4jEntry expected = new Log4jEntry("info", "someMessage");
+        expected.setStackTrace(EntryUtils.toEntry(Thread.currentThread().getStackTrace()));
 
-    @Before
-    public void setUp() throws Exception {
+        String jsonValue = mapper.writeValueAsString(expected);
+        Log4jEntry actual = mapper.readValue(jsonValue, Log4jEntry.class);
 
-        mapper = JacksonUtils.createMapper();
+        assertThat("same entry", actual, is(expected));
     }
 }

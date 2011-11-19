@@ -38,6 +38,8 @@ public interface ContextPreference {
      */
     public boolean isEnabled(String property);
 
+    public boolean isRegexEnabled(String property);
+
     /**
      * Determines the int property value.
      *

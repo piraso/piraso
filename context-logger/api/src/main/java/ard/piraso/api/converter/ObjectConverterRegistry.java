@@ -18,6 +18,8 @@
 
 package ard.piraso.api.converter;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Collections;
@@ -44,6 +46,10 @@ public class ObjectConverterRegistry {
         register(Double.class, new TypeConverter<Double>(Double.class));
         register(Float.class, new TypeConverter<Float>(Float.class));
         register(Class.class, new TypeConverter<Class>(Class.class));
+        register(BigInteger.class, new TypeConverter<BigInteger>(BigInteger.class));
+        register(BigDecimal.class, new TypeConverter<BigDecimal>(BigDecimal.class));
+        register(StringBuffer.class, new TypeConverter<StringBuffer>(StringBuffer.class));
+        register(StringBuilder.class, new TypeConverter<StringBuilder>(StringBuilder.class));
 
         register(Date.class, new TypeConverter<Date>(Date.class));
         register(java.sql.Date.class, new TypeConverter<java.sql.Date>(java.sql.Date.class));

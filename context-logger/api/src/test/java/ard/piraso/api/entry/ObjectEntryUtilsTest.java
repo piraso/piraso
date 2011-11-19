@@ -23,6 +23,7 @@ import org.junit.Test;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
+import java.util.StringTokenizer;
 
 import static junit.framework.Assert.*;
 
@@ -55,7 +56,7 @@ public class ObjectEntryUtilsTest {
 
     @Test(expected = IllegalStateException.class)
     public void testToObjectNotSupported() {
-        ObjectEntryUtils.toObject(new ObjectEntry(new StringBuffer()));
+        ObjectEntryUtils.toObject(new ObjectEntry(new StringTokenizer("")));
     }
 
     @Test

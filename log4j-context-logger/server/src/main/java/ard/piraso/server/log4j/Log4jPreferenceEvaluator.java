@@ -16,20 +16,16 @@
  * limitations under the License.
  */
 
-package ard.piraso.api;
+package ard.piraso.server.log4j;
 
-import org.codehaus.jackson.map.ObjectMapper;
-import org.junit.Before;
+import ard.piraso.server.GeneralPreferenceEvaluator;
 
 /**
- * Base test class for testing jackson object mapper for beans.
+ * Log4j preference evaluator
  */
-public abstract class AbstractJacksonTest {
-    protected ObjectMapper mapper;
+public class Log4jPreferenceEvaluator extends GeneralPreferenceEvaluator {
 
-    @Before
-    public void setUp() throws Exception {
-
-        mapper = JacksonUtils.createMapper();
+    public boolean isLoggingEnabled(String category, String level) {
+        return isRegexEnabled("log4j." + category + "." + level);
     }
 }
