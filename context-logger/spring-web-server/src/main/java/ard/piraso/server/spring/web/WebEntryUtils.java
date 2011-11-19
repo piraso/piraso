@@ -65,7 +65,7 @@ public final class WebEntryUtils {
             entry.addHeader(name, value);
         }
 
-        if(ArrayUtils.isNotEmpty(request.getCookies())) {
+        if(!ArrayUtils.isEmpty(request.getCookies())) {
             for(Cookie cookie : request.getCookies()) {
                entry.addCookie(toEntry(cookie));
             }
