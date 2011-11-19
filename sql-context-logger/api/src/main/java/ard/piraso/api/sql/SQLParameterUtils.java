@@ -8,7 +8,6 @@ import org.apache.commons.lang.StringUtils;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Date;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -53,6 +52,10 @@ public class SQLParameterUtils {
             return "is null";
         }
 
+        if("setNull".equals(parameter.getMethodName())) {
+            return "null";
+        }
+
         if(LITERAL_TYPES.contains(parameterClassName)) {
             return parameterValue.getStrValue();
         } else if(Date.class.getName().equals(parameterClassName)) {
@@ -63,9 +66,11 @@ public class SQLParameterUtils {
             SimpleDateFormat timeFormat = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
 
             return "'" + timeFormat.format(parameterValue.toObject()) + "'";
-        } else if(Time.class.getName().equals(parameterClassName)) {
-            return "'" + parameterValue.toObject().toString() + "'";
         } else {
+            if(parameterValue.isSupported()) {
+                return "'" + String.valueOf(parameterValue.toObject()) + "'";
+            }
+
             return "'" + parameterValue.getStrValue() + "'";
         }
     }
