@@ -90,8 +90,10 @@ public class SQLParameterUtils {
             SimpleDateFormat timeFormat = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
 
             return timeFormat.format(returnedValue.toObject());
-        } else if(Time.class.getName().equals(parameter.getReturnClassName())) {
-            return returnedValue.toObject().toString();
+        }
+
+        if(returnedValue.isSupported()) {
+            return String.valueOf(returnedValue.toObject());
         }
 
         return returnedValue.getStrValue();

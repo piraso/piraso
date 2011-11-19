@@ -37,6 +37,10 @@ public final class ObjectEntryUtils {
             return "@not-supported";
         }
 
+        if(entry.isSupported()) {
+            return String.valueOf(entry.toObject());
+        }
+
         return entry.getStrValue();
     }
 

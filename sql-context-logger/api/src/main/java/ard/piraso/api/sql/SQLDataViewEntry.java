@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * represents a resultSet SQL data
@@ -69,6 +70,9 @@ public class SQLDataViewEntry extends Entry {
 
         StringWriter writer = new StringWriter();
         CSVWriter csv = new CSVWriter(writer);
+
+        Vector<String> header = SQLParameterUtils.createHeaders(this, Integer.MAX_VALUE);
+        csv.writeNext(header.toArray(new String[header.size()]));
 
         for(List<SQLParameterEntry> list : records) {
             List<String> row = new ArrayList<String>(list.size());
