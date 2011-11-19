@@ -24,6 +24,7 @@ import org.mockito.Matchers;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
+import java.util.ArrayList;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
@@ -154,5 +155,47 @@ public class RegexProxyFactoryTest {
 
         assertThat(proxy, not(sameInstance(actual)));
         verify(actual, times(2)).getConnection();
+    }
+
+    @Test
+    public void testNonInterfaceTest() throws Exception {
+        ArrayList<String> list = new ArrayList<String>();
+        list.add("hello");
+
+        final RegexProxyFactory<ArrayList> factory = new RegexProxyFactory<ArrayList>(ArrayList.class);
+        factory.addMethodListener("contains", new RegexMethodInterceptorAdapter<ArrayList>() {
+            @Override
+            public void afterCall(RegexMethodInterceptorEvent<ArrayList> evt) {
+                evt.setReturnedValue(true);
+            }
+        });
+
+        ArrayList listProxy = factory.getProxy(list);
+        assertEquals(true, listProxy.contains("o"));
+    }
+
+    @Test
+    public void testDuplicateReturnedValueSet() throws Exception {
+        ArrayList<String> list = new ArrayList<String>();
+        list.add("hello");
+
+        final RegexProxyFactory<ArrayList> factory = new RegexProxyFactory<ArrayList>(ArrayList.class);
+        factory.addMethodListener("c[a-z]*", new RegexMethodInterceptorAdapter<ArrayList>() {
+            @Override
+            public void afterCall(RegexMethodInterceptorEvent<ArrayList> evt) {
+                evt.setReturnedValue(true);
+            }
+        });
+        factory.addMethodListener("contains", new RegexMethodInterceptorAdapter<ArrayList>() {
+            @Override
+            public void afterCall(RegexMethodInterceptorEvent<ArrayList> evt) {
+                evt.setReturnedValue(true);
+            }
+        });
+
+        // returned value will be reverted back since there were two listeners settings
+        // the returned value.
+        ArrayList listProxy = factory.getProxy(list);
+        assertEquals(false, listProxy.contains("o"));
     }
 }

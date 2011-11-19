@@ -19,6 +19,9 @@
 package ard.piraso.proxy;
 
 import org.aopalliance.intercept.MethodInvocation;
+import org.springframework.aop.framework.AdvisedSupport;
+import org.springframework.aop.framework.AopProxy;
+import org.springframework.aop.framework.DefaultAopProxyFactory;
 import org.springframework.aop.framework.ProxyFactory;
 
 import java.lang.reflect.AccessibleObject;
@@ -52,7 +55,19 @@ public class RegexProxyFactory<T> implements ProxyAware<T> {
         RegexMethodInterceptor<T> wrapper = new RegexMethodInterceptorWrapper(new RegexMethodInterceptor<T>(), object);
         wrapper.addAllMethodListener(listeners);
 
-        return new ProxyInterceptorAware<T>((T) ProxyFactory.getProxy(clazz, wrapper), wrapper);
+        T proxy;
+
+        if(clazz.isInterface()) {
+            proxy = ProxyFactory.getProxy(clazz, wrapper);
+        } else {
+            AdvisedSupport advisedSupport = new AdvisedSupport();
+            advisedSupport.setTarget(object);
+            advisedSupport.addAdvice(wrapper);
+            AopProxy aopProxy = new DefaultAopProxyFactory().createAopProxy(advisedSupport);
+            proxy = (T) aopProxy.getProxy();
+        }
+
+        return new ProxyInterceptorAware<T>(proxy, wrapper);
     }
 
     public void addMethodListener(String regex, RegexMethodInterceptorListener<T> listener) {

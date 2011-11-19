@@ -18,7 +18,7 @@
 
 package ard.piraso.server.spring.web;
 
-import ard.piraso.api.entry.ResponseEntry;
+import ard.piraso.api.entry.HttpResponseEntry;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,14 +34,14 @@ import static junit.framework.Assert.assertEquals;
  */
 public class PirasoResponseWrapperTest {
 
-    private ResponseEntry entry;
+    private HttpResponseEntry entry;
 
     private PirasoResponseWrapper wrapper;
 
     @Before
     public void setUp() throws Exception {
         MockHttpServletResponse response = new MockHttpServletResponse();
-        entry = new ResponseEntry();
+        entry = new HttpResponseEntry();
 
         wrapper = new PirasoResponseWrapper(response, entry);
     }

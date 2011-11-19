@@ -18,7 +18,7 @@
 
 package ard.piraso.server.spring.web;
 
-import ard.piraso.api.entry.ResponseEntry;
+import ard.piraso.api.entry.HttpResponseEntry;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -30,9 +30,9 @@ import java.io.IOException;
  */
 public class PirasoResponseWrapper extends HttpServletResponseWrapper {
 
-    private ResponseEntry entry;
+    private HttpResponseEntry entry;
 
-    public PirasoResponseWrapper(HttpServletResponse response, ResponseEntry entry) {
+    public PirasoResponseWrapper(HttpServletResponse response, HttpResponseEntry entry) {
         super(response);
 
         this.entry = entry;

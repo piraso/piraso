@@ -32,7 +32,7 @@ import static org.junit.Assert.assertThat;
 public class ResponseEntryTest extends AbstractJacksonTest {
     @Test
     public void testJackson() throws IOException {
-        ResponseEntry expected = new ResponseEntry();
+        HttpResponseEntry expected = new HttpResponseEntry();
 
         expected.setStatus(1);
         expected.setStatusReason("");
@@ -49,7 +49,7 @@ public class ResponseEntryTest extends AbstractJacksonTest {
         expected.addHeader("6", 6l);
 
         String jsonValue = mapper.writeValueAsString(expected);
-        ResponseEntry actual = mapper.readValue(jsonValue, ResponseEntry.class);
+        HttpResponseEntry actual = mapper.readValue(jsonValue, HttpResponseEntry.class);
 
         assertThat("same entry", actual, is(expected));
 

@@ -19,7 +19,7 @@
 package ard.piraso.server.spring.web;
 
 import ard.piraso.api.entry.CookieEntry;
-import ard.piraso.api.entry.RequestEntry;
+import ard.piraso.api.entry.HttpRequestEntry;
 import org.apache.commons.lang.ArrayUtils;
 
 import javax.servlet.http.Cookie;
@@ -50,8 +50,8 @@ public final class WebEntryUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static RequestEntry toEntry(HttpServletRequest request) {
-        RequestEntry entry = new RequestEntry(request.getRequestURI());
+    public static HttpRequestEntry toEntry(HttpServletRequest request) {
+        HttpRequestEntry entry = new HttpRequestEntry(request.getRequestURI());
 
         entry.setMethod(request.getMethod());
         entry.setQueryString(request.getQueryString());

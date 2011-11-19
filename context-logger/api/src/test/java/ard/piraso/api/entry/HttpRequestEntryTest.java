@@ -31,10 +31,10 @@ import static org.junit.Assert.assertTrue;
 /**
  * Test for {@link RequestEntry} class.
  */
-public class RequestEntryTest extends AbstractJacksonTest {
+public class HttpRequestEntryTest extends AbstractJacksonTest {
     @Test
     public void testJackson() throws IOException {
-        RequestEntry expected = new RequestEntry("/");
+        HttpRequestEntry expected = new HttpRequestEntry("/");
         expected.setMethod("GET");
         expected.setParameters(new LinkedHashMap<String, String[]>());
         expected.setQueryString("test=1");
@@ -46,7 +46,7 @@ public class RequestEntryTest extends AbstractJacksonTest {
         expected.addHeader("test2", "test");
 
         String jsonValue = mapper.writeValueAsString(expected);
-        RequestEntry actual = mapper.readValue(jsonValue, RequestEntry.class);
+        HttpRequestEntry actual = mapper.readValue(jsonValue, HttpRequestEntry.class);
 
         assertThat("same entry", actual, is(expected));
         assertTrue(actual.toString().contains(expected.getUri()));

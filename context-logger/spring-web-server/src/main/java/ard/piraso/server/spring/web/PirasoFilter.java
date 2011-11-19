@@ -19,7 +19,7 @@
 package ard.piraso.server.spring.web;
 
 import ard.piraso.api.Level;
-import ard.piraso.api.entry.ResponseEntry;
+import ard.piraso.api.entry.HttpResponseEntry;
 import ard.piraso.server.GroupChainId;
 import ard.piraso.server.PirasoContext;
 import ard.piraso.server.PirasoContextHolder;
@@ -56,7 +56,7 @@ public class PirasoFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         boolean requestIsWatched = registry.isWatched(new PirasoHttpServletRequest(request));
-        ResponseEntry responseEntry = new ResponseEntry();
+        HttpResponseEntry responseEntry = new HttpResponseEntry();
 
         try {
             if(requestIsWatched) {

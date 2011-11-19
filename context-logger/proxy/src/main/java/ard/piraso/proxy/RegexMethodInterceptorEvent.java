@@ -33,7 +33,11 @@ public class RegexMethodInterceptorEvent<T>  {
 
     private Object returnedValue;
 
+    private Object setReturnedValue;
+
     private Exception exception;
+
+    private boolean wasSetReturnedValue;
     
     RegexMethodInterceptorEvent(RegexMethodInterceptor<T> source, MethodInvocation invocation) {
         this(source, invocation, null);
@@ -68,10 +72,18 @@ public class RegexMethodInterceptorEvent<T>  {
     }
 
     public Object getReturnedValue() {
+        if(wasSetReturnedValue) {
+            return setReturnedValue;
+        }
+
         return returnedValue;
     }
 
     public void setReturnedValue(Object newReturnedValue) {
-        this.returnedValue = newReturnedValue;
+        if(wasSetReturnedValue) {
+            throw new IllegalStateException("A previous listener 'returnedValue' was already set.");
+        }
+        this.wasSetReturnedValue = true;
+        this.setReturnedValue = newReturnedValue;
     }
 }
