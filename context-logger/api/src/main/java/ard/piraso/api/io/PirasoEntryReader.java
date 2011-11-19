@@ -96,15 +96,14 @@ public class PirasoEntryReader extends DefaultHandler {
         if(qName.equals("entry")) {
             try {
                 if(currentEntryClassName != null) {
-                    Class clazz = Class.forName(currentEntryClassName);
-                    Entry entry = (Entry) mapper.readValue(content.toString(), clazz);
-
+                    Entry entry = PirasoEntryLoaderRegistry.INSTANCE.loadEntry(currentEntryClassName, content.toString());
                     fireEntryReadEvent(new EntryReadEvent(this, currentEntryId, entry, currentEntryDate));
                 } else {
                     LOG.warn(String.format("Unable to parse entry with value '%s'", content));
                 }
             } catch (Exception e) {
-                LOG.warn(String.format("Unable to parse entry with class name '%s' and value '%s'", currentEntryClassName, content), e);
+                String msg = String.format("Unable to parse entry with class name '%s' and value '%s'", currentEntryClassName, content);
+                LOG.warn(msg, e);
             }
         }
 
