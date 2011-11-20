@@ -47,7 +47,12 @@ public class LoggerProxyFactory  extends AbstractLog4jProxyFactory<Logger> {
         public void beforeCall(RegexMethodInterceptorEvent<Logger> evt) {
             String level = evt.getInvocation().getMethod().getName().toUpperCase();
 
-            if(getPref().isLoggingEnabled(category, level)) {
+            if(getPref().isLog4jEnabled()) {
+                // we are on scope so start monitoring
+                getPref().requestOnScope();
+            }
+
+            if(getPref().isLog4jEnabled(category, level)) {
                 Object msg = evt.getInvocation().getArguments()[0];
                 Log4jEntry entry = new Log4jEntry(level, String.valueOf(msg));
 

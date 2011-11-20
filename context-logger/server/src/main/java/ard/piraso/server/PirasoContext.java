@@ -146,6 +146,10 @@ public class PirasoContext implements ContextPreference {
      * {@inheritDoc}
      */
     public void requestOnScope() {
+        if(requestOnScope) {
+            return;
+        }
+
         requestOnScope = true;
 
         // ensure to log queued

@@ -40,11 +40,12 @@ public class DataSourceProxyFactory extends AbstractSQLProxyFactory<DataSource> 
     private class GetConnectionListener extends RegexMethodInterceptorAdapter<DataSource> {
         @Override
         public void afterCall(RegexMethodInterceptorEvent<DataSource> evt) {
-            // the current request retrieves a db connection
-            // which means the current request is in logging scope.
-            evaluator.requestOnScope();
-
             if(getPref().isConnectionEnabled()) {
+                // the current request retrieves a db connection
+                // which means the current request is in logging scope.
+                // we are on scope when connection is enabled.
+                getPref().requestOnScope();
+
                 Connection connection = (Connection) evt.getReturnedValue();
                 GroupChainId newId = id.create("connection-", connection.hashCode());
 

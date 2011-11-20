@@ -33,34 +33,30 @@ import java.util.Map;
  */
 public class Preferences {
 
-    private Map<String, Property<Boolean>> booleanProperties;
+    private Map<String, Boolean> booleanProperties;
 
-    private Map<String, Property<Integer>> integerProperties;
+    private Map<String, Integer> integerProperties;
 
     private List<String> urlPatterns;
 
-    public Map<String, Property<Boolean>> getBooleanProperties() {
+    public Map<String, Boolean> getBooleanProperties() {
         return booleanProperties;
     }
 
     public void addProperty(String name, boolean value) {
         if(MapUtils.isEmpty(booleanProperties)) {
-            booleanProperties = new HashMap<String, Property<Boolean>>();
+            booleanProperties = new HashMap<String, Boolean>();
         }
 
-        Property<Boolean> property = new Property<Boolean>(name, value);
-
-        booleanProperties.put(property.getName(), property);
+        booleanProperties.put(name, value);
     }
 
     public void addProperty(String name, int value) {
         if(MapUtils.isEmpty(integerProperties)) {
-            integerProperties = new HashMap<String, Property<Integer>>();
+            integerProperties = new HashMap<String, Integer>();
         }
 
-        Property<Integer> property = new Property<Integer>(name, value);
-
-        integerProperties.put(property.getName(), property);
+        integerProperties.put(name, value);
     }
 
     public void addUrlPattern(String pattern) {
@@ -71,15 +67,15 @@ public class Preferences {
         urlPatterns.add(pattern);
     }
 
-    public void setBooleanProperties(Map<String, Property<Boolean>> booleanProperties) {
+    public void setBooleanProperties(Map<String, Boolean> booleanProperties) {
         this.booleanProperties = booleanProperties;
     }
 
-    public Map<String, Property<Integer>> getIntegerProperties() {
+    public Map<String, Integer> getIntegerProperties() {
         return integerProperties;
     }
 
-    public void setIntegerProperties(Map<String, Property<Integer>> integerProperties) {
+    public void setIntegerProperties(Map<String, Integer> integerProperties) {
         this.integerProperties = integerProperties;
     }
 
@@ -107,7 +103,7 @@ public class Preferences {
     }
 
     public boolean isEnabled(String property) {
-        return MapUtils.isNotEmpty(booleanProperties) && booleanProperties.containsKey(property) && booleanProperties.get(property).getValue();
+        return MapUtils.isNotEmpty(booleanProperties) && booleanProperties.containsKey(property) && booleanProperties.get(property);
     }
 
     public boolean isRegexEnabled(String name) {
@@ -115,8 +111,8 @@ public class Preferences {
             return false;
         }
 
-        for(Property<Boolean> value : booleanProperties.values()) {
-            if(name.matches(value.getName())) {
+        for(Map.Entry<String, Boolean> value : booleanProperties.entrySet()) {
+            if(name.matches(value.getKey())) {
                 return value.getValue();
             }
         }
@@ -129,7 +125,7 @@ public class Preferences {
             return null;
         }
 
-        return integerProperties.get(property).getValue();
+        return integerProperties.get(property);
     }
 
     @Override
