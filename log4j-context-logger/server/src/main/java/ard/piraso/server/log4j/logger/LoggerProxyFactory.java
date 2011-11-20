@@ -26,6 +26,7 @@ import ard.piraso.proxy.RegexProxyFactory;
 import ard.piraso.server.GroupChainId;
 import ard.piraso.server.dispatcher.ContextLogDispatcher;
 import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
 
 /**
  * ProxyFactory for {@link org.apache.log4j.Logger} class.
@@ -39,7 +40,7 @@ public class LoggerProxyFactory  extends AbstractLog4jProxyFactory<Logger> {
         this.category = category;
         this.id = new GroupChainId(category);
 
-        factory.addMethodListener("debug|error|fatal|info|warn|trace", new LevelLogInterceptorListener());
+        factory.addMethodListener("debug|error|fatal|info|warn|trace|log", new LevelLogInterceptorListener());
     }
 
     private class LevelLogInterceptorListener extends RegexMethodInterceptorAdapter<Logger> {
@@ -52,9 +53,28 @@ public class LoggerProxyFactory  extends AbstractLog4jProxyFactory<Logger> {
                 getPref().requestOnScope();
             }
 
+            if("LOG".equals(level) && Priority.class.equals(evt.getInvocation().getMethod().getParameterTypes()[0])) {
+                Priority priority = (Priority) evt.getInvocation().getArguments()[0];
+                logEntry(priority.toString(), evt.getInvocation().getArguments()[1]);
+
+                return;
+            }
+            if("LOG".equals(level) && Priority.class.equals(evt.getInvocation().getMethod().getParameterTypes()[1])) {
+                Priority priority = (Priority) evt.getInvocation().getArguments()[1];
+                logEntry(priority.toString(), evt.getInvocation().getArguments()[2]);
+
+                return;
+            }
+
+            if(!"LOG".equals(level)) {
+                logEntry(level, evt.getInvocation().getArguments()[0]);
+            }
+        }
+
+        private void logEntry(String level, Object msg) {
             if(getPref().isLog4jEnabled(category, level)) {
-                Object msg = evt.getInvocation().getArguments()[0];
                 Log4jEntry entry = new Log4jEntry(level, String.valueOf(msg));
+                entry.setLevel("log4j." + category);
 
                 if(getPref().isStackTraceEnabled()) {
                     entry.setStackTrace(EntryUtils.toEntry(Thread.currentThread().getStackTrace()));

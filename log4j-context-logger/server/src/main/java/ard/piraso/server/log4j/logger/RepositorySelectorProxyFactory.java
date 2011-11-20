@@ -34,8 +34,6 @@ public class RepositorySelectorProxyFactory extends AbstractLog4jProxyFactory<Re
         factory.addMethodListener("getLoggerRepository", new RegexMethodInterceptorAdapter<RepositorySelector>() {
             @Override
             public void afterCall(RegexMethodInterceptorEvent<RepositorySelector> evt) {
-
-
                 LoggerRepository returnedValue = (LoggerRepository) evt.getReturnedValue();
                 evt.setReturnedValue(new LoggerRepositoryProxyFactory().getProxy(returnedValue));
             }

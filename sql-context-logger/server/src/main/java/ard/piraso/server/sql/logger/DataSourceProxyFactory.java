@@ -18,10 +18,14 @@
 
 package ard.piraso.server.sql.logger;
 
+import ard.piraso.api.Level;
+import ard.piraso.api.entry.MessageEntry;
+import ard.piraso.api.sql.SQLPreferenceEnum;
 import ard.piraso.proxy.RegexMethodInterceptorAdapter;
 import ard.piraso.proxy.RegexMethodInterceptorEvent;
 import ard.piraso.proxy.RegexProxyFactory;
 import ard.piraso.server.GroupChainId;
+import ard.piraso.server.dispatcher.ContextLogDispatcher;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -30,6 +34,8 @@ import java.sql.Connection;
  * {@link DataSource} logger proxy factory.
  */
 public class DataSourceProxyFactory extends AbstractSQLProxyFactory<DataSource> {
+
+    private static final Level BASE_LEVEL = Level.get(SQLPreferenceEnum.CONNECTION_ENABLED.getPropertyName());
 
     public DataSourceProxyFactory(GroupChainId id) {
         super(id, new RegexProxyFactory<DataSource>(DataSource.class));
@@ -48,6 +54,9 @@ public class DataSourceProxyFactory extends AbstractSQLProxyFactory<DataSource> 
 
                 Connection connection = (Connection) evt.getReturnedValue();
                 GroupChainId newId = id.create("connection-", connection.hashCode());
+
+                MessageEntry entry = new MessageEntry("open");
+                ContextLogDispatcher.forward(BASE_LEVEL, newId, entry);
 
                 evt.setReturnedValue(new ConnectionProxyFactory(newId).getProxy(connection));
             }
