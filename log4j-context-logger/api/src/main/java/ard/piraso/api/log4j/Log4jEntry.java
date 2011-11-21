@@ -20,6 +20,7 @@ package ard.piraso.api.log4j;
 
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.StackTraceElementEntry;
+import ard.piraso.api.entry.ThrowableEntry;
 
 /**
  * Log4J log entry.
@@ -32,11 +33,26 @@ public class Log4jEntry extends Entry {
 
     private StackTraceElementEntry[] stackTrace;
 
+    private ThrowableEntry throwable;
+
     public Log4jEntry() {}
 
     public Log4jEntry(String logLevel, String message) {
+        this(logLevel, message, null);
+    }
+
+    public Log4jEntry(String logLevel, String message, ThrowableEntry throwable) {
         this.logLevel = logLevel;
         this.message = message;
+        this.throwable = throwable;
+    }
+
+    public ThrowableEntry getThrowable() {
+        return throwable;
+    }
+
+    public void setThrowable(ThrowableEntry throwable) {
+        this.throwable = throwable;
     }
 
     public StackTraceElementEntry[] getStackTrace() {

@@ -19,14 +19,18 @@
 package ard.piraso.server.log4j.logger;
 
 import ard.piraso.api.entry.EntryUtils;
+import ard.piraso.api.entry.ThrowableEntry;
 import ard.piraso.api.log4j.Log4jEntry;
 import ard.piraso.proxy.RegexMethodInterceptorAdapter;
 import ard.piraso.proxy.RegexMethodInterceptorEvent;
 import ard.piraso.proxy.RegexProxyFactory;
 import ard.piraso.server.GroupChainId;
 import ard.piraso.server.dispatcher.ContextLogDispatcher;
+import org.aopalliance.intercept.MethodInvocation;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
+
+import java.lang.reflect.Method;
 
 /**
  * ProxyFactory for {@link org.apache.log4j.Logger} class.
@@ -48,34 +52,57 @@ public class LoggerProxyFactory  extends AbstractLog4jProxyFactory<Logger> {
         public void beforeCall(RegexMethodInterceptorEvent<Logger> evt) {
             String level = evt.getInvocation().getMethod().getName().toUpperCase();
 
-            if(getPref().isLog4jEnabled()) {
-                // we are on scope so start monitoring
-                getPref().requestOnScope();
-            }
+            if("LOG".equals(level)) {
+                Priority priority = getArgument(evt, Priority.class);
+                if(priority == null) {
+                    return;
+                }
 
-            if("LOG".equals(level) && Priority.class.equals(evt.getInvocation().getMethod().getParameterTypes()[0])) {
-                Priority priority = (Priority) evt.getInvocation().getArguments()[0];
-                logEntry(priority.toString(), evt.getInvocation().getArguments()[1]);
+                Object msg = getArgument(evt, Object.class);
+                Throwable throwable = getArgument(evt, Throwable.class);
 
-                return;
-            }
-            if("LOG".equals(level) && Priority.class.equals(evt.getInvocation().getMethod().getParameterTypes()[1])) {
-                Priority priority = (Priority) evt.getInvocation().getArguments()[1];
-                logEntry(priority.toString(), evt.getInvocation().getArguments()[2]);
-
+                logEntry(priority.toString(), msg, throwable);
                 return;
             }
 
-            if(!"LOG".equals(level)) {
-                logEntry(level, evt.getInvocation().getArguments()[0]);
+            if(!"LOG".equals(level)) {  // either debug|error|fatal|info|warn|trace
+                Object msg = getArgument(evt, Object.class);
+                Throwable throwable = getArgument(evt, Throwable.class);
+
+                logEntry(level, msg, throwable);
             }
         }
 
-        private void logEntry(String level, Object msg) {
-            if(getPref().isLog4jEnabled(category, level)) {
-                Log4jEntry entry = new Log4jEntry(level, String.valueOf(msg));
-                entry.setLevel("log4j." + category);
+        @SuppressWarnings("unchecked")
+        private <T> T getArgument(RegexMethodInterceptorEvent<Logger> evt, Class<T> type) {
+            MethodInvocation invocation = evt.getInvocation();
+            Method method = invocation.getMethod();
 
+            if(method.getParameterTypes() == null) {
+                return null;
+            }
+
+            for(int i = 0; i < method.getParameterTypes().length; i++) {
+                if(type.equals(method.getParameterTypes()[i])) {
+                    return (T) invocation.getArguments()[i];
+                }
+            }
+
+            return null;
+        }
+
+        private void logEntry(String level, Object msg, Throwable throwable) {
+            if(getPref().isLog4jEnabled(category, level)) {
+                // we are on scope so start monitoring
+                if(getPref().isLog4jEnabled()) {
+                    getPref().requestOnScope();
+                }
+
+                Log4jEntry entry = new Log4jEntry(level, String.valueOf(msg));
+
+                if(throwable != null) {
+                    entry.setThrowable(new ThrowableEntry(throwable));
+                }
                 if(getPref().isStackTraceEnabled()) {
                     entry.setStackTrace(EntryUtils.toEntry(Thread.currentThread().getStackTrace()));
                 }

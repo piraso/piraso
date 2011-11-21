@@ -20,6 +20,7 @@ package ard.piraso.api.log4j;
 
 import ard.piraso.api.AbstractJacksonTest;
 import ard.piraso.api.entry.EntryUtils;
+import ard.piraso.api.entry.ThrowableEntry;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -33,8 +34,9 @@ import static org.junit.Assert.assertThat;
 public class Log4jEntryTest extends AbstractJacksonTest {
     @Test
     public void testJackson() throws IOException {
-        Log4jEntry expected = new Log4jEntry("info", "someMessage");
+        Log4jEntry expected = new Log4jEntry("INFO", "someMessage");
         expected.setStackTrace(EntryUtils.toEntry(Thread.currentThread().getStackTrace()));
+        expected.setThrowable(new ThrowableEntry(new Throwable()));
 
         String jsonValue = mapper.writeValueAsString(expected);
         Log4jEntry actual = mapper.readValue(jsonValue, Log4jEntry.class);
