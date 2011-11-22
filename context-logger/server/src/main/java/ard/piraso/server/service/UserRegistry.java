@@ -9,7 +9,8 @@
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
+ * Unless required by applicable law or agreed
+ * to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
@@ -60,7 +61,7 @@ public class UserRegistry {
         List<ResponseLoggerService> tmp = new ArrayList<ResponseLoggerService>(userLoggerMap.values());
         for(ResponseLoggerService rl : tmp) {
             Preferences preferences = rl.getPreferences();
-            if(rl.isAlive() && rl.getWatchedAddr().equals(getMonitoredAddr(entryPoint)) &&
+            if(rl.isAlive() && rl.isWatched(getMonitoredAddr(entryPoint)) &&
                     preferences.isUrlAcceptable(entryPoint.getPath())) {
                 list.add(preferences);
             }
@@ -82,7 +83,7 @@ public class UserRegistry {
         List<ResponseLoggerService> tmp = new ArrayList<ResponseLoggerService>(userLoggerMap.values());
         for(ResponseLoggerService rl : tmp) {
             Preferences preferences = rl.getPreferences();
-            if(rl.isAlive() && rl.getWatchedAddr().equals(getMonitoredAddr(request)) &&
+            if(rl.isAlive() && rl.isWatched(getMonitoredAddr(request)) &&
                     preferences.isUrlAcceptable(request.getPath())) {
                 list.add(rl);
             }

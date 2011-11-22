@@ -9,7 +9,8 @@
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
+ * Unless required by applicable law or agreed
+ * to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
@@ -25,6 +26,7 @@ import ard.piraso.server.IOUtils;
 import ard.piraso.server.PirasoRequest;
 import ard.piraso.server.PirasoResponse;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -35,6 +37,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Response logger service implementation.
@@ -72,9 +75,19 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
     private User user;
 
     /**
-     * The user monitor remote address.
+     * The user watched remote address
      */
     private String watchedAddr;
+
+    /**
+     * Some alternative watched address given the watched address
+     */
+    private String[] alternativeWatchedAddrs;
+
+    /**
+     * The user watched remote address regular expression pattern
+     */
+    private Pattern watchedAddrPattern;
 
     /**
      * The response transfer.
@@ -133,6 +146,8 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
     public ResponseLoggerServiceImpl(User user, PirasoRequest request, PirasoResponse response) throws IOException {
         this.preferences = request.getPreferences();
         this.watchedAddr = request.getWatchedAddr();
+        this.watchedAddrPattern = Pattern.compile(request.getWatchedAddr());
+        this.alternativeWatchedAddrs = AlternativeWatchedAddressProviderManager.INSTANCE.getAlternatives(watchedAddr);
         this.user = user;
         this.response = response;
     }
@@ -167,6 +182,29 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
      */
     public String getWatchedAddr() {
         return watchedAddr;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isWatched(String remoteAddr) {
+        if(watchedAddr.equals(remoteAddr)) {
+            return true;
+        }
+
+        if(watchedAddrPattern.matcher(remoteAddr).matches()) {
+            return true;
+        }
+
+        if(!ArrayUtils.isEmpty(alternativeWatchedAddrs)) {
+            for(String addr : alternativeWatchedAddrs) {
+                if(addr.equals(remoteAddr)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**

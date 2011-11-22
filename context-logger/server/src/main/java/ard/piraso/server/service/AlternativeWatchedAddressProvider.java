@@ -19,35 +19,16 @@
 
 package ard.piraso.server.service;
 
-import ard.piraso.api.Preferences;
-import ard.piraso.api.entry.Entry;
-
-import java.io.IOException;
-
 /**
- * Defines an interface for a response logger service.
+ * Defines an interface for providing alternative watched addresses.
  */
-public interface ResponseLoggerService {
+public interface AlternativeWatchedAddressProvider {
 
-    public User getUser();
-
-    public String getId();
-
-    public String getWatchedAddr();
-
-    public boolean isWatched(String remoteAddr);
-
-    public Preferences getPreferences();
-
-    public void start() throws Exception;
-
-    public void stop() throws IOException;
-
-    public boolean isAlive();
-
-    public boolean isForcedStopped();
-
-    public void stopAndWait(long timeout) throws InterruptedException, IOException;
-
-    public void log(Entry entry) throws IOException;
+    /**
+     * provide alternative watched address.
+     *
+     * @param watchedAddr the user watched address.
+     * @return the alternative watched addresses.
+     */
+    public String[] getAlternatives(String watchedAddr);
 }

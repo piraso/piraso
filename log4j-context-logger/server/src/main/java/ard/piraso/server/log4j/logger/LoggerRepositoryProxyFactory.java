@@ -9,7 +9,8 @@
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
+ * Unless required by applicable law or agreed
+ * to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
@@ -41,7 +42,13 @@ public class LoggerRepositoryProxyFactory extends AbstractLog4jProxyFactory<Logg
 
                 // ensure that there is no conflict on springframework aop classes
                 if(category != null && !category.startsWith("org.springframework.aop")) {
-                    Logger returnedValue = Log4JLoggerEnhancer.wrap((Logger) evt.getReturnedValue());
+                    Logger logger = (Logger) evt.getReturnedValue();
+
+                    if(Log4JLogger.class.isInstance(logger)) {
+                        return;
+                    }
+
+                    Logger returnedValue = Log4JLoggerEnhancer.wrap(logger);
                     evt.setReturnedValue(new LoggerProxyFactory(category).getProxy(returnedValue));
                 }
             }
