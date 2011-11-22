@@ -9,7 +9,8 @@
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
+ * Unless required by applicable law or agreed
+ * to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
@@ -24,8 +25,7 @@ import org.junit.Test;
 
 import static ard.piraso.server.CommonMockObjects.*;
 import static junit.framework.Assert.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 /**
  * Test for {@link UserRegistry} class.
@@ -53,7 +53,7 @@ public class UserRegistryTest {
 
         User user = registry.createOrGetUser(request);
         ResponseLoggerService service = mockService(request.getRemoteAddr(), true);
-
+        when(service.isWatched("test")).thenReturn(true);
         registry.associate(user, service);
 
         assertEquals(1, registry.getContextPreferences(request).size());
@@ -69,6 +69,7 @@ public class UserRegistryTest {
 
         User user = registry.createOrGetUser(request);
         ResponseLoggerService service = mockService(request.getRemoteAddr(), true);
+        when(service.isWatched("test")).thenReturn(true);
 
         registry.associate(user, service);
 
@@ -81,6 +82,7 @@ public class UserRegistryTest {
 
         User user = registry.createOrGetUser(request);
         ResponseLoggerService service = mockService(request.getRemoteAddr(), true);
+        when(service.isWatched("test")).thenReturn(true);
 
         registry.associate(user, service);
 
@@ -110,6 +112,7 @@ public class UserRegistryTest {
 
         User user = registry.createOrGetUser(request);
         ResponseLoggerService service = mockService(request.getRemoteAddr(), true);
+        when(service.isWatched("test")).thenReturn(true);
 
         registry.associate(user, service);
 
