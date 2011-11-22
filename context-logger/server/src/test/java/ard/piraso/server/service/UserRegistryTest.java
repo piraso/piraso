@@ -25,7 +25,8 @@ import org.junit.Test;
 
 import static ard.piraso.server.CommonMockObjects.*;
 import static junit.framework.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 /**
  * Test for {@link UserRegistry} class.
@@ -53,7 +54,7 @@ public class UserRegistryTest {
 
         User user = registry.createOrGetUser(request);
         ResponseLoggerService service = mockService(request.getRemoteAddr(), true);
-        when(service.isWatched("test")).thenReturn(true);
+
         registry.associate(user, service);
 
         assertEquals(1, registry.getContextPreferences(request).size());
@@ -69,7 +70,6 @@ public class UserRegistryTest {
 
         User user = registry.createOrGetUser(request);
         ResponseLoggerService service = mockService(request.getRemoteAddr(), true);
-        when(service.isWatched("test")).thenReturn(true);
 
         registry.associate(user, service);
 
@@ -82,7 +82,6 @@ public class UserRegistryTest {
 
         User user = registry.createOrGetUser(request);
         ResponseLoggerService service = mockService(request.getRemoteAddr(), true);
-        when(service.isWatched("test")).thenReturn(true);
 
         registry.associate(user, service);
 
@@ -112,7 +111,6 @@ public class UserRegistryTest {
 
         User user = registry.createOrGetUser(request);
         ResponseLoggerService service = mockService(request.getRemoteAddr(), true);
-        when(service.isWatched("test")).thenReturn(true);
 
         registry.associate(user, service);
 
