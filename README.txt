@@ -10,3 +10,7 @@ Developer's Notes:
 1. Command to create package snapshots
     > mvn -DaltDeploymentRepository=snapshot-repo::default::file:../piraso-mvn-repo/snapshots clean deploy
 
+2. Deploying third party jars.
+    > mvn deploy:deploy-file -DgroupId={groupId} -DartifactId={artifactId} -Dversion={version} -Dpackaging=jar -Dfile={file}.jar -Durl=file:///{piraso.home}/piraso-mvn-repo/releases/
+    > mvn deploy:deploy-file -DgroupId={groupId} -DartifactId={artifactId} -Dversion={version} -Dpackaging=java-source -DgeneratePom=false -Dfile={file}-sources.jar -Durl=file:///{piraso.home}/piraso-mvn-repo/releases/
+
