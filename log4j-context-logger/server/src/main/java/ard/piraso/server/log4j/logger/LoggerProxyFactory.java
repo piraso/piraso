@@ -101,7 +101,7 @@ public class LoggerProxyFactory  extends AbstractLog4jProxyFactory<Logger> {
                 Log4jEntry entry = new Log4jEntry(level, String.valueOf(msg));
 
                 if(throwable != null) {
-                    entry.setThrowable(new ThrowableEntry(throwable));
+                    entry.setThrown(new ThrowableEntry(throwable));
                 }
                 if(getPref().isStackTraceEnabled()) {
                     entry.setStackTrace(EntryUtils.toEntry(Thread.currentThread().getStackTrace()));

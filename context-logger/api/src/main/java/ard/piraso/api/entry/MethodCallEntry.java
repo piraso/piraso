@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
 /**
  * Defines a method call log entry.
  */
-public class MethodCallEntry extends Entry implements ElapseTimeAware {
+public class MethodCallEntry extends Entry implements ElapseTimeAware, ThrowableAwareEntry, StackTraceAwareEntry {
 
     private String methodName;
 

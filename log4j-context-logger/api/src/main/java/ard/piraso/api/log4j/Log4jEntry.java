@@ -18,14 +18,12 @@
 
 package ard.piraso.api.log4j;
 
-import ard.piraso.api.entry.Entry;
-import ard.piraso.api.entry.StackTraceElementEntry;
-import ard.piraso.api.entry.ThrowableEntry;
+import ard.piraso.api.entry.*;
 
 /**
  * Log4J log entry.
  */
-public class Log4jEntry extends Entry {
+public class Log4jEntry extends Entry implements StackTraceAwareEntry, ThrowableAwareEntry {
 
     private String logLevel;
 
@@ -47,11 +45,11 @@ public class Log4jEntry extends Entry {
         this.throwable = throwable;
     }
 
-    public ThrowableEntry getThrowable() {
+    public ThrowableEntry getThrown() {
         return throwable;
     }
 
-    public void setThrowable(ThrowableEntry throwable) {
+    public void setThrown(ThrowableEntry throwable) {
         this.throwable = throwable;
     }
 
