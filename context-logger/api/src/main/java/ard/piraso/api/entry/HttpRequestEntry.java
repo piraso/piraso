@@ -18,6 +18,8 @@
 
 package ard.piraso.api.entry;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -118,5 +120,17 @@ public class HttpRequestEntry extends RequestEntry {
 
     public void setRemoteAddr(String remoteAddr) {
         this.remoteAddr = remoteAddr;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder buf = new StringBuilder(super.toString());
+
+        if(StringUtils.isNotEmpty(getQueryString())) {
+            buf.append("?");
+            buf.append(getQueryString());
+        }
+
+        return buf.toString();
     }
 }
