@@ -36,7 +36,7 @@ public class Log4jEntryTest extends AbstractJacksonTest {
     public void testJackson() throws IOException {
         Log4jEntry expected = new Log4jEntry("INFO", "someMessage");
         expected.setStackTrace(EntryUtils.toEntry(Thread.currentThread().getStackTrace()));
-        expected.setThrowable(new ThrowableEntry(new Throwable()));
+        expected.setThrown(new ThrowableEntry(new Throwable()));
 
         String jsonValue = mapper.writeValueAsString(expected);
         Log4jEntry actual = mapper.readValue(jsonValue, Log4jEntry.class);
