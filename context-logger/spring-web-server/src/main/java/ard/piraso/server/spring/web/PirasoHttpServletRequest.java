@@ -58,15 +58,19 @@ public class PirasoHttpServletRequest implements PirasoEntryPoint, PirasoRequest
     }
 
     public String getRemoteAddr() {
+        if(request.getHeader(REMOTE_ADDRESS_HEADER) != null) {
+            return request.getHeader(REMOTE_ADDRESS_HEADER);
+        }
+
         return request.getRemoteAddr();
     }
 
     public String getWatchedAddr() {
         if(request.getParameter(WATCHED_ADDR_PARAMETER) != null) {
             return request.getParameter(WATCHED_ADDR_PARAMETER);
-        } else {
-            return request.getRemoteAddr();
         }
+
+        return request.getRemoteAddr();
     }
 
     public String getActivityUuid() {

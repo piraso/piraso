@@ -25,18 +25,22 @@ import ard.piraso.api.PreferenceEnum;
  */
 public abstract class PreferenceEvaluator {
 
-    protected ContextPreference preference = new PirasoEntryPointContext();
+    protected ContextPreference context = new PirasoEntryPointContext();
+
+    public ContextPreference getContext() {
+        return context;
+    }
 
     public void requestOnScope() {
-        preference.requestOnScope();
+        context.requestOnScope();
     }
 
     public boolean isRegexEnabled(String property) {
-        return preference != null && preference.isRegexEnabled(property);
+        return context != null && context.isRegexEnabled(property);
     }
 
     public boolean isEnabled(String property) {
-        return preference != null && preference.isEnabled(property);
+        return context != null && context.isEnabled(property);
     }
 
     public boolean isEnabled(PreferenceEnum pref) {
@@ -44,10 +48,10 @@ public abstract class PreferenceEvaluator {
     }
 
     public Integer getIntValue(PreferenceEnum pref) {
-        if(preference == null) {
+        if(context == null) {
             return null;
         }
 
-        return preference.getIntValue(pref.getPropertyName());
+        return context.getIntValue(pref.getPropertyName());
     }
 }

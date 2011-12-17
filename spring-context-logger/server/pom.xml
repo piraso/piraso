@@ -25,25 +25,30 @@
     
     <parent>
         <groupId>ard.piraso</groupId>
-        <artifactId>piraso</artifactId>
+        <artifactId>spring-context-logger</artifactId>
         <version>1.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     
-    <artifactId>context-logger</artifactId>
-    <packaging>pom</packaging>
-    <name>context-logger</name>
+    <artifactId>spring-context-logger-server</artifactId>
+    <packaging>jar</packaging>
+    <name>spring-context-logger-server</name>
 
-    <modules>
-        <module>api</module>
-        <module>proxy</module>
-        <module>http-client</module>
-        <module>server</module>
-        <module>spring-web-server</module>
-    </modules>
-
-    <properties>
-        <commons.collections.version>3.2.1</commons.collections.version>
-        <jackson.version>1.9.0</jackson.version>
-    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>spring-context-logger-api</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>context-logger-spring-web-server</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+    </dependencies>
 </project>

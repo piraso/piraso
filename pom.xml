@@ -60,6 +60,7 @@
 
     <modules>
         <module>context-logger</module>
+        <module>spring-context-logger</module>
         <module>sql-context-logger</module>
         <module>hibernate-context-logger</module>
         <module>log4j-context-logger</module>
@@ -73,6 +74,7 @@
         <log4j.version>1.2.16</log4j.version>
         <slf4j.version>1.6.1</slf4j.version>
         <junit.version>4.8.1</junit.version>
+        <spring.version>3.0.4.RELEASE</spring.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>

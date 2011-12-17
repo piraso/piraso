@@ -21,6 +21,8 @@ package ard.piraso.server;
 import ard.piraso.api.*;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.GroupEntry;
+import ard.piraso.api.entry.ReferenceRequestEntry;
+import ard.piraso.api.entry.RequestEntry;
 import ard.piraso.server.service.ResponseLoggerService;
 import ard.piraso.server.service.UserRegistry;
 import org.apache.commons.collections.CollectionUtils;
@@ -28,8 +30,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Represents the current request context.
@@ -53,12 +57,21 @@ public class PirasoContext implements ContextPreference {
 
     private long requestId;
 
+    private ReferenceRequestEntry ref;
+    
+    private Map<Class<?>, Map<String, Object>> propertyBag = new HashMap<Class<?>, Map<String, Object>>();
+
     private LinkedList<EntryHolder> entryQueue = new LinkedList<EntryHolder>();
 
     public PirasoContext(PirasoEntryPoint entryPoint, UserRegistry registry) {
+        this(entryPoint, registry, null);
+    }
+
+    public PirasoContext(PirasoEntryPoint entryPoint, UserRegistry registry, ReferenceRequestEntry ref) {
         this.requestId = ID_GENERATOR.next();
         this.registry = registry;
         this.entryPoint = entryPoint;
+        this.ref = ref;
 
         if(LOG_ENTRY_POINT.isDebugEnabled()) {
             LOG_ENTRY_POINT.debug(String.format(
@@ -70,6 +83,53 @@ public class PirasoContext implements ContextPreference {
                     entryPoint.getPath())
             );
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void addProperty(Class<?> clazz, String name, Object value) {
+        Map<String, Object> map = propertyBag.get(clazz);
+        if(map == null) {
+            map = new HashMap<String, Object>();
+            propertyBag.put(clazz, map);
+        }
+        
+        map.put(name, value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object getProperty(Class<?> clazz, String name) {
+        Map<String, Object> map = propertyBag.get(clazz);
+
+        if(map == null) {
+            return null;
+        }
+
+        return map.get(name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Long getRequestId() {
+        return requestId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public ReferenceRequestEntry getRef() {
+        return ref;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public PirasoEntryPoint getEntryPoint() {
+        return entryPoint;
     }
 
     /**
@@ -239,6 +299,10 @@ public class PirasoContext implements ContextPreference {
         entry.setRequestId(requestId);
         entry.setLevel(level.getName());
         entry.setGroup(new GroupEntry(id.getGroupIds()));
+
+        if(ref != null && RequestEntry.class.isInstance(entry)) {
+            ((RequestEntry) entry).setReference(ref);
+        }
 
         logger.log(entry);
     }

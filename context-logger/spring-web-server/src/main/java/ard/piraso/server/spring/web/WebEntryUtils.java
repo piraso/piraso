@@ -57,6 +57,7 @@ public final class WebEntryUtils {
         entry.setQueryString(request.getQueryString());
         entry.setRemoteAddr(request.getRemoteAddr());
         entry.setParameters(new LinkedHashMap<String, String[]>(request.getParameterMap()));
+        entry.setServerName(request.getServerName());
 
         Enumeration<String> enumeration = request.getHeaderNames();
         while(enumeration.hasMoreElements()) {

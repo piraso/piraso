@@ -46,4 +46,15 @@ public final class PirasoConstants {
     public static final String ENCODING_UTF_8 = "UTF-8";
 
     public static final String XML_CONTENT_TYPE = "xml/plain";
+
+
+
+    //--- These are the cascaded properties for call propagation.
+
+    public static String REMOTE_ADDRESS_HEADER = "Piraso-Remote-Address";
+
+    public static String REQUEST_ID_HEADER = "Piraso-Request-Id";
+
+    public static String GROUP_ID_HEADER = "Piraso-Group-Id";
+
 }

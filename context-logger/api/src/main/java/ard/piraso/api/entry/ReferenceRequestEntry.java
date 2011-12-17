@@ -19,29 +19,29 @@
 package ard.piraso.api.entry;
 
 /**
- * Represents a request entry
+ * Reference request entry.
  */
-public class RequestEntry extends Entry {
-
-    private String path;
-
-    private ReferenceRequestEntry reference;
-    
+public class ReferenceRequestEntry extends Entry {
     private String serverName;
+    
+    private String remoteAddress;
+    
+    private String groupId;
 
-    public RequestEntry() {
+    public String getGroupId() {
+        return groupId;
     }
 
-    public ReferenceRequestEntry getReference() {
-        return reference;
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
     }
 
-    public void setReference(ReferenceRequestEntry reference) {
-        this.reference = reference;
+    public String getRemoteAddress() {
+        return remoteAddress;
     }
 
-    public RequestEntry(String path) {
-        this.path = path;
+    public void setRemoteAddress(String remoteAddress) {
+        this.remoteAddress = remoteAddress;
     }
 
     public String getServerName() {
@@ -50,20 +50,5 @@ public class RequestEntry extends Entry {
 
     public void setServerName(String serverName) {
         this.serverName = serverName;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder buf = new StringBuilder();
-
-        buf.append(getRequestId());
-        buf.append(":");
-        buf.append(getPath());
-
-        return buf.toString();
     }
 }

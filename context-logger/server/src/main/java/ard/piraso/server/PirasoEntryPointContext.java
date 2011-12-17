@@ -18,6 +18,8 @@
 
 package ard.piraso.server;
 
+import ard.piraso.api.entry.ReferenceRequestEntry;
+
 /**
  * Piraso entry point context preference.
  */
@@ -30,6 +32,47 @@ public class PirasoEntryPointContext implements ContextPreference {
      */
     protected PirasoContext getDelegate() {
         return PirasoContextHolder.getContext();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public PirasoEntryPoint getEntryPoint() {
+        return getDelegate() != null ? getDelegate().getEntryPoint() : null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void addProperty(Class<?> clazz, String name, Object value) {
+        if(getDelegate() != null) {
+            getDelegate().addProperty(clazz, name, value);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object getProperty(Class<?> clazz, String name) {
+        if(getDelegate() != null) {
+            return getDelegate().getProperty(clazz, name);
+        }
+
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Long getRequestId() {
+        return getDelegate() != null ? getDelegate().getRequestId() : null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public ReferenceRequestEntry getRef() {
+        return getDelegate() != null ? getDelegate().getRef() : null;
     }
 
     /**

@@ -18,17 +18,51 @@
 
 package ard.piraso.server;
 
+import ard.piraso.api.entry.ReferenceRequestEntry;
+
 /**
  * The current thread context preferences.
  */
 public interface ContextPreference {
 
     /**
+     * Adds a property given the class context.
+     *
+     * @param clazz the class context
+     * @param name the property name
+     * @param value the property value
+     */
+    void addProperty(Class<?> clazz, String name, Object value);
+
+    /**
+     * Gets a property given the context class.
+     *
+     * @param clazz the class context
+     * @param name the property name
+     * @return the property value
+     */
+    Object getProperty(Class<?> clazz, String name);
+
+    /**
+     * The current piraso context request id.
+     *
+     * @return the request id
+     */
+    Long getRequestId();
+
+    /**
+     * Determines the request reference if available.
+     *
+     * @return {@code not null} if available, {@code null} if available.
+     */
+    ReferenceRequestEntry getRef();
+
+    /**
      * Determines whether the current context request is eligible for monitoring.
      *
      * @return {@code true} if eligible, {@code false} otherwise.
      */
-    public boolean isMonitored();
+    boolean isMonitored();
 
     /**
      * Determines whether the given property is enabled or not.
@@ -36,9 +70,9 @@ public interface ContextPreference {
      * @param property the property to check.
      * @return {@code true} if enabled, {@code false} otherwise.
      */
-    public boolean isEnabled(String property);
+    boolean isEnabled(String property);
 
-    public boolean isRegexEnabled(String property);
+    boolean isRegexEnabled(String property);
 
     /**
      * Determines the int property value.
@@ -46,7 +80,7 @@ public interface ContextPreference {
      * @param property the property to retrieve.
      * @return the property int value, {@code null} if not found.
      */
-    public Integer getIntValue(String property);
+    Integer getIntValue(String property);
 
     /**
      * When invoked, this determines that the current request is executed on a logging scoped.
@@ -56,5 +90,12 @@ public interface ContextPreference {
      * <p>
      * This will ensure that request that only do resource serving will be ignored.
      */
-    public void requestOnScope();
+    void requestOnScope();
+
+    /**
+     * The piraso context entry point
+     *
+     * @return the piraso context entry point
+     */
+    PirasoEntryPoint getEntryPoint();
 }

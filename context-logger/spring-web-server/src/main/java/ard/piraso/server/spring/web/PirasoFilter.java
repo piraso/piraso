@@ -20,6 +20,7 @@ package ard.piraso.server.spring.web;
 
 import ard.piraso.api.Level;
 import ard.piraso.api.entry.HttpResponseEntry;
+import ard.piraso.api.entry.ReferenceRequestEntry;
 import ard.piraso.server.GroupChainId;
 import ard.piraso.server.PirasoContext;
 import ard.piraso.server.PirasoContextHolder;
@@ -34,6 +35,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
+import static ard.piraso.api.PirasoConstants.GROUP_ID_HEADER;
+import static ard.piraso.api.PirasoConstants.REQUEST_ID_HEADER;
 
 /**
  * Filter responsible for adding context logging to request.
@@ -62,8 +66,22 @@ public class PirasoFilter extends OncePerRequestFilter {
             if(requestIsWatched) {
                 responseEntry.getElapseTime().start();
 
+                ReferenceRequestEntry ref = null;
+                try {
+                    if(request.getHeader(REQUEST_ID_HEADER) != null && request.getHeader(GROUP_ID_HEADER) != null) {
+                        ref = new ReferenceRequestEntry();
+
+                        ref.setRemoteAddress(request.getRemoteAddr());
+                        ref.setRequestId(Long.valueOf(request.getHeader(REQUEST_ID_HEADER)));
+                        ref.setGroupId(request.getHeader(GROUP_ID_HEADER));
+                        ref.setServerName(request.getRemoteHost());
+                    }
+                } catch(RuntimeException e) {
+                    ref = null;
+                }
+
                 response = new PirasoResponseWrapper(response, responseEntry);
-                PirasoContext context = new PirasoContext(new PirasoHttpServletRequest(request), registry);
+                PirasoContext context = new PirasoContext(new PirasoHttpServletRequest(request), registry, ref);
 
                 PirasoContextHolder.setContext(context);
 
