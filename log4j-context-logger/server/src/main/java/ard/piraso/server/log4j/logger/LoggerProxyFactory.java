@@ -45,6 +45,35 @@ public class LoggerProxyFactory  extends AbstractLog4jProxyFactory<Logger> {
         this.id = new GroupChainId(category);
 
         factory.addMethodListener("debug|error|fatal|info|warn|trace|log", new LevelLogInterceptorListener());
+        factory.addMethodListener("is*Enabled*", new LevelIsEnabledListener());
+    }
+
+    private class LevelIsEnabledListener extends RegexMethodInterceptorAdapter<Logger> {
+        @Override
+        public void afterCall(RegexMethodInterceptorEvent<Logger> evt) {
+            if(!evt.getInvocation().getMethod().getReturnType().equals(Boolean.TYPE)) {
+                return;
+            }
+            
+            Boolean enabled = (Boolean) evt.getReturnedValue();
+            if(enabled) {
+                return;
+            }
+
+            if(getPref().isLog4jEnabled()) {
+                Method method = evt.getInvocation().getMethod();
+                if(method.getName().equals("isTraceEnabled")) {
+                    evt.setReturnedValue(getPref().isLog4jEnabled(category, "TRACE"));
+                } else if(method.getName().equals("isDebugEnabled")) {
+                    evt.setReturnedValue(getPref().isLog4jEnabled(category, "DEBUG"));
+                } else if(method.getName().equals("isInfoEnabled")) {
+                    evt.setReturnedValue(getPref().isLog4jEnabled(category, "INFO"));
+                } else if(method.getName().equals("isEnabledFor")) {
+                    Priority priority = getArgument(evt, Priority.class);
+                    evt.setReturnedValue(getPref().isLog4jEnabled(category, priority.toString()));
+                }
+            }
+        }
     }
 
     private class LevelLogInterceptorListener extends RegexMethodInterceptorAdapter<Logger> {
@@ -73,24 +102,6 @@ public class LoggerProxyFactory  extends AbstractLog4jProxyFactory<Logger> {
             }
         }
 
-        @SuppressWarnings("unchecked")
-        private <T> T getArgument(RegexMethodInterceptorEvent<Logger> evt, Class<T> type) {
-            MethodInvocation invocation = evt.getInvocation();
-            Method method = invocation.getMethod();
-
-            if(method.getParameterTypes() == null) {
-                return null;
-            }
-
-            for(int i = 0; i < method.getParameterTypes().length; i++) {
-                if(type.equals(method.getParameterTypes()[i])) {
-                    return (T) invocation.getArguments()[i];
-                }
-            }
-
-            return null;
-        }
-
         private void logEntry(String level, Object msg, Throwable throwable) {
             if(getPref().isLog4jEnabled(category, level)) {
                 // we are on scope so start monitoring
@@ -110,5 +121,23 @@ public class LoggerProxyFactory  extends AbstractLog4jProxyFactory<Logger> {
                 ContextLogDispatcher.forward(id, entry);
             }
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> T getArgument(RegexMethodInterceptorEvent<Logger> evt, Class<T> type) {
+        MethodInvocation invocation = evt.getInvocation();
+        Method method = invocation.getMethod();
+
+        if(method.getParameterTypes() == null) {
+            return null;
+        }
+
+        for(int i = 0; i < method.getParameterTypes().length; i++) {
+            if(type.equals(method.getParameterTypes()[i])) {
+                return (T) invocation.getArguments()[i];
+            }
+        }
+
+        return null;
     }
 }
