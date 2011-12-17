@@ -18,6 +18,8 @@
 
 package ard.piraso.api.entry;
 
+import java.io.PrintStream;
+
 /**
  * Defines an exception entry.
  */
@@ -67,5 +69,65 @@ public class ThrowableEntry extends Entry {
 
     public void setCause(ThrowableEntry cause) {
         this.cause = cause;
+    }
+
+    /**
+     * Prints this throwable and its backtrace to the specified print stream.
+     *
+     * @param s <code>PrintStream</code> to use for output
+     */
+    public void printStackTrace(PrintStream s) {
+        synchronized (s) {
+            s.println(this);
+
+            StackTraceElementEntry[] trace = getStackTrace();
+            for (StackTraceElementEntry aTrace : trace) {
+                s.println("\tat " + aTrace);
+            }
+
+            ThrowableEntry ourCause = getCause();
+            if (ourCause != null)
+                ourCause.printStackTraceAsCause(s, trace);
+        }
+    }
+
+    /**
+     * Print our stack trace as a cause for the specified stack trace.
+     *
+     * @param s           the print stream
+     * @param causedTrace the base stack trace
+     */
+    private void printStackTraceAsCause(PrintStream s,
+                                        StackTraceElementEntry[] causedTrace) {
+        StackTraceElementEntry[] trace = getStackTrace();
+        int m = trace.length - 1, n = causedTrace.length - 1;
+
+        while (m >= 0 && n >= 0 && trace[m].equals(causedTrace[n])) {
+            m--;
+            n--;
+        }
+
+        int framesInCommon = trace.length - 1 - m;
+
+        s.println("Caused by: " + this);
+        for (int i = 0; i <= m; i++) {
+            s.println("\tat " + trace[i]);
+        }
+
+        if (framesInCommon != 0) {
+            s.println("\t... " + framesInCommon + " more");
+        }
+
+        ThrowableEntry ourCause = getCause();
+        if (ourCause != null) {
+            ourCause.printStackTraceAsCause(s, trace);
+        }
+    }
+
+    @Override
+    public String toString() {
+        String s = getClass().getName();
+        String message = getMessage();
+        return (message != null) ? (s + ": " + message) : s;
     }
 }

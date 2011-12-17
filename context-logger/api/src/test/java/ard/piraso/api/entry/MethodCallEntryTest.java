@@ -100,6 +100,8 @@ public class MethodCallEntryTest extends AbstractJacksonTest {
             expectedMethodCall.setThrown(new ThrowableEntry(e));
         }
 
+        expectedMethodCall.getThrown().printStackTrace(System.err);
+
         String jsonValue = mapper.writeValueAsString(expectedMethodCall);
         MethodCallEntry actualMethodCall = mapper.readValue(jsonValue, MethodCallEntry.class);
 

@@ -26,6 +26,8 @@ import java.lang.reflect.Method;
 public class MethodCallEntry extends Entry implements ElapseTimeAware, ThrowableAwareEntry, StackTraceAwareEntry {
 
     private String methodName;
+    
+    private String genericString;
 
     private String[] parameterClassNames;
 
@@ -61,6 +63,7 @@ public class MethodCallEntry extends Entry implements ElapseTimeAware, Throwable
 
     public void init(Method method) {
         methodName = method.getName();
+        genericString = method.toGenericString();
         returnClassName = method.getReturnType().getName();
 
         parameterClassNames = new String[method.getParameterTypes().length];
@@ -131,5 +134,13 @@ public class MethodCallEntry extends Entry implements ElapseTimeAware, Throwable
 
     public void setElapseTime(ElapseTimeEntry elapseTime) {
         this.elapseTime = elapseTime;
+    }
+
+    public String getGenericString() {
+        return genericString;
+    }
+
+    public void setGenericString(String genericString) {
+        this.genericString = genericString;
     }
 }

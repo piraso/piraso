@@ -26,11 +26,13 @@ public class StackTraceElementEntry extends Entry {
     private String methodName;
     private String fileName;
     private int lineNumber;
+    private boolean nativeMethod;
 
     public StackTraceElementEntry() {}
 
     public StackTraceElementEntry(StackTraceElement element) {
         this.declaringClass = element.getClassName();
+        this.nativeMethod = element.isNativeMethod();
         this.fileName = element.getFileName();
         this.methodName = element.getMethodName();
         this.lineNumber = element.getLineNumber();
@@ -66,5 +68,22 @@ public class StackTraceElementEntry extends Entry {
 
     public void setLineNumber(int lineNumber) {
         this.lineNumber = lineNumber;
+    }
+
+    public boolean isNativeMethod() {
+        return nativeMethod;
+    }
+
+    public void setNativeMethod(boolean nativeMethod) {
+        this.nativeMethod = nativeMethod;
+    }
+
+    @Override
+    public String toString() {
+        return getDeclaringClass() + "." + methodName +
+                (isNativeMethod() ? "(Native Method)" :
+                        (fileName != null && lineNumber >= 0 ?
+                                "(" + fileName + ":" + lineNumber + ")" :
+                                (fileName != null ?  "("+fileName+")" : "(Unknown Source)")));
     }
 }
