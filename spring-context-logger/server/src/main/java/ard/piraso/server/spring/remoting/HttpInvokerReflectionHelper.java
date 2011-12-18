@@ -56,7 +56,7 @@ public class HttpInvokerReflectionHelper {
     }
     
     private Object invokeMethod(String name, Class<?>[] paramTypes, Object[] args) throws IOException {
-            try {
+        try {
             Method method = findMethod(name, paramTypes);
 
             return method.invoke(instance, args);
