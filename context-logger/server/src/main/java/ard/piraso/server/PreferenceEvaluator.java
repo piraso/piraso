@@ -32,7 +32,9 @@ public abstract class PreferenceEvaluator {
     }
 
     public void requestOnScope() {
-        context.requestOnScope();
+        if(context != null) {
+            context.requestOnScope();
+        }
     }
 
     public boolean isRegexEnabled(String property) {
