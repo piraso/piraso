@@ -118,7 +118,7 @@ public class LoggerProxyFactory  extends AbstractLog4jProxyFactory<Logger> {
                     entry.setStackTrace(EntryUtils.toEntry(Thread.currentThread().getStackTrace()));
                 }
 
-                ContextLogDispatcher.forward(id, entry);
+                ContextLogDispatcher.forward(getPref().getLog4jRegexLevel(category, level), id, entry);
             }
         }
     }

@@ -19,10 +19,7 @@
 package ard.piraso.server;
 
 import ard.piraso.api.*;
-import ard.piraso.api.entry.Entry;
-import ard.piraso.api.entry.GroupEntry;
-import ard.piraso.api.entry.ReferenceRequestEntry;
-import ard.piraso.api.entry.RequestEntry;
+import ard.piraso.api.entry.*;
 import ard.piraso.server.service.ResponseLoggerService;
 import ard.piraso.server.service.UserRegistry;
 import org.apache.commons.collections.CollectionUtils;
@@ -275,6 +272,10 @@ public class PirasoContext implements ContextPreference {
 
                 if(Level.ALL.equals(level)) {
                     doLog(logger, level, id, entry);
+                } else if(RegexLevelEntryAware.class.isInstance(entry)) {
+                    if(preferences.isRegexEnabled(level.getName())) {
+                        doLog(logger, level, id, entry);
+                    }
                 } else if(preferences.isEnabled(level.getName())) {
                     doLog(logger, level, id, entry);
                 } else if(Level.SCOPED.equals(level) && requestOnScope) {

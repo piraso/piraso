@@ -18,6 +18,7 @@
 
 package ard.piraso.server.log4j;
 
+import ard.piraso.api.Level;
 import ard.piraso.api.log4j.Log4jPreferenceEnum;
 import ard.piraso.server.GeneralPreferenceEvaluator;
 
@@ -28,6 +29,16 @@ public class Log4jPreferenceEvaluator extends GeneralPreferenceEvaluator {
 
     public boolean isLog4jEnabled() {
         return isEnabled(Log4jPreferenceEnum.LOG4J_ENABLED);
+    }
+    
+    public synchronized Level getLog4jRegexLevel(String category, String level) {
+        String levelName = "log4j." + category + "." + level;
+
+        if(Level.isLevel(levelName)) {
+            return Level.get(levelName);
+        }
+        
+        return Level.addLevel(levelName);
     }
 
     public boolean isLog4jEnabled(String category, String level) {

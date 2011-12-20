@@ -50,12 +50,15 @@ public class Level {
         return LEVELS.containsKey(name);
     }
 
-    public static void addLevel(String name) {
+    public static synchronized Level addLevel(String name) {
         if(LEVELS.containsKey(name)) {
             throw new IllegalArgumentException(String.format("Level with name '%s' already exists.", name));
         }
 
-        LEVELS.put(name, new Level(name));
+        Level level = new Level(name);
+        LEVELS.put(name, level);
+
+        return level;
     }
 
     public static void addLevels(PreferenceEnum... enums) {

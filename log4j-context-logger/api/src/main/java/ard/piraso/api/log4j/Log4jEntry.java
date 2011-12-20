@@ -23,7 +23,7 @@ import ard.piraso.api.entry.*;
 /**
  * Log4J log entry.
  */
-public class Log4jEntry extends Entry implements StackTraceAwareEntry, ThrowableAwareEntry {
+public class Log4jEntry extends Entry implements StackTraceAwareEntry, ThrowableAwareEntry, RegexLevelEntryAware {
 
     private String logLevel;
 
