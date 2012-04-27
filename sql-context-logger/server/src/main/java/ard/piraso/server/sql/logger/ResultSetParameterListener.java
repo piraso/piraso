@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
+ * Copyright (c) 2012. Piraso Alvin R. de Leon. All Rights Reserved.
  *
  * See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -22,6 +22,7 @@ import ard.piraso.api.sql.SQLParameterEntry;
 import ard.piraso.proxy.RegexMethodInterceptorAdapter;
 import ard.piraso.proxy.RegexMethodInterceptorEvent;
 import org.aopalliance.intercept.MethodInvocation;
+import org.apache.commons.lang.ArrayUtils;
 
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
@@ -65,6 +66,11 @@ public class ResultSetParameterListener extends RegexMethodInterceptorAdapter<Re
         Object returnedValue = evt.getReturnedValue();
 
         Class[] types = method.getParameterTypes();
+
+        if(ArrayUtils.isEmpty(types)) {
+            return;
+        }
+
         if(Integer.TYPE.isAssignableFrom(types[0])) {
             Integer index = (Integer) invocation.getArguments()[0];
 
