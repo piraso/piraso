@@ -71,6 +71,7 @@ public class ResultSetParameterListener extends RegexMethodInterceptorAdapter<Re
             return;
         }
 
+
         if(Integer.TYPE.isAssignableFrom(types[0])) {
             Integer index = (Integer) invocation.getArguments()[0];
 
