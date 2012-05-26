@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
+ * Copyright (c) 2012. Piraso Alvin R. de Leon. All Rights Reserved.
  *
  * See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -19,6 +19,10 @@
 package ard.piraso.api.log4j;
 
 import ard.piraso.api.entry.*;
+import org.apache.log4j.MDC;
+import org.apache.log4j.NDC;
+
+import java.util.Date;
 
 /**
  * Log4J log entry.
@@ -28,6 +32,18 @@ public class Log4jEntry extends Entry implements StackTraceAwareEntry, Throwable
     private String logLevel;
 
     private String message;
+
+    private String threadName;
+
+    private long threadId;
+
+    private int threadPriority;
+
+    private String ndc;
+
+    private String mdc;
+
+    private Date time;
 
     private StackTraceElementEntry[] stackTrace;
 
@@ -43,6 +59,12 @@ public class Log4jEntry extends Entry implements StackTraceAwareEntry, Throwable
         this.logLevel = logLevel;
         this.message = message;
         this.throwable = throwable;
+        this.time = new Date();
+        this.threadName = Thread.currentThread().getName();
+        this.threadId = Thread.currentThread().getId();
+        this.threadPriority = Thread.currentThread().getPriority();
+        this.ndc = NDC.peek();
+        this.mdc = String.valueOf(MDC.getContext());
     }
 
     public ThrowableEntry getThrown() {
@@ -75,5 +97,61 @@ public class Log4jEntry extends Entry implements StackTraceAwareEntry, Throwable
 
     public void setLogLevel(String logLevel) {
         this.logLevel = logLevel;
+    }
+
+    public String getMdc() {
+        return mdc;
+    }
+
+    public void setMdc(String mdc) {
+        this.mdc = mdc;
+    }
+
+    public String getNdc() {
+        return ndc;
+    }
+
+    public void setNdc(String ndc) {
+        this.ndc = ndc;
+    }
+
+    public long getThreadId() {
+        return threadId;
+    }
+
+    public void setThreadId(long threadId) {
+        this.threadId = threadId;
+    }
+
+    public String getThreadName() {
+        return threadName;
+    }
+
+    public void setThreadName(String threadName) {
+        this.threadName = threadName;
+    }
+
+    public int getThreadPriority() {
+        return threadPriority;
+    }
+
+    public void setThreadPriority(int threadPriority) {
+        this.threadPriority = threadPriority;
+    }
+
+    public ThrowableEntry getThrowable() {
+        return throwable;
+    }
+
+    public void setThrowable(ThrowableEntry throwable) {
+        this.throwable = throwable;
+    }
+
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
     }
 }
