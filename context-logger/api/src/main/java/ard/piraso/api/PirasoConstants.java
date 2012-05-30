@@ -47,9 +47,11 @@ public final class PirasoConstants {
 
     public static final String ENCODING_UTF_8 = "UTF-8";
 
-    public static final String XML_CONTENT_TYPE = "xml/plain";
+    public static final String STATUS_OK = "SUCCESS";
 
+    public static final String XML_CONTENT_TYPE = "text/xml";
 
+    public static final String JSON_CONTENT_TYPE = "application/json";
 
     //--- These are the cascaded properties for call propagation.
 

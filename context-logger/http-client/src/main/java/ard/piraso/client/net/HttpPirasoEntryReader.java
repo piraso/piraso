@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
+ * Copyright (c) 2012. Piraso Alvin R. de Leon. All Rights Reserved.
  *
  * See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -39,9 +39,12 @@ public class HttpPirasoEntryReader {
 
     private HttpPirasoStopHandler stopHandler;
 
+    private HttpPirasoTestHandler testHandler;
+
     public HttpPirasoEntryReader(HttpClient client, HttpContext context) {
         startHandler = new HttpPirasoStartHandler(client, context);
         stopHandler = new HttpPirasoStopHandler(client, context);
+        testHandler = new HttpPirasoTestHandler(client, context);
     }
 
     public void setUri(String uri) {
@@ -63,6 +66,17 @@ public class HttpPirasoEntryReader {
 
     public boolean isComplete() {
         return startHandler.isComplete();
+    }
+
+    public boolean testConnection() {
+        testHandler.setUri(uri);
+        try {
+            testHandler.execute();
+        } catch (Exception e) {
+            return false;
+        }
+
+        return testHandler.isSuccess();
     }
 
     public void stop() throws IOException {

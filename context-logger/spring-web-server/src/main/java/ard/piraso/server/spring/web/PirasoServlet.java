@@ -92,10 +92,10 @@ public class PirasoServlet implements HttpRequestHandler {
             PrintWriter out = response.getWriter();
 
             try {
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
+                response.setContentType(JSON_CONTENT_TYPE);
+                response.setCharacterEncoding(ENCODING_UTF_8);
 
-                out.write(String.format("{\"status\":\"OK\", \"version\":\"%s\"}", version));
+                out.write(String.format("{\"status\":\"%s\", \"version\":\"%s\"}", STATUS_OK, version));
                 out.flush();
             } finally {
                 out.close();
