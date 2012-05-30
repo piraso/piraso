@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
+ * Copyright (c) 2012. Piraso Alvin R. de Leon. All Rights Reserved.
  *
  * See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -40,6 +40,7 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ard.piraso.api.PirasoConstants.XML_CONTENT_TYPE;
 import static junit.framework.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -96,7 +97,7 @@ public class HttpPirasoEntryReaderTest {
         doReturn(line).when(response).getStatusLine();
 
         doReturn(new ByteArrayInputStream(xml.getBytes())).when(entity).getContent();
-        doReturn("xml/plain").when(contentTypeHeader).getValue();
+        doReturn(XML_CONTENT_TYPE).when(contentTypeHeader).getValue();
 
         reader.getStartHandler().setPreferences(preferences);
         reader.getStartHandler().setWatchedAddr("127.0.0.1");
