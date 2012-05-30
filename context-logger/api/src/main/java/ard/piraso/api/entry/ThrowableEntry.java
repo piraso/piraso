@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
+ * Copyright (c) 2012. Piraso Alvin R. de Leon. All Rights Reserved.
  *
  * See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -26,6 +26,8 @@ import java.io.PrintStream;
 public class ThrowableEntry extends Entry {
     private String message;
 
+    private String actualToString;
+
     private ThrowableEntry cause;
 
     private StackTraceElementEntry[] stackTrace;
@@ -33,6 +35,7 @@ public class ThrowableEntry extends Entry {
     public ThrowableEntry() {}
 
     public ThrowableEntry(Throwable e) {
+        actualToString = e.toString();
         message = e.getMessage();
 
         StackTraceElement[] elements = e.getStackTrace();
@@ -71,6 +74,14 @@ public class ThrowableEntry extends Entry {
         this.cause = cause;
     }
 
+    public String getActualToString() {
+        return actualToString;
+    }
+
+    public void setActualToString(String actualToString) {
+        this.actualToString = actualToString;
+    }
+
     /**
      * Prints this throwable and its backtrace to the specified print stream.
      *
@@ -78,7 +89,7 @@ public class ThrowableEntry extends Entry {
      */
     public void printStackTrace(PrintStream s) {
         synchronized (s) {
-            s.println(this);
+            s.println(actualToString);
 
             StackTraceElementEntry[] trace = getStackTrace();
             for (StackTraceElementEntry aTrace : trace) {
@@ -109,7 +120,7 @@ public class ThrowableEntry extends Entry {
 
         int framesInCommon = trace.length - 1 - m;
 
-        s.println("Caused by: " + this);
+        s.println("Caused by: " + actualToString);
         for (int i = 0; i <= m; i++) {
             s.println("\tat " + trace[i]);
         }
