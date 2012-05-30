@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
+ * Copyright (c) 2012. Piraso Alvin R. de Leon. All Rights Reserved.
  *
  * See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -42,6 +42,8 @@ public final class PirasoConstants {
     public static final String SERVICE_START_PARAMETER_VALUE = "start";
 
     public static final String SERVICE_STOP_PARAMETER_VALUE = "stop";
+
+    public static final String SERVICE_TEST_PARAMETER_VALUE = "test";
 
     public static final String ENCODING_UTF_8 = "UTF-8";
 

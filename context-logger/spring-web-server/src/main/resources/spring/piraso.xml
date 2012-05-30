@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
+  ~ Copyright (c) 2012. Piraso Alvin R. de Leon. All Rights Reserved.
   ~
   ~ See the NOTICE file distributed with
   ~ this work for additional information regarding copyright ownership.
@@ -25,6 +25,7 @@
 
     <bean id="pirasoServlet" class="ard.piraso.server.spring.web.PirasoServlet">
         <property name="registry" ref="pirasoUserRegistry"/>
+        <property name="version" value="1.0-SNAPSHOT"/>
     </bean>
 
     <bean id="pirasoFilter" class="ard.piraso.server.spring.web.PirasoFilter">

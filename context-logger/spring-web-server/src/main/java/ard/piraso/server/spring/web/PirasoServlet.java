@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
+ * Copyright (c) 2012. Piraso Alvin R. de Leon. All Rights Reserved.
  *
  * See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -30,6 +30,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import static ard.piraso.api.PirasoConstants.*;
 
@@ -53,8 +54,14 @@ public class PirasoServlet implements HttpRequestHandler {
 
     private UserRegistry registry;
 
+    private String version;
+
     public void setRegistry(UserRegistry registry) {
         this.registry = registry;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 
     public void setMaxIdleTimeout(Long maxIdleTimeout) {
@@ -81,6 +88,18 @@ public class PirasoServlet implements HttpRequestHandler {
             startLoggerService(request, response, user);
         } else if(SERVICE_STOP_PARAMETER_VALUE.equals(request.getParameter(SERVICE_PARAMETER))) {
             stopService(response, user);
+        } else if(SERVICE_TEST_PARAMETER_VALUE.equals(request.getParameter(SERVICE_PARAMETER))) {
+            PrintWriter out = response.getWriter();
+
+            try {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+
+                out.write(String.format("{\"status\":\"OK\", \"version\":\"%s\"}", version));
+                out.flush();
+            } finally {
+                out.close();
+            }
         } else {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                     String.format("Request Parameter 'service' with value '%s' is invalid.",
