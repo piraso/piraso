@@ -69,6 +69,7 @@ public class HttpPirasoEntryReader {
     }
 
     public boolean testConnection() throws Exception {
+        startHandler.setTargetHost(targetHost);
         testHandler.setUri(uri);
         testHandler.execute();
 
