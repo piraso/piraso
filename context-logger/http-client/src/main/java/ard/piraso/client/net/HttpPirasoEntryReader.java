@@ -68,13 +68,9 @@ public class HttpPirasoEntryReader {
         return startHandler.isComplete();
     }
 
-    public boolean testConnection() {
+    public boolean testConnection() throws Exception {
         testHandler.setUri(uri);
-        try {
-            testHandler.execute();
-        } catch (Exception e) {
-            return false;
-        }
+        testHandler.execute();
 
         return testHandler.isSuccess();
     }
