@@ -37,6 +37,7 @@
     <modules>
         <module>api</module>
         <module>assembly</module>
+        <module>piraso-maven-plugin</module>
         <module>proxy</module>
         <module>http-client</module>
         <module>server</module>
