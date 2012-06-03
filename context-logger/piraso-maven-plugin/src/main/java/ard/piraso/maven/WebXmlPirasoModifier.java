@@ -130,7 +130,7 @@ public class WebXmlPirasoModifier  extends AbstractMojo {
     private void insertFilterAndServletElement(Node root, Node insertBefore) {
         Element filter = createElementNameValue("filter", "filter-name", "filter-class", "pirasoFilter", "org.springframework.web.filter.DelegatingFilterProxy");
         Element filterMapping = createElementNameValue("filter-mapping", "filter-name", "url-pattern", "pirasoFilter", "/*");
-        Element servlet = createElementNameValue("servlet", "servlet-name", "filter-class", "pirasoServlet", "org.springframework.web.context.support.HttpRequestHandlerServlet");
+        Element servlet = createElementNameValue("servlet", "servlet-name", "servlet-class", "pirasoServlet", "org.springframework.web.context.support.HttpRequestHandlerServlet");
         Element servletMapping = createElementNameValue("servlet-mapping", "servlet-name", "url-pattern", "pirasoServlet", "/piraso/logging");
 
         Node buf1 = document.createTextNode("\n  ");
