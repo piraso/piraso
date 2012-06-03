@@ -38,7 +38,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 
 /**
- * Web xml Piraso modifier
+ * Web xml Piraso modifier.
  *
  * @goal web-xml
  */
