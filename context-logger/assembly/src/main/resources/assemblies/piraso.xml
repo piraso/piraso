@@ -32,5 +32,12 @@
         <include>**/*</include>
       </includes>
     </fileSet>
+    <fileSet>
+      <directory>${project.build.directory}/piraso</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>**/*</include>
+      </includes>
+    </fileSet>
   </fileSets>
 </assembly>
