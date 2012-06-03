@@ -106,6 +106,10 @@ public class WebXmlPirasoModifier  extends AbstractMojo {
     private void writeDocument() throws TransformerException, FileNotFoundException {
         File output = new File(outputDirectory, "web.xml");
 
+        if(!output.getParentFile().isDirectory()) {
+            output.getParentFile().mkdirs();
+        }
+
         System.out.println("Output: " + output.toString());
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -171,6 +175,8 @@ public class WebXmlPirasoModifier  extends AbstractMojo {
 
     private void parseDocument() throws MojoExecutionException {
         try {
+            System.out.println("Input: " + webXml.toString());
+
             DOMParser parser = new DOMParser();
             parser.parse(new InputSource(new FileReader(webXml)));
 
