@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
+ * Copyright (c) 2012. Piraso Alvin R. de Leon. All Rights Reserved.
  *
  * See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -96,7 +96,7 @@ public class PirasoEntryReader extends DefaultHandler {
         if(qName.equals("entry")) {
             try {
                 if(currentEntryClassName != null) {
-                    Entry entry = PirasoEntryLoaderRegistry.INSTANCE.loadEntry(currentEntryClassName, content.toString());
+                    Entry entry = (Entry) PirasoObjectLoaderRegistry.INSTANCE.loadObject(currentEntryClassName, content.toString());
                     fireEntryReadEvent(new EntryReadEvent(this, currentEntryId, entry, currentEntryDate));
                 } else {
                     LOG.warn(String.format("Unable to parse entry with value '%s'", content));
