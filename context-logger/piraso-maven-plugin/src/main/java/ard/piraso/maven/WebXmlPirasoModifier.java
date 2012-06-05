@@ -50,7 +50,7 @@ public class WebXmlPirasoModifier  extends AbstractMojo {
      *
      * @parameter default-value="/piraso/logging"
      */
-    private String pirasoLoggingPath;
+    private String pirasoLoggingPath = "/piraso/logging";
 
     /**
      * the web.xml file to modify
@@ -139,7 +139,7 @@ public class WebXmlPirasoModifier  extends AbstractMojo {
         Element filter = createElementNameValue("filter", "filter-name", "filter-class", "pirasoFilter", "org.springframework.web.filter.DelegatingFilterProxy");
         Element filterMapping = createElementNameValue("filter-mapping", "filter-name", "url-pattern", "pirasoFilter", "/*");
         Element servlet = createElementNameValue("servlet", "servlet-name", "servlet-class", "pirasoServlet", "org.springframework.web.context.support.HttpRequestHandlerServlet");
-        Element servletMapping = createElementNameValue("servlet-mapping", "servlet-name", "url-pattern", "pirasoServlet", "/piraso/logging");
+        Element servletMapping = createElementNameValue("servlet-mapping", "servlet-name", "url-pattern", "pirasoServlet", pirasoLoggingPath);
 
         Node buf1 = document.createTextNode("\n  ");
         Node buf2 = document.createTextNode("\n  ");
