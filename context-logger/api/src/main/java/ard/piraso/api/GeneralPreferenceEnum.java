@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
+ * Copyright (c) 2012. Piraso Alvin R. de Leon. All Rights Reserved.
  *
  * See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -33,7 +33,12 @@ public enum GeneralPreferenceEnum implements PreferenceEnum {
      * Example: for sql logging, only when the request requires {@link javax.sql.DataSource} will be monitored.
      * Any other request like, resources, will not result to any logs.
      */
-    SCOPE_ENABLED("general.scoped.enabled");
+    SCOPE_ENABLED("general.scoped.enabled"),
+
+    /**
+     * Determines whether there is no request context
+     */
+    NO_REQUEST_CONTEXT("general.no.request.context");
 
     /**
      * the preference property name.

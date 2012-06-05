@@ -18,8 +18,9 @@
 
 package ard.piraso.server.service;
 
-import ard.piraso.api.Preferences;
+import ard.piraso.api.*;
 import ard.piraso.api.entry.Entry;
+import ard.piraso.api.entry.GlobalRequestEntry;
 import ard.piraso.api.io.PirasoEntryWriter;
 import ard.piraso.server.IOUtils;
 import ard.piraso.server.PirasoRequest;
@@ -29,10 +30,12 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -62,6 +65,9 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
      * The response content type.
      */
     private static final String RESPONSE_CONTENT_TYPE = "text/xml; charset=UTF-8";
+
+    private static final IDGenerator ID_GENERATOR = new IDGenerator();
+
 
     /**
      * The transfer queue. This holds the queue which will be streamed to response writer.
@@ -134,6 +140,10 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
      */
     private int maxQueueForceKillSize = DEFAULT_MAX_QUEUE_FORCE_KILL_SIZE;
 
+    private long globalId;
+
+    private ObjectMapper mapper;
+
     /**
      * Construct the service given the user, request and response.
      *
@@ -149,6 +159,8 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
         this.alternativeWatchedAddrs = AlternativeWatchedAddressProviderManager.INSTANCE.getAlternatives(watchedAddr);
         this.user = user;
         this.response = response;
+        this.mapper = JacksonUtils.createMapper();
+        this.globalId = ID_GENERATOR.next();
     }
 
     /**
@@ -236,6 +248,19 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
 
         try {
             writer = new PirasoEntryWriter(getId(), getWatchedAddr(), response.getWriter());
+
+            if(preferences.isEnabled(GeneralPreferenceEnum.NO_REQUEST_CONTEXT.getPropertyName())) {
+                GlobalRequestEntry entry = new GlobalRequestEntry();
+                entry.setRequestId(globalId);
+                entry.setLevel(Level.SCOPED.getName());
+
+                try {
+                    writer.write(entry);
+                } catch (Exception e) {
+                    LOG.warn(e.getMessage(), e);;
+                }
+            }
+
             doLogWhileAlive();
         } finally {
             synchronized (this) {
@@ -298,6 +323,15 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
         while(CollectionUtils.isNotEmpty(transferQueue) && !isForcedStopped()) {
             try {
                 Entry entry = transferQueue.remove(0);
+
+                // only do this for no id request
+                if(preferences.isEnabled(GeneralPreferenceEnum.NO_REQUEST_CONTEXT.getPropertyName())) {
+                    StringWriter writer = new StringWriter();
+                    mapper.writeValue(writer, entry);
+                    entry = mapper.readValue(writer.toString(), entry.getClass());
+
+                    entry.setRequestId(globalId);
+                }
 
                 writer.write(entry);
                 currentIdleTime = 0;
