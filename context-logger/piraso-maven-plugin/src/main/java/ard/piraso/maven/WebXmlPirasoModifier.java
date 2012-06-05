@@ -25,6 +25,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import javax.xml.transform.Transformer;
@@ -90,11 +91,18 @@ public class WebXmlPirasoModifier  extends AbstractMojo {
 
         Node root = document.getElementsByTagName("web-app").item(0);
         Node firstContextParam = document.getElementsByTagName("context-param").item(0);
-        Node firstFilter = document.getElementsByTagName("filter").item(0);
+        NodeList firstFilters = document.getElementsByTagName("filter");
+
+        Node firstFilterOrServlet;
+        if(firstFilters != null && firstFilters.getLength() > 0) {
+            firstFilterOrServlet = firstFilters.item(0);
+        } else {
+            firstFilterOrServlet = document.getElementsByTagName("servlet").item(0);
+        }
 
         insertContextParam(root, firstContextParam, "parentContextKey", "piraso.context");
         insertContextParam(root, firstContextParam, "contextClass", "ard.piraso.server.spring.web.PirasoWebApplicationContext");
-        insertFilterAndServletElement(root, firstFilter);
+        insertFilterAndServletElement(root, firstFilterOrServlet);
 
         try {
             writeDocument();
@@ -110,7 +118,7 @@ public class WebXmlPirasoModifier  extends AbstractMojo {
             output.getParentFile().mkdirs();
         }
 
-        System.out.println("Output: " + output.toString());
+        getLog().info("Piraso output web xml file: " + output.toString());
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
@@ -175,7 +183,7 @@ public class WebXmlPirasoModifier  extends AbstractMojo {
 
     private void parseDocument() throws MojoExecutionException {
         try {
-            System.out.println("Input: " + webXml.toString());
+            getLog().info("Piraso input web xml file: " + webXml.toString());
 
             DOMParser parser = new DOMParser();
             parser.parse(new InputSource(new FileReader(webXml)));

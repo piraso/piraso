@@ -43,4 +43,22 @@ public class WebXmlPirasoModifierTest {
 
         modifier.execute();
     }
+
+    @Test
+    public void testExecute2() throws Exception {
+        WebXmlPirasoModifier modifier = new WebXmlPirasoModifier();
+
+        File webXml = new File(WebXmlPirasoModifier.class.getResource("/web2.xml").getFile());
+        File parent = new File(webXml.getParentFile(), "new2");
+
+        if(!parent.isDirectory()) {
+            parent.mkdirs();
+        }
+
+        modifier.setPirasoLoggingPath("/piraso/logging");
+        modifier.setWebXml(webXml);
+        modifier.setOutputDirectory(parent);
+
+        modifier.execute();
+    }
 }
