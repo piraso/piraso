@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
+ * Copyright (c) 2012. Piraso Alvin R. de Leon. All Rights Reserved.
  *
  * See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -32,6 +32,17 @@ public class ObjectEntry extends Entry {
     private boolean supported;
 
     public ObjectEntry() {}
+
+    public ObjectEntry(Object obj, Class forceClass) {
+        if(obj != null) {
+            supported = ObjectConverterRegistry.isSupported(forceClass);
+            className = forceClass.getName();
+
+            if(supported) {
+                strValue = ObjectConverterRegistry.convertToString(obj, forceClass);
+            }
+        }
+    }
 
     public ObjectEntry(Object obj) {
         if(obj != null) {

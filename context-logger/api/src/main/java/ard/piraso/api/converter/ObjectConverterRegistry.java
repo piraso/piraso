@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
+ * Copyright (c) 2012. Piraso Alvin R. de Leon. All Rights Reserved.
  *
  * See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -73,6 +73,14 @@ public class ObjectConverterRegistry {
         }
     }
 
+    public static String convertToString(Object obj, Class forceClass) {
+        try {
+            return REGISTRY.toString(obj, forceClass);
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
     public static Object convertToObject(String className, String strValue) {
         try {
             return REGISTRY.toObject(className, strValue);
@@ -92,7 +100,20 @@ public class ObjectConverterRegistry {
             throw new IllegalArgumentException("obj should not be null");
         }
 
-        return converters.containsKey(obj.getClass());
+        if(Class.class.isInstance(obj)) {
+            return converters.containsKey(obj);
+        } else {
+            return converters.containsKey(obj.getClass());
+        }
+    }
+
+    private String toString(Object obj, Class forceClass) throws Exception {
+        if(!isClassSupported(forceClass)) {
+            throw new IllegalArgumentException(String.format("obj '%s' not supported", String.valueOf(obj)));
+        }
+
+        ObjectConverter converter = converters.get(forceClass);
+        return converter.convertToString(obj);
     }
 
     private String toString(Object obj) throws Exception {
