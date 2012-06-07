@@ -27,7 +27,7 @@ import java.util.Date;
 /**
  * Log4J log entry.
  */
-public class Log4jEntry extends Entry implements StackTraceAwareEntry, ThrowableAwareEntry, RegexLevelEntryAware {
+public class Log4jEntry extends Entry implements MessageAwareEntry, StackTraceAwareEntry, ThrowableAwareEntry, RegexLevelEntryAware {
 
     private String logLevel;
 

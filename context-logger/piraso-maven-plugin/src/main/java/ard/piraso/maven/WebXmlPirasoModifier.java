@@ -18,32 +18,20 @@
 
 package ard.piraso.maven;
 
-import com.sun.org.apache.xerces.internal.parsers.DOMParser;
-import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 
 /**
  * Web xml Piraso modifier.
  *
  * @goal web-xml
  */
-public class WebXmlPirasoModifier  extends AbstractMojo {
+public class WebXmlPirasoModifier extends AbstractXMLPirasoModifier {
 
     /**
      * piraso logging path
@@ -66,9 +54,6 @@ public class WebXmlPirasoModifier  extends AbstractMojo {
      */
     private File outputDirectory;
 
-    private Document document;
-
-
     public void setOutputDirectory(File outputDirectory) {
         this.outputDirectory = outputDirectory;
     }
@@ -87,7 +72,14 @@ public class WebXmlPirasoModifier  extends AbstractMojo {
      * @throws MojoFailureException on error
      */
     public void execute() throws MojoExecutionException, MojoFailureException {
-        parseDocument();
+        if(webXml == null || !webXml.isFile()) {
+            throw new MojoExecutionException("'webXml' configuration is expected and should be a valid file.");
+        }
+        if(outputDirectory == null || !outputDirectory.isDirectory()) {
+            throw new MojoExecutionException("'outputDirectory' configuration is expected and should be a valid directory.");
+        }
+
+        parseDocument(webXml);
 
         Node root = document.getElementsByTagName("web-app").item(0);
         Node firstContextParam = document.getElementsByTagName("context-param").item(0);
@@ -105,27 +97,10 @@ public class WebXmlPirasoModifier  extends AbstractMojo {
         insertFilterAndServletElement(root, firstFilterOrServlet);
 
         try {
-            writeDocument();
+            writeDocument(outputDirectory, webXml.getName());
         } catch (Exception e) {
             throw new MojoExecutionException(e.getMessage(), e);
         }
-    }
-
-    private void writeDocument() throws TransformerException, FileNotFoundException {
-        File output = new File(outputDirectory, "web.xml");
-
-        if(!output.getParentFile().isDirectory()) {
-            output.getParentFile().mkdirs();
-        }
-
-        getLog().info("Piraso output web xml file: " + output.toString());
-
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-
-        StreamResult outputTarget = new StreamResult(new FileOutputStream(output));
-        DOMSource source = new DOMSource(document);
-        transformer.transform(source, outputTarget);
     }
 
     private void insertContextParam(Node root, Node insertBefore, String name, String value) {
@@ -179,18 +154,5 @@ public class WebXmlPirasoModifier  extends AbstractMojo {
         filter.appendChild(document.createTextNode("\n  "));
 
         return filter;
-    }
-
-    private void parseDocument() throws MojoExecutionException {
-        try {
-            getLog().info("Piraso input web xml file: " + webXml.toString());
-
-            DOMParser parser = new DOMParser();
-            parser.parse(new InputSource(new FileReader(webXml)));
-
-            document = parser.getDocument();
-        } catch (Exception e) {
-            throw new MojoExecutionException(e.getMessage(), e);
-        }
     }
 }

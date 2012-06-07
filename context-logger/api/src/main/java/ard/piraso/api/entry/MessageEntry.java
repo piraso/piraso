@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
+ * Copyright (c) 2012. Piraso Alvin R. de Leon. All Rights Reserved.
  *
  * See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -21,7 +21,7 @@ package ard.piraso.api.entry;
 /**
  * Defines a message log entry.
  */
-public class MessageEntry extends Entry implements ElapseTimeAware {
+public class MessageEntry extends Entry implements ElapseTimeAware, MessageAwareEntry {
 
     private String message;
 
