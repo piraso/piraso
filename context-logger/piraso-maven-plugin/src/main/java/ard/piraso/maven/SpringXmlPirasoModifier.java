@@ -71,8 +71,8 @@ public class SpringXmlPirasoModifier extends AbstractXMLPirasoModifier {
         if(springXml == null || !springXml.isFile()) {
             throw new MojoExecutionException("'springXml' configuration is expected and should be a valid file.");
         }
-        if(outputDirectory == null || !outputDirectory.isDirectory()) {
-            throw new MojoExecutionException("'outputDirectory' configuration is expected and should be a valid directory.");
+        if(outputDirectory == null) {
+            throw new MojoExecutionException("'outputDirectory' configuration is expected.");
         }
         if(classReplacements == null || classReplacements.isEmpty()) {
             throw new MojoExecutionException("'classReplacements' configuration is expected and should not be empty.");

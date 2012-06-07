@@ -75,8 +75,8 @@ public class WebXmlPirasoModifier extends AbstractXMLPirasoModifier {
         if(webXml == null || !webXml.isFile()) {
             throw new MojoExecutionException("'webXml' configuration is expected and should be a valid file.");
         }
-        if(outputDirectory == null || !outputDirectory.isDirectory()) {
-            throw new MojoExecutionException("'outputDirectory' configuration is expected and should be a valid directory.");
+        if(outputDirectory == null) {
+            throw new MojoExecutionException("'outputDirectory' configuration is expected.");
         }
 
         parseDocument(webXml);

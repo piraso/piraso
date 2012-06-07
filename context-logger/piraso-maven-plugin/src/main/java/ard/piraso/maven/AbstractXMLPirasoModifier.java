@@ -44,8 +44,8 @@ public abstract class AbstractXMLPirasoModifier extends AbstractMojo {
     protected void writeDocument(File outputDirectory, String fileName) throws TransformerException, FileNotFoundException {
         File output = new File(outputDirectory, fileName);
 
-        if(!output.getParentFile().isDirectory()) {
-            output.getParentFile().mkdirs();
+        if(!outputDirectory.isDirectory()) {
+            outputDirectory.mkdirs();
         }
 
         getLog().info("Piraso output xml file: " + output.toString());
