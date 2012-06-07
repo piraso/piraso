@@ -34,6 +34,10 @@ public class SpringXmlPirasoModifierTest {
         File springXML = new File(SpringXmlPirasoModifier.class.getResource("/spring.xml").getFile());
         File parent = new File(springXML.getParentFile(), "new");
 
+        if(!parent.isDirectory()) {
+            parent.mkdirs();
+        }
+
         modifier.setSpringXml(springXML);
         modifier.setOutputDirectory(parent);
         modifier.setClassReplacements(Arrays.asList(
