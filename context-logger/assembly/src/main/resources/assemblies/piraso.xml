@@ -26,14 +26,14 @@
   <includeBaseDirectory>false</includeBaseDirectory>
   <fileSets>
     <fileSet>
-      <directory>${project.build.directory}/${project.build.finalName}</directory>
+      <directory>${project.build.directory}/piraso</directory>
       <outputDirectory>/</outputDirectory>
       <includes>
         <include>**/*</include>
       </includes>
     </fileSet>
     <fileSet>
-      <directory>${project.build.directory}/piraso</directory>
+      <directory>${project.build.directory}/${project.build.finalName}</directory>
       <outputDirectory>/</outputDirectory>
       <includes>
         <include>**/*</include>
