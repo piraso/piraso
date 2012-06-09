@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
+ * Copyright (c) 2012. Piraso Alvin R. de Leon. All Rights Reserved.
  *
  * See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -45,7 +45,7 @@ public class LoggerProxyFactory  extends AbstractLog4jProxyFactory<Logger> {
         this.id = new GroupChainId(category);
 
         factory.addMethodListener("debug|error|fatal|info|warn|trace|log", new LevelLogInterceptorListener());
-        factory.addMethodListener("is*Enabled*", new LevelIsEnabledListener());
+        factory.addMethodListener("isTraceEnabled|isDebugEnabled|isInfoEnabled|isEnabledFor", new LevelIsEnabledListener());
     }
 
     private class LevelIsEnabledListener extends RegexMethodInterceptorAdapter<Logger> {
