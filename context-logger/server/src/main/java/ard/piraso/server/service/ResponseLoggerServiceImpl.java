@@ -18,9 +18,11 @@
 
 package ard.piraso.server.service;
 
-import ard.piraso.api.*;
+import ard.piraso.api.GeneralPreferenceEnum;
+import ard.piraso.api.IDGenerator;
+import ard.piraso.api.JacksonUtils;
+import ard.piraso.api.Preferences;
 import ard.piraso.api.entry.Entry;
-import ard.piraso.api.entry.GlobalRequestEntry;
 import ard.piraso.api.io.PirasoEntryWriter;
 import ard.piraso.server.IOUtils;
 import ard.piraso.server.PirasoRequest;
@@ -248,18 +250,6 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
 
         try {
             writer = new PirasoEntryWriter(getId(), getWatchedAddr(), response.getWriter());
-
-            if(preferences.isEnabled(GeneralPreferenceEnum.NO_REQUEST_CONTEXT.getPropertyName())) {
-                GlobalRequestEntry entry = new GlobalRequestEntry();
-                entry.setRequestId(globalId);
-                entry.setLevel(Level.SCOPED.getName());
-
-                try {
-                    writer.write(entry);
-                } catch (Exception e) {
-                    LOG.warn(e.getMessage(), e);;
-                }
-            }
 
             doLogWhileAlive();
         } finally {
