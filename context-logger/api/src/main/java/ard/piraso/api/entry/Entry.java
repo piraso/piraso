@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
+ * Copyright (c) 2012. Piraso Alvin R. de Leon. All Rights Reserved.
  *
  * See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -28,6 +28,8 @@ public class Entry {
 
     protected Long requestId;
 
+    protected Long baseRequestId;
+
     protected String level;
 
     protected GroupEntry group;
@@ -38,6 +40,14 @@ public class Entry {
 
     public void setRequestId(Long requestId) {
         this.requestId = requestId;
+    }
+
+    public Long getBaseRequestId() {
+        return baseRequestId;
+    }
+
+    public void setBaseRequestId(Long baseRequestId) {
+        this.baseRequestId = baseRequestId;
     }
 
     public GroupEntry getGroup() {
