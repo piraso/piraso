@@ -21,7 +21,6 @@ package ard.piraso.api.sql;
 import ard.piraso.api.entry.ObjectEntry;
 import ard.piraso.api.entry.ObjectEntryUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -173,8 +172,8 @@ public class SQLParameterUtils {
             int j = 1;
             for (List<SQLParameterEntry> row : entry.getRecords()) {
                 Vector<String> v = new Vector<String>();
-                v.add("@Row " + (j++));
-                v.add(StringUtils.repeat("-", 100));
+                v.add("@Row " + (j++) + " --- ");
+                v.add("");
                 data.add(v);
                 for (SQLParameterEntry param : row) {
                     v = new Vector<String>();
