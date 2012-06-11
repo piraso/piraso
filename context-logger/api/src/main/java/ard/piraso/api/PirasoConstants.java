@@ -61,4 +61,6 @@ public final class PirasoConstants {
 
     public static String GROUP_ID_HEADER = "Piraso-Group-Id";
 
+    public static String METHOD_NAME_HEADER = "Piraso-Method-Name";
+
 }

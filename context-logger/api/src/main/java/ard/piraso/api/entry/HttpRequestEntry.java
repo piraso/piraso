@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
+ * Copyright (c) 2012. Piraso Alvin R. de Leon. All Rights Reserved.
  *
  * See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -18,6 +18,8 @@
 
 package ard.piraso.api.entry;
 
+import ard.piraso.api.PirasoConstants;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
@@ -129,6 +131,15 @@ public class HttpRequestEntry extends RequestEntry {
         if(StringUtils.isNotEmpty(getQueryString())) {
             buf.append("?");
             buf.append(getQueryString());
+        }
+
+        if(MapUtils.isNotEmpty(headers)) {
+            for(Map.Entry<String, String> entry : headers.entrySet()) {
+                if(PirasoConstants.METHOD_NAME_HEADER.equalsIgnoreCase(entry.getKey())) {
+                    buf.append("?methodName=");
+                    buf.append(entry.getValue());
+                }
+            }
         }
 
         return buf.toString();

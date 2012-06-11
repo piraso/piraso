@@ -21,12 +21,13 @@ package ard.piraso.replacer.spring.remoting;
 import ard.piraso.server.ContextPreference;
 import ard.piraso.server.PirasoEntryPointContext;
 import org.springframework.remoting.httpinvoker.SimpleHttpInvokerRequestExecutor;
+import org.springframework.remoting.support.RemoteInvocation;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 
-import static ard.piraso.api.PirasoConstants.REMOTE_ADDRESS_HEADER;
-import static ard.piraso.api.PirasoConstants.REQUEST_ID_HEADER;
+import static ard.piraso.api.PirasoConstants.*;
 
 /**
  * Piraso aware {@link SimpleHttpInvokerRequestExecutor} instance.
@@ -35,12 +36,22 @@ public class PirasoSimpleHttpInvokerRequestExecutor extends SimpleHttpInvokerReq
 
     protected ContextPreference context = new PirasoEntryPointContext();
 
+    @Override
+    protected void writeRemoteInvocation(RemoteInvocation invocation, OutputStream os) throws IOException {
+        if(context.isMonitored()) {
+            context.addProperty(PirasoSimpleHttpInvokerRequestExecutor.class, METHOD_NAME_HEADER, invocation.getMethodName());
+        }
+
+        super.writeRemoteInvocation(invocation, os);
+    }
+
     protected void prepareConnection(HttpURLConnection con, int contentLength) throws IOException {
         super.prepareConnection(con, contentLength);
 
-        if(context != null && context.getEntryPoint() != null) {
+        if(context.isMonitored() && context.getEntryPoint() != null) {
             con.setRequestProperty(REMOTE_ADDRESS_HEADER, context.getEntryPoint().getRemoteAddr());
             con.setRequestProperty(REQUEST_ID_HEADER, String.valueOf(context.getRequestId()));
+            con.setRequestProperty(METHOD_NAME_HEADER, String.valueOf(context.getProperty(PirasoSimpleHttpInvokerRequestExecutor.class, METHOD_NAME_HEADER)));
         }
     }
 }
