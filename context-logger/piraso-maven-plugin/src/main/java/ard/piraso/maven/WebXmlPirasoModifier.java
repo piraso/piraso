@@ -113,7 +113,7 @@ public class WebXmlPirasoModifier extends AbstractXMLPirasoModifier {
     private void insertFilterAndServletElement(Node root, Node insertBefore) {
         Element filter = createElementNameValue("filter", "filter-name", "filter-class", "pirasoFilter", "org.springframework.web.filter.DelegatingFilterProxy");
         Element filterMapping = createElementNameValue("filter-mapping", "filter-name", "url-pattern", "pirasoFilter", "/*");
-        Element servlet = createElementNameValue("servlet", "servlet-name", "servlet-class", "pirasoServlet", "org.springframework.web.context.support.HttpRequestHandlerServlet");
+        Element servlet = createElementNameValue("servlet", "servlet-name", "servlet-class", "pirasoServlet", "org.springframework.web.context.support.HttpRequestHandlerServlet", 0);
         Element servletMapping = createElementNameValue("servlet-mapping", "servlet-name", "url-pattern", "pirasoServlet", pirasoLoggingPath);
 
         Node buf1 = document.createTextNode("\n  ");
@@ -140,19 +140,35 @@ public class WebXmlPirasoModifier extends AbstractXMLPirasoModifier {
     }
 
     private Element createElementNameValue(String node, String nameNode, String valueNode, String name, String value) {
-        Element filter = document.createElement(node);
+        return createElementNameValue(node, nameNode, valueNode, name, value, -1);
+    }
+
+    private Element createElementNameValue(String node, String nameNode, String valueNode, String name, String value, int loadOnStartup) {
+        Element mainEl = document.createElement(node);
         Element paramName = document.createElement(nameNode);
-        Element paramClass = document.createElement(valueNode);
+        Element paramValue = document.createElement(valueNode);
+        Element loadOnStartUpEl = document.createElement("load-on-startup");
+
 
         paramName.setTextContent(name);
-        paramClass.setTextContent(value);
+        paramValue.setTextContent(value);
 
-        filter.appendChild(document.createTextNode("\n    "));
-        filter.appendChild(paramName);
-        filter.appendChild(document.createTextNode("\n    "));
-        filter.appendChild(paramClass);
-        filter.appendChild(document.createTextNode("\n  "));
+        if(loadOnStartup >= 0) {
+            loadOnStartUpEl.setTextContent(String.valueOf(loadOnStartup));
+        }
 
-        return filter;
+        mainEl.appendChild(document.createTextNode("\n    "));
+        mainEl.appendChild(paramName);
+        mainEl.appendChild(document.createTextNode("\n    "));
+        mainEl.appendChild(paramValue);
+        mainEl.appendChild(document.createTextNode("\n  "));
+
+        if(loadOnStartup >= 0) {
+            mainEl.appendChild(document.createTextNode("  "));
+            mainEl.appendChild(loadOnStartUpEl);
+            mainEl.appendChild(document.createTextNode("\n  "));
+        }
+
+        return mainEl;
     }
 }
