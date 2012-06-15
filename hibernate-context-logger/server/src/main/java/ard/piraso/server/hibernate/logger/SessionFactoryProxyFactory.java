@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
+ * Copyright (c) 2012. Piraso Alvin R. de Leon. All Rights Reserved.
  *
  * See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -38,8 +38,6 @@ public class SessionFactoryProxyFactory extends AbstractHibernateProxyFactory<Se
     private class GetOrOpenSessionListener extends RegexMethodInterceptorAdapter<SessionFactory> {
         @Override
         public void afterCall(RegexMethodInterceptorEvent<SessionFactory> evt) {
-            evaluator.requestOnScope();
-
             if(getPref().isSessionEnabled()) {
                 Session session = (Session) evt.getReturnedValue();
 

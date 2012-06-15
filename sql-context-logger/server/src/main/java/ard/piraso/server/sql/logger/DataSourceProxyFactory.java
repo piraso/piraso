@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
+ * Copyright (c) 2012. Piraso Alvin R. de Leon. All Rights Reserved.
  *
  * See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -47,11 +47,6 @@ public class DataSourceProxyFactory extends AbstractSQLProxyFactory<DataSource> 
         @Override
         public void afterCall(RegexMethodInterceptorEvent<DataSource> evt) {
             if(getPref().isConnectionEnabled()) {
-                // the current request retrieves a db connection
-                // which means the current request is in logging scope.
-                // we are on scope when connection is enabled.
-                getPref().requestOnScope();
-
                 Connection connection = (Connection) evt.getReturnedValue();
                 GroupChainId newId = id.create("connection-", connection.hashCode());
 

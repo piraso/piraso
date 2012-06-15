@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
+ * Copyright (c) 2012. Piraso Alvin R. de Leon. All Rights Reserved.
  *
  * See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -50,12 +50,9 @@ public class PirasoEntryPointContextTest {
         assertFalse(pirasoEntryPointContext.isEnabled("some property"));
         assertNull(pirasoEntryPointContext.getIntValue("some property"));
 
-        pirasoEntryPointContext.requestOnScope(); // nothing will happen here
-
         verify(context, times(0)).isMonitored();
         verify(context, times(0)).isEnabled("some property");
         verify(context, times(0)).getIntValue("some property");
-        verify(context, times(0)).requestOnScope();
     }
 
     @Test
@@ -84,12 +81,5 @@ public class PirasoEntryPointContextTest {
         assertEquals(Integer.valueOf(0), pirasoEntryPointContext.getIntValue("other property"));
 
         verify(context, times(2)).getIntValue(anyString());
-    }
-
-    @Test
-    public void testRequestInScope() throws Exception {
-        pirasoEntryPointContext.requestOnScope();
-
-        verify(context, times(1)).requestOnScope();
     }
 }

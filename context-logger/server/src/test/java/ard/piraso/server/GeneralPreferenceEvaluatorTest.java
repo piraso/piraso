@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
+ * Copyright (c) 2012. Piraso Alvin R. de Leon. All Rights Reserved.
  *
  * See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -54,12 +54,5 @@ public class GeneralPreferenceEvaluatorTest {
         assertFalse(evaluator.isLoggingScopedEnabled());
 
         verify(context, times(1)).isEnabled(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName());
-    }
-
-    @Test
-    public void testRequestOnScope() throws Exception {
-        evaluator.requestOnScope();
-
-        verify(context, times(1)).requestOnScope();
     }
 }

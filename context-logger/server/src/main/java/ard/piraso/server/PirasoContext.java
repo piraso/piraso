@@ -50,15 +50,15 @@ public class PirasoContext implements ContextPreference {
 
     private PirasoEntryPoint entryPoint;
 
-    private boolean requestOnScope;
-
     private long requestId;
 
     private ReferenceRequestEntry ref;
     
     private Map<Class<?>, Map<String, Object>> propertyBag = new HashMap<Class<?>, Map<String, Object>>();
 
-    private LinkedList<EntryHolder> entryQueue = new LinkedList<EntryHolder>();
+    private LinkedList<EntryHolder> scopedEntryQueue = new LinkedList<EntryHolder>();
+
+    private LinkedList<ResponseLoggerService> requestScoped = new LinkedList<ResponseLoggerService>();
 
     public PirasoContext(PirasoEntryPoint entryPoint, UserRegistry registry) {
         this(entryPoint, registry, null);
@@ -200,40 +200,6 @@ public class PirasoContext implements ContextPreference {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public void requestOnScope() {
-        if(requestOnScope) {
-            return;
-        }
-
-        requestOnScope = true;
-
-        // ensure to log queued
-        while(!entryQueue.isEmpty()) {
-            EntryHolder holder = entryQueue.remove(0);
-            logScoped(holder.id, holder.entry, true);
-        }
-    }
-
-    private void logScoped(GroupChainId id, Entry entry, boolean scopedEnabled) {
-        try {
-            List<ResponseLoggerService> loggers = registry.getContextLoggers(entryPoint);
-
-            for(ResponseLoggerService logger : loggers) {
-                Preferences preferences = logger.getPreferences();
-
-                boolean actual = preferences.isEnabled(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName());
-                if(actual == scopedEnabled) {
-                    doLog(logger, Level.SCOPED, id, entry);
-                }
-            }
-        } catch (Exception e) {
-            LOG.warn(e.getMessage(), e);
-        }
-    }
-
-    /**
      * Log the given entry.
      *
      * @param level preference property
@@ -250,22 +216,28 @@ public class PirasoContext implements ContextPreference {
             level = Level.ALL;
         }
 
-        // only log for those that ignores logging scope
-        if(Level.SCOPED.equals(level) && !requestOnScope) {
-            logScoped(id, entry, false);
-
-            if(isEnabled(Level.SCOPED.getName())) {
-                entryQueue.add(new EntryHolder(id, entry));
-            }
-
-            return;
-        } else if(!requestOnScope && !Level.SCOPED.equals(level)) {
-            // when any other log is provided that is not scope aware then enable request for scope logging
-            requestOnScope();
-        }
-
         try {
             List<ResponseLoggerService> loggers = registry.getContextLoggers(entryPoint);
+
+            if(Level.SCOPED.equals(level)) {
+                scopedEntryQueue.add(new EntryHolder(id, entry));
+
+                for(ResponseLoggerService logger : loggers) {
+                    Preferences preferences = logger.getPreferences();
+
+                    synchronized (this) {
+                        if(requestScoped.contains(logger) || !preferences.isEnabled(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName())) {
+                            doLog(logger, Level.SCOPED, id, entry);
+
+                            if(!requestScoped.contains(logger)) {
+                                requestScoped.add(logger);
+                            }
+                        }
+                    }
+                }
+
+                return;
+            }
 
             for(ResponseLoggerService logger : loggers) {
                 Preferences preferences = logger.getPreferences();
@@ -277,8 +249,6 @@ public class PirasoContext implements ContextPreference {
                         doLog(logger, level, id, entry);
                     }
                 } else if(preferences.isEnabled(level.getName())) {
-                    doLog(logger, level, id, entry);
-                } else if(Level.SCOPED.equals(level) && requestOnScope) {
                     doLog(logger, level, id, entry);
                 }
             }
@@ -297,6 +267,16 @@ public class PirasoContext implements ContextPreference {
      * @throws IOException on error
      */
     private void doLog(ResponseLoggerService logger, Level level, GroupChainId id, Entry entry) throws IOException {
+        synchronized (this) {
+            if(!requestScoped.contains(logger) && Level.SCOPED != level) {
+                requestScoped.add(logger);
+
+                for(EntryHolder holder : scopedEntryQueue) {
+                    doLog(logger, Level.SCOPED, holder.id, holder.entry);
+                }
+            }
+        }
+
         entry.setRequestId(requestId);
         entry.setBaseRequestId(requestId);
         entry.setLevel(level.getName());

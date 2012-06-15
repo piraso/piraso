@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
+ * Copyright (c) 2012. Piraso Alvin R. de Leon. All Rights Reserved.
  *
  * See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -81,16 +81,6 @@ public interface ContextPreference {
      * @return the property int value, {@code null} if not found.
      */
     Integer getIntValue(String property);
-
-    /**
-     * When invoked, this determines that the current request is executed on a logging scoped.
-     * <p>
-     * For sql context logging, only request with transactional scope will trigger this. Any request that uses {@link javax.sql.DataSource} will
-     * invoke this method.
-     * <p>
-     * This will ensure that request that only do resource serving will be ignored.
-     */
-    void requestOnScope();
 
     /**
      * The piraso context entry point

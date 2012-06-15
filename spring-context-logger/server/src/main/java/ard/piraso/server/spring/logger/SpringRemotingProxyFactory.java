@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
+ * Copyright (c) 2012. Piraso Alvin R. de Leon. All Rights Reserved.
  *
  * See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -48,10 +48,6 @@ public class SpringRemotingProxyFactory extends AbstractSpringProxyFactory<HttpI
         @Override
         public void beforeCall(RegexMethodInterceptorEvent<HttpInvokerRequestExecutor> evt) {
             if(getPref().isSpringRemotingEnabled()) {
-                // the current request is in logging scope.
-                // we are on scope when connection is enabled.
-                getPref().requestOnScope();
-
                 ElapseTimeEntry entry = new ElapseTimeEntry();
                 entry.start();
 

@@ -104,11 +104,6 @@ public class LoggerProxyFactory  extends AbstractLog4jProxyFactory<Logger> {
 
         private void logEntry(String level, Object msg, Throwable throwable) {
             if(getPref().isLog4jEnabled(category, level)) {
-                // we are on scope so start monitoring
-                if(getPref().isLog4jEnabled()) {
-                    getPref().requestOnScope();
-                }
-
                 Log4jEntry entry = new Log4jEntry(level, String.valueOf(msg));
 
                 if(throwable != null) {

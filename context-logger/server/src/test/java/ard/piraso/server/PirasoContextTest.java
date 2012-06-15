@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
+ * Copyright (c) 2012. Piraso Alvin R. de Leon. All Rights Reserved.
  *
  * See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -185,7 +185,6 @@ public class PirasoContextTest {
         GroupChainId id = new GroupChainId("test");
         MessageEntry entry = new MessageEntry("test");
 
-        context.requestOnScope();
         context.log(null, id, entry);
 
         verify(registry.getLogger(user), times(1)).log(entry);
@@ -262,36 +261,6 @@ public class PirasoContextTest {
 
         doThrow(new IOException()).when(service3).log(Matchers.<Entry>any());
 
-        context.log(Level.SCOPED, id, entry);
-
-        // all should be invoked since all are non-scoped aware
-        verify(service, times(1)).log(entry);
-        verify(service2, times(1)).log(entry);
-        verify(service3, times(1)).log(entry);
-    }
-
-    @Test
-    public void testLogQueueEntryWithRequestOnScopeAllNoneScopeEnabledAlreadyOnScoped() throws IOException {
-        User user = associateUser(request);
-        ResponseLoggerService service = registry.getLogger(user);
-
-        service.getPreferences().addProperty(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName(), false);
-
-        GroupChainId id = new GroupChainId("test");
-        MessageEntry entry = new MessageEntry("test");
-
-        User user2 = associateUser(request);
-        ResponseLoggerService service2 = registry.getLogger(user2);
-
-        MockHttpServletRequest request3 = mockRequest(MONITORED_ADDR);
-
-        User user3 = associateUser(request3);
-        ResponseLoggerService service3 = registry.getLogger(user3);
-        service3.getPreferences().addProperty(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName(), false);
-
-        doThrow(new IOException()).when(service3).log(Matchers.<Entry>any());
-
-        context.requestOnScope();
         context.log(Level.SCOPED, id, entry);
 
         // all should be invoked since all are non-scoped aware
