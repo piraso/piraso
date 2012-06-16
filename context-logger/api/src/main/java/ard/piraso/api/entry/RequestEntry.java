@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
+ * Copyright (c) 2012. Piraso Alvin R. de Leon. All Rights Reserved.
  *
  * See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -60,7 +60,7 @@ public class RequestEntry extends Entry {
     public String toString() {
         StringBuilder buf = new StringBuilder();
 
-        buf.append(getRequestId());
+        buf.append(getBaseRequestId());
         buf.append(":");
         buf.append(getPath());
 
