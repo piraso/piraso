@@ -37,6 +37,8 @@ public class RegexMethodInterceptorEvent<T>  {
 
     private Exception exception;
 
+    private Object[] replacedArguments;
+
     private boolean wasSetReturnedValue;
     
     RegexMethodInterceptorEvent(RegexMethodInterceptor<T> source, MethodInvocation invocation) {
@@ -49,6 +51,14 @@ public class RegexMethodInterceptorEvent<T>  {
         this.invocation = invocation;
         this.target = (T) invocation.getThis();
         this.returnedValue = returnedValue;
+    }
+
+    public void setReplacedArguments(Object[] replacedArguments) {
+        this.replacedArguments = replacedArguments;
+    }
+
+    public Object[] getReplacedArguments() {
+        return replacedArguments;
     }
 
     public Exception getException() {

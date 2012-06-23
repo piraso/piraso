@@ -111,10 +111,12 @@ public class RegexProxyFactory<T> implements ProxyAware<T> {
         }
     }
 
-    private class MethodInvocationWrapper implements MethodInvocation {
+    public class MethodInvocationWrapper implements MethodInvocation {
         private MethodInvocation wrappedObject;
 
         private T target;
+
+        private Object[] replacedArguments;
 
         private MethodInvocationWrapper(MethodInvocation wrappedObject, T target) {
             this.wrappedObject = wrappedObject;
@@ -129,10 +131,19 @@ public class RegexProxyFactory<T> implements ProxyAware<T> {
             return wrappedObject.getArguments();
         }
 
+        public void setReplacedArguments(Object[] replacedArguments) {
+            this.replacedArguments = replacedArguments;
+        }
+
         public Object proceed() throws Throwable {
             Method method = getMethod();
 
-            return method.invoke(target, getArguments());
+            Object[] arguments = getArguments();
+            if(replacedArguments != null) {
+                arguments = replacedArguments;
+            }
+
+            return method.invoke(target, arguments);
         }
 
         public Object getThis() {

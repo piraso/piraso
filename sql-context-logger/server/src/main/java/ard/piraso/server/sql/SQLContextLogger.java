@@ -26,7 +26,7 @@ import javax.sql.DataSource;
 /**
  * Utility class for wrapping {@link DataSource} object with the {@link DataSource} proxy logger.
  */
-public class SQLContextLogger {
+public final class SQLContextLogger {
 
     /**
      * Wraps the given {@link DataSource} to add support for context logging.

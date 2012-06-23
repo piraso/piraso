@@ -41,10 +41,18 @@ public class RegexMethodInterceptor<T> implements MethodInterceptor {
     public Object invoke(MethodInvocation invocation) throws Throwable {
         Set<RegexMethodInterceptorListener<T>> invokeListeners = getListeners(invocation.getMethod());
 
-        fireBeforeCall(invokeListeners, invocation);
+        RegexMethodInterceptorEvent event = fireBeforeCall(invokeListeners, invocation);
         Object returnValue;
 
         try {
+            // do replacement of arguments
+            if(event != null && event.getReplacedArguments() != null &&
+                    RegexProxyFactory.MethodInvocationWrapper.class.isInstance(invocation)) {
+                RegexProxyFactory.MethodInvocationWrapper wrapper = (RegexProxyFactory.MethodInvocationWrapper) invocation;
+
+                wrapper.setReplacedArguments(event.getReplacedArguments());
+            }
+
             returnValue = invocation.proceed();
         } catch(Exception e) {
             fireExceptionCall(invokeListeners, invocation, e);
@@ -55,15 +63,19 @@ public class RegexMethodInterceptor<T> implements MethodInterceptor {
         return fireAfterCall(invokeListeners, invocation, returnValue);
     }
 
-    private void fireBeforeCall(Set<RegexMethodInterceptorListener<T>> listeners, MethodInvocation invocation) {
+    private RegexMethodInterceptorEvent fireBeforeCall(Set<RegexMethodInterceptorListener<T>> listeners, MethodInvocation invocation) {
         try {
             RegexMethodInterceptorEvent<T> event = new RegexMethodInterceptorEvent<T>(this, invocation);
             for(RegexMethodInterceptorListener<T> listener : listeners) {
                 listener.beforeCall(event);
             }
+
+            return event;
         } catch(Exception e) {
             LOG.warn(e.getMessage(), e);
         }
+
+        return null;
     }
 
     private void fireExceptionCall(Set<RegexMethodInterceptorListener<T>> listeners, MethodInvocation invocation, Exception ex) {

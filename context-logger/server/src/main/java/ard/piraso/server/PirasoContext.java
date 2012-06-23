@@ -60,15 +60,14 @@ public class PirasoContext implements ContextPreference {
 
     private LinkedList<ResponseLoggerService> requestScoped = new LinkedList<ResponseLoggerService>();
 
+    private GroupChainId refGroupChainId;
+
     public PirasoContext(PirasoEntryPoint entryPoint, UserRegistry registry) {
         this(entryPoint, registry, null);
     }
 
     public PirasoContext(PirasoEntryPoint entryPoint, UserRegistry registry, ReferenceRequestEntry ref) {
-        this.requestId = ID_GENERATOR.next();
-        this.registry = registry;
-        this.entryPoint = entryPoint;
-        this.ref = ref;
+        this(ID_GENERATOR.next(), entryPoint, registry, ref, null);
 
         if(LOG_ENTRY_POINT.isDebugEnabled()) {
             LOG_ENTRY_POINT.debug(String.format(
@@ -80,6 +79,24 @@ public class PirasoContext implements ContextPreference {
                     entryPoint.getPath())
             );
         }
+    }
+
+    private PirasoContext(long requestId, PirasoEntryPoint entryPoint, UserRegistry registry, ReferenceRequestEntry ref, GroupChainId refGroupChainId) {
+        this.requestId = requestId;
+        this.registry = registry;
+        this.entryPoint = entryPoint;
+        this.ref = ref;
+        this.refGroupChainId = refGroupChainId;
+    }
+
+    public PirasoContext createChildContext(GroupChainId chainId) {
+        PirasoContext context = new PirasoContext(requestId, entryPoint, registry, ref, chainId);
+
+        context.scopedEntryQueue = scopedEntryQueue;
+        context.requestScoped = requestScoped;
+        context.propertyBag = propertyBag;
+
+        return context;
     }
 
     /**
@@ -275,6 +292,10 @@ public class PirasoContext implements ContextPreference {
                     doLog(logger, Level.SCOPED, holder.id, holder.entry);
                 }
             }
+        }
+
+        if(refGroupChainId != null) {
+            entry.setReferenceGroup(new GroupEntry(refGroupChainId.getGroupIds()));
         }
 
         entry.setRequestId(requestId);

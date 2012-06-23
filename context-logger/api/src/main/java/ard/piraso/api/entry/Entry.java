@@ -32,10 +32,20 @@ public class Entry {
 
     protected String level;
 
+    protected GroupEntry referenceGroup;
+
     protected GroupEntry group;
 
     public Long getRequestId() {
         return requestId;
+    }
+
+    public GroupEntry getReferenceGroup() {
+        return referenceGroup;
+    }
+
+    public void setReferenceGroup(GroupEntry referenceGroup) {
+        this.referenceGroup = referenceGroup;
     }
 
     public void setRequestId(Long requestId) {
