@@ -224,6 +224,11 @@ public class PirasoContext implements ContextPreference {
      * @param entry the entry to log
      */
     public void log(Level level, GroupChainId id, Entry entry) {
+        // always store scoped entries
+        if(Level.SCOPED.equals(level)) {
+            scopedEntryQueue.add(new EntryHolder(id, entry));
+        }
+
         if(!isMonitored()) {
             // ignore any logs when current context is not monitored.
             return;
@@ -237,8 +242,6 @@ public class PirasoContext implements ContextPreference {
             List<ResponseLoggerService> loggers = registry.getContextLoggers(entryPoint);
 
             if(Level.SCOPED.equals(level)) {
-                scopedEntryQueue.add(new EntryHolder(id, entry));
-
                 for(ResponseLoggerService logger : loggers) {
                     Preferences preferences = logger.getPreferences();
 
@@ -287,6 +290,7 @@ public class PirasoContext implements ContextPreference {
     private void doLog(ResponseLoggerService logger, Level level, GroupChainId id, Entry entry) throws IOException {
         synchronized (this) {
             if(!requestScoped.contains(logger) && Level.SCOPED != level) {
+                logger.addStopListener(new StoppedLoggerHandler(logger));
                 requestScoped.add(logger);
 
                 for(EntryHolder holder : scopedEntryQueue) {
