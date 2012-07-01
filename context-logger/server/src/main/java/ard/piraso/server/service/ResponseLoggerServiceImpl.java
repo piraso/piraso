@@ -34,10 +34,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import javax.swing.event.EventListenerList;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -145,6 +147,9 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
     private long globalId;
 
     private ObjectMapper mapper;
+
+    private EventListenerList listeners = new EventListenerList();
+
 
     /**
      * Construct the service given the user, request and response.
@@ -338,10 +343,14 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
      */
     private void doLogWhileAlive() throws IOException {
         synchronized (this) {
-            while(isAlive()) {
-                waitTillNoEntry();
-                writeAllTransfer();
-                throwWhenForcedStopped();
+            try {
+                while(isAlive()) {
+                    waitTillNoEntry();
+                    writeAllTransfer();
+                    throwWhenForcedStopped();
+                }
+            } finally {
+                fireStopEvent(new StopLoggerEvent(this));
             }
         }
     }
@@ -392,6 +401,29 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
 
             transferQueue.add(entry);
             notifyAll();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void addStopListener(StopLoggerListener listener) {
+        listeners.add(StopLoggerListener.class, listener);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void removeStopListener(StopLoggerListener listener) {
+        listeners.remove(StopLoggerListener.class, listener);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void fireStopEvent(StopLoggerEvent event) {
+        for(StopLoggerListener listener : Arrays.asList(listeners.getListeners(StopLoggerListener.class))) {
+            listener.stopped(event);
         }
     }
 }

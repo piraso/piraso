@@ -50,4 +50,10 @@ public interface ResponseLoggerService {
     public void stopAndWait(long timeout) throws InterruptedException, IOException;
 
     public void log(Entry entry) throws IOException;
+
+    public void addStopListener(StopLoggerListener listener);
+
+    public void removeStopListener(StopLoggerListener listener);
+
+    public void fireStopEvent(StopLoggerEvent event);
 }

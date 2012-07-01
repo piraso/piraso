@@ -20,18 +20,13 @@ package ard.piraso.server;
 
 import ard.piraso.api.*;
 import ard.piraso.api.entry.*;
-import ard.piraso.server.service.ResponseLoggerService;
-import ard.piraso.server.service.UserRegistry;
-import ard.piraso.server.service.UserRegistrySingleton;
+import ard.piraso.server.service.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Represents the current request context.
@@ -59,7 +54,7 @@ public class PirasoContext implements ContextPreference {
 
     private LinkedList<EntryHolder> scopedEntryQueue = new LinkedList<EntryHolder>();
 
-    private LinkedList<ResponseLoggerService> requestScoped = new LinkedList<ResponseLoggerService>();
+    private List<ResponseLoggerService> requestScoped = Collections.synchronizedList(new LinkedList<ResponseLoggerService>());
 
     private GroupChainId refGroupChainId;
 
@@ -252,6 +247,7 @@ public class PirasoContext implements ContextPreference {
                             doLog(logger, Level.SCOPED, id, entry);
 
                             if(!requestScoped.contains(logger)) {
+                                logger.addStopListener(new StoppedLoggerHandler(logger));
                                 requestScoped.add(logger);
                             }
                         }
@@ -323,6 +319,20 @@ public class PirasoContext implements ContextPreference {
         private EntryHolder(GroupChainId id, Entry entry) {
             this.id = id;
             this.entry = entry;
+        }
+    }
+
+    private class StoppedLoggerHandler implements StopLoggerListener {
+
+        private ResponseLoggerService logger;
+
+        private StoppedLoggerHandler(ResponseLoggerService logger) {
+            this.logger = logger;
+        }
+
+        public void stopped(StopLoggerEvent evt) {
+            requestScoped.remove(logger);
+            logger.removeStopListener(this);
         }
     }
 }
