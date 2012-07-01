@@ -23,6 +23,11 @@
 
     <bean id="pirasoUserRegistry" class="ard.piraso.server.service.UserRegistry"/>
 
+    <bean class="ard.piraso.server.service.UserRegistrySingleton" factory-method="valueOf">
+      <constructor-arg value="INSTANCE" />
+      <property name="registry" ref="pirasoUserRegistry" />
+    </bean>
+
     <bean id="pirasoServlet" class="ard.piraso.server.spring.web.PirasoServlet">
         <property name="registry" ref="pirasoUserRegistry"/>
         <property name="version" value="1.0-SNAPSHOT"/>

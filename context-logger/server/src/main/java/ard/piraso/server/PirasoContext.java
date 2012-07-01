@@ -22,6 +22,7 @@ import ard.piraso.api.*;
 import ard.piraso.api.entry.*;
 import ard.piraso.server.service.ResponseLoggerService;
 import ard.piraso.server.service.UserRegistry;
+import ard.piraso.server.service.UserRegistrySingleton;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -61,6 +62,10 @@ public class PirasoContext implements ContextPreference {
     private LinkedList<ResponseLoggerService> requestScoped = new LinkedList<ResponseLoggerService>();
 
     private GroupChainId refGroupChainId;
+
+    public PirasoContext(PirasoEntryPoint entryPoint) {
+        this(entryPoint, UserRegistrySingleton.INSTANCE.getRegistry());
+    }
 
     public PirasoContext(PirasoEntryPoint entryPoint, UserRegistry registry) {
         this(entryPoint, registry, null);
