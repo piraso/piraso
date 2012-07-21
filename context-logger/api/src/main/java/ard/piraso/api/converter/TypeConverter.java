@@ -37,7 +37,7 @@ public class TypeConverter<T> implements ObjectConverter {
     public TypeConverter(Class<T> clazz) {
         this.clazz = clazz;
 
-        mapper = JacksonUtils.createMapper();
+        mapper = JacksonUtils.MAPPER;
     }
 
     /**

@@ -28,6 +28,9 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
  */
 public class JacksonUtils {
 
+    public static final ObjectMapper MAPPER = createMapper();
+
+
     public static ObjectMapper createMapper() {
         ObjectMapper mapper = new ObjectMapper();
 

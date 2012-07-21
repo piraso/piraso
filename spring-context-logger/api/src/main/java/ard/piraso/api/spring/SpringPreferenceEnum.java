@@ -31,6 +31,11 @@ public enum SpringPreferenceEnum implements PreferenceEnum {
     REMOTING_ENABLED("spring.remoting.enabled"),
 
     /**
+     * Determines whether spring remoting elapse time is computed
+     */
+    REMOTING_ELAPSE_TIME_ENABLED("spring.remoting.elapse.time.enabled"),
+
+    /**
      * Determines whether spring remoting method call is enabled
      */
     REMOTING_METHOD_CALL_ENABLED("spring.remoting.method.call.enabled");

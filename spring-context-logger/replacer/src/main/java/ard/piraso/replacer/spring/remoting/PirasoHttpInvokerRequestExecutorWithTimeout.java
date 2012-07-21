@@ -51,7 +51,13 @@ public class PirasoHttpInvokerRequestExecutorWithTimeout extends PirasoSimpleHtt
 
     protected void prepareConnection(HttpURLConnection con, int contentLength) throws IOException {
         super.prepareConnection(con, contentLength);
-        con.setConnectTimeout(getConnectTimeoutMs());
-        con.setReadTimeout(getReadTimeoutMs());
+
+        if(context.isMonitored()) {
+            con.setConnectTimeout(getConnectTimeoutMs() * 5);
+            con.setReadTimeout(getReadTimeoutMs() * 5);
+        } else {
+            con.setConnectTimeout(getConnectTimeoutMs());
+            con.setReadTimeout(getReadTimeoutMs());
+        }
     }
 }
