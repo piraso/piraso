@@ -41,14 +41,11 @@ public class PirasoHttpInvokerProxyFactoryBean extends HttpInvokerProxyFactoryBe
 
                 if(pref.isEnabled(SpringPreferenceEnum.REMOTING_METHOD_CALL_ENABLED)) {
                     String declaringClass = originalInvocation.getMethod().getDeclaringClass().getName();
-                    String methodName = originalInvocation.getMethod().getName();
 
                     HttpRemoteInvocation remoteInvocation = new HttpRemoteInvocation(invocation);
                     Level level = Level.get(SpringPreferenceEnum.REMOTING_ENABLED.getPropertyName());
-                    MessageEntry messageEntry = new MessageEntry("Method: " + originalInvocation.getMethod().toGenericString());
-                    JSONEntry entry = new JSONEntry("Invocation: " + methodName, remoteInvocation);
+                    JSONEntry entry = new JSONEntry(originalInvocation.getMethod().toGenericString(), remoteInvocation);
 
-                    ContextLogDispatcher.forward(level, new GroupChainId(declaringClass), messageEntry);
                     ContextLogDispatcher.forward(level, new GroupChainId(declaringClass), entry);
                 }
             } catch(Exception e) {
@@ -67,7 +64,7 @@ public class PirasoHttpInvokerProxyFactoryBean extends HttpInvokerProxyFactoryBe
                     elapseTime.stop();
 
                     Level level = Level.get(SpringPreferenceEnum.REMOTING_ENABLED.getPropertyName());
-                    MessageEntry entry = new MessageEntry("Method: " + methodName, elapseTime);
+                    MessageEntry entry = new MessageEntry("Elapse Time", elapseTime);
 
                     ContextLogDispatcher.forward(level, new GroupChainId(declaringClass), entry);
                 }
@@ -75,7 +72,7 @@ public class PirasoHttpInvokerProxyFactoryBean extends HttpInvokerProxyFactoryBe
                 if(context.isMonitored() && pref.isEnabled(SpringPreferenceEnum.REMOTING_METHOD_CALL_ENABLED)) {
                     HttpRemoteInvocationResult remoteInvocationResult = new HttpRemoteInvocationResult(result);
                     Level level = Level.get(SpringPreferenceEnum.REMOTING_ENABLED.getPropertyName());
-                    JSONEntry entry = new JSONEntry("Invocation Result: " + methodName, remoteInvocationResult);
+                    JSONEntry entry = new JSONEntry("Returned for " + methodName, remoteInvocationResult);
 
                     if(result.getException() != null) {
                         entry.setThrown(new ThrowableEntry(result.getException()));
