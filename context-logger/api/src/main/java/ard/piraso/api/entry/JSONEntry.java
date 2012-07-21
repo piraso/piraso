@@ -7,13 +7,15 @@ import java.io.IOException;
 /**
  * JSON entry
  */
-public class JSONEntry extends Entry implements MessageAwareEntry, ThrowableAwareEntry {
+public class JSONEntry extends Entry implements MessageAwareEntry, ThrowableAwareEntry, StackTraceAwareEntry {
 
     private ThrowableEntry thrown;
 
     private String message;
 
     private String jsonString;
+
+    private StackTraceElementEntry[] stackTrace;
 
     public JSONEntry() {
     }
@@ -49,5 +51,13 @@ public class JSONEntry extends Entry implements MessageAwareEntry, ThrowableAwar
 
     public String getMessage() {
         return message;
+    }
+
+    public StackTraceElementEntry[] getStackTrace() {
+        return stackTrace;
+    }
+
+    public void setStackTrace(StackTraceElementEntry[] stackTrace) {
+        this.stackTrace = stackTrace;
     }
 }

@@ -1,10 +1,7 @@
 package ard.piraso.replacer.spring.remoting;
 
 import ard.piraso.api.Level;
-import ard.piraso.api.entry.ElapseTimeEntry;
-import ard.piraso.api.entry.JSONEntry;
-import ard.piraso.api.entry.MessageEntry;
-import ard.piraso.api.entry.ThrowableEntry;
+import ard.piraso.api.entry.*;
 import ard.piraso.api.spring.SpringPreferenceEnum;
 import ard.piraso.server.ContextPreference;
 import ard.piraso.server.GeneralPreferenceEvaluator;
@@ -46,6 +43,10 @@ public class PirasoHttpInvokerProxyFactoryBean extends HttpInvokerProxyFactoryBe
                     HttpRemoteInvocation remoteInvocation = new HttpRemoteInvocation(invocation);
                     Level level = Level.get(SpringPreferenceEnum.REMOTING_ENABLED.getPropertyName());
                     JSONEntry entry = new JSONEntry("START ("  + methodName + "): " + originalInvocation.getMethod().toGenericString(), remoteInvocation);
+
+                    if(pref.isStackTraceEnabled()) {
+                        entry.setStackTrace(EntryUtils.toEntry(Thread.currentThread().getStackTrace()));
+                    }
 
                     ContextLogDispatcher.forward(level, new GroupChainId(declaringClass), entry);
                 }

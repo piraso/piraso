@@ -53,6 +53,14 @@ public class SQLPreferenceEvaluator extends GeneralPreferenceEvaluator {
         return isEnabled(SQLPreferenceEnum.RESULTSET_ENABLED);
     }
 
+    public boolean isResultSetDataEnabled() {
+        return isEnabled(SQLPreferenceEnum.RESULTSET_DATA_ENABLED);
+    }
+
+    public boolean isResultSetAllDataEnabled() {
+        return isEnabled(SQLPreferenceEnum.RESULTSET_ALL_DATA_ENABLED);
+    }
+
     public boolean isResultSetMethodCallEnabled() {
         return isEnabled(SQLPreferenceEnum.RESULTSET_METHOD_CALL_ENABLED);
     }

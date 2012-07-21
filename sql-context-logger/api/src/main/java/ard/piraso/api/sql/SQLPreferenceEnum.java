@@ -39,6 +39,10 @@ public enum SQLPreferenceEnum  implements PreferenceEnum {
 
     RESULTSET_METHOD_CALL_ENABLED("sql.resultset.method.call.enabled"),
 
+    RESULTSET_DATA_ENABLED("sql.resultset.data.enabled"),
+
+    RESULTSET_ALL_DATA_ENABLED("sql.resultset.all.data.enabled"),
+
     VIEW_DATA_SIZE("sql.data.size", false);
 
     // register enum as level

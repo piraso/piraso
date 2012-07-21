@@ -79,8 +79,10 @@ public class ResultSetProxyFactory extends AbstractSQLProxyFactory<ResultSet> {
         }
 
         parameterCollector = new ResultSetParameterListener();
+        if(getPref().isResultSetDataEnabled()) {
+            factory.addMethodListener("get.*", parameterCollector);
+        }
 
-        factory.addMethodListener("get.*", parameterCollector);
         factory.addMethodListener("close", new MessageLoggerListener<ResultSet>(BASE_LEVEL, id, "Fetch Elapse Time", elapseTime));
         factory.addMethodListener("next|close", new NextCloseListener());
     }
@@ -95,26 +97,28 @@ public class ResultSetProxyFactory extends AbstractSQLProxyFactory<ResultSet> {
                 totalRowCount++;
             }
 
-            if(CollectionUtils.isNotEmpty(parameterCollector.getParameters())) {
-                recordQueue.add(new ArrayList<SQLParameterEntry>(parameterCollector.getParameters()));
-                parameterCollector.clear();
-            }
-
-            if(!parameterCollector.isDisabled() && (recordQueue.size() >= getPref().getMaxDataSize()
-                    || recordQueue.size() >= MAX_RETURN_RESULT)) {
-                if(totalRowCount >= getPref().getMaxDataSize()) {
-                    parameterCollector.disable();
+            if(getPref().isResultSetDataEnabled()) {
+                if(CollectionUtils.isNotEmpty(parameterCollector.getParameters())) {
+                    recordQueue.add(new ArrayList<SQLParameterEntry>(parameterCollector.getParameters()));
+                    parameterCollector.clear();
                 }
 
-                if(CollectionUtils.isNotEmpty(recordQueue)) {
+                if(!parameterCollector.isDisabled() && (recordQueue.size() >= getPref().getMaxDataSize()
+                        || recordQueue.size() >= MAX_RETURN_RESULT)) {
+                    if(totalRowCount >= getPref().getMaxDataSize() && !getPref().isResultSetAllDataEnabled()) {
+                        parameterCollector.disable();
+                    }
+
+                    if(CollectionUtils.isNotEmpty(recordQueue)) {
+                        ContextLogDispatcher.forward(BASE_LEVEL, id, new SQLDataViewEntry(resultSetId, recordQueue));
+                        recordQueue.clear();
+                    }
+                }
+
+                if(!parameterCollector.isDisabled() && method.getName().equals("close") && CollectionUtils.isNotEmpty(recordQueue)) {
                     ContextLogDispatcher.forward(BASE_LEVEL, id, new SQLDataViewEntry(resultSetId, recordQueue));
                     recordQueue.clear();
                 }
-            }
-
-            if(!parameterCollector.isDisabled() && method.getName().equals("close") && CollectionUtils.isNotEmpty(recordQueue)) {
-                ContextLogDispatcher.forward(BASE_LEVEL, id, new SQLDataViewEntry(resultSetId, recordQueue));
-                recordQueue.clear();
             }
 
             if(method.getName().equals("close")) {
