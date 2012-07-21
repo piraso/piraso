@@ -41,10 +41,11 @@ public class PirasoHttpInvokerProxyFactoryBean extends HttpInvokerProxyFactoryBe
 
                 if(pref.isEnabled(SpringPreferenceEnum.REMOTING_METHOD_CALL_ENABLED)) {
                     String declaringClass = originalInvocation.getMethod().getDeclaringClass().getName();
+                    String methodName = originalInvocation.getMethod().getName();
 
                     HttpRemoteInvocation remoteInvocation = new HttpRemoteInvocation(invocation);
                     Level level = Level.get(SpringPreferenceEnum.REMOTING_ENABLED.getPropertyName());
-                    JSONEntry entry = new JSONEntry(originalInvocation.getMethod().toGenericString(), remoteInvocation);
+                    JSONEntry entry = new JSONEntry("START ("  + methodName + "): " + originalInvocation.getMethod().toGenericString(), remoteInvocation);
 
                     ContextLogDispatcher.forward(level, new GroupChainId(declaringClass), entry);
                 }
@@ -72,7 +73,7 @@ public class PirasoHttpInvokerProxyFactoryBean extends HttpInvokerProxyFactoryBe
                 if(context.isMonitored() && pref.isEnabled(SpringPreferenceEnum.REMOTING_METHOD_CALL_ENABLED)) {
                     HttpRemoteInvocationResult remoteInvocationResult = new HttpRemoteInvocationResult(result);
                     Level level = Level.get(SpringPreferenceEnum.REMOTING_ENABLED.getPropertyName());
-                    JSONEntry entry = new JSONEntry("Returned for " + methodName, remoteInvocationResult);
+                    JSONEntry entry = new JSONEntry("END (" + methodName + "): Returned Value ", remoteInvocationResult);
 
                     if(result.getException() != null) {
                         entry.setThrown(new ThrowableEntry(result.getException()));
