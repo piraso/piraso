@@ -25,9 +25,9 @@ import org.springframework.remoting.support.RemoteInvocation;
 import java.lang.reflect.Method;
 
 /**
- * Test for {@link HttpRemoteInvocation}
+ * Test for XStream serialization
  */
-public class HttpRemoteInvocationTest extends TestCase {
+public class XStreamTest extends TestCase {
 
     public class TestNestedBean {
         private TestNestedBean test;
@@ -61,8 +61,7 @@ public class HttpRemoteInvocationTest extends TestCase {
         remote.setMethodName(method.getName());
         remote.setParameterTypes(method.getParameterTypes());
         remote.setArguments(new Object[] {"Alvin", "de", "Leon", new TestNestedBean(new TestNestedBean(null))});
-        HttpRemoteInvocation invocation = new HttpRemoteInvocation(remote);
 
-        System.out.println(XStreamUtils.XSTREAM.toXML(invocation));
+        System.out.println(XStreamUtils.XSTREAM.toXML(remote));
     }
 }
