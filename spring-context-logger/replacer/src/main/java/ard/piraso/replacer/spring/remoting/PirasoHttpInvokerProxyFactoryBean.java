@@ -60,7 +60,7 @@ public class PirasoHttpInvokerProxyFactoryBean extends HttpInvokerProxyFactoryBe
 
                     HttpRemoteInvocation remoteInvocation = new HttpRemoteInvocation(invocation);
                     Level level = Level.get(SpringPreferenceEnum.REMOTING_ENABLED.getPropertyName());
-                    JSONEntry entry = new JSONEntry("START ("  + methodName + "): " + originalInvocation.getMethod().toGenericString(), remoteInvocation);
+                    XMLEntry entry = new XMLEntry("START ("  + methodName + "): " + originalInvocation.getMethod().toGenericString(), remoteInvocation);
 
                     if(pref.isStackTraceEnabled()) {
                         entry.setStackTrace(EntryUtils.toEntry(Thread.currentThread().getStackTrace()));
@@ -92,7 +92,7 @@ public class PirasoHttpInvokerProxyFactoryBean extends HttpInvokerProxyFactoryBe
                 if(context.isMonitored() && pref.isEnabled(SpringPreferenceEnum.REMOTING_METHOD_CALL_ENABLED)) {
                     HttpRemoteInvocationResult remoteInvocationResult = new HttpRemoteInvocationResult(result);
                     Level level = Level.get(SpringPreferenceEnum.REMOTING_ENABLED.getPropertyName());
-                    JSONEntry entry = new JSONEntry("END (" + methodName + "): Returned Value ", remoteInvocationResult);
+                    XMLEntry entry = new XMLEntry("END (" + methodName + "): Returned Value ", remoteInvocationResult);
 
                     if(result.getException() != null) {
                         entry.setThrown(new ThrowableEntry(result.getException()));

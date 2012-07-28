@@ -18,37 +18,37 @@
 
 package ard.piraso.api.entry;
 
-import ard.piraso.api.JacksonUtils;
+import ard.piraso.api.XStreamUtils;
 
 import java.io.IOException;
 
 /**
- * JSON entry
+ * XML entry
  */
-public class JSONEntry extends Entry implements MessageAwareEntry, ThrowableAwareEntry, StackTraceAwareEntry, JSONAwareEntry {
+public class XMLEntry extends Entry implements MessageAwareEntry, ThrowableAwareEntry, StackTraceAwareEntry, XMLAwareEntry {
 
     private ThrowableEntry thrown;
 
     private String message;
 
-    private String jsonString;
+    private String xmlString;
 
     private StackTraceElementEntry[] stackTrace;
 
-    public JSONEntry() {
+    public XMLEntry() {
     }
 
-    public JSONEntry(String message, Object jsonObj) throws IOException {
+    public XMLEntry(String message, Object xmlObj) throws IOException {
         setMessage(message);
-        json(jsonObj);
+        toXml(xmlObj);
     }
 
-    public String getJsonString() {
-        return jsonString;
+    public String getXmlString() {
+        return xmlString;
     }
 
-    public void setJsonString(String jsonString) {
-        this.jsonString = jsonString;
+    public void setXmlString(String xmlString) {
+        this.xmlString = xmlString;
     }
 
     public void setThrown(ThrowableEntry thrown) {
@@ -59,8 +59,8 @@ public class JSONEntry extends Entry implements MessageAwareEntry, ThrowableAwar
         return thrown;
     }
 
-    public void json(Object obj) throws IOException {
-        setJsonString(JacksonUtils.MAPPER.writeValueAsString(obj));
+    public void toXml(Object obj) throws IOException {
+        setXmlString(XStreamUtils.XSTREAM.toXML(obj));
     }
 
     public void setMessage(String message) {
