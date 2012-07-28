@@ -19,8 +19,13 @@
 package ard.piraso.replacer.spring.remoting;
 
 import ard.piraso.api.Level;
-import ard.piraso.api.entry.*;
+import ard.piraso.api.entry.ElapseTimeEntry;
+import ard.piraso.api.entry.EntryUtils;
+import ard.piraso.api.entry.MessageEntry;
+import ard.piraso.api.entry.ThrowableEntry;
 import ard.piraso.api.spring.SpringPreferenceEnum;
+import ard.piraso.api.spring.SpringRemotingEndEntry;
+import ard.piraso.api.spring.SpringRemotingStartEntry;
 import ard.piraso.server.ContextPreference;
 import ard.piraso.server.GeneralPreferenceEvaluator;
 import ard.piraso.server.GroupChainId;
@@ -59,7 +64,11 @@ public class PirasoHttpInvokerProxyFactoryBean extends HttpInvokerProxyFactoryBe
                     String methodName = originalInvocation.getMethod().getName();
 
                     Level level = Level.get(SpringPreferenceEnum.REMOTING_ENABLED.getPropertyName());
-                    XMLEntry entry = new XMLEntry("START ("  + methodName + "): " + originalInvocation.getMethod().toGenericString(), invocation);
+                    SpringRemotingStartEntry entry = new SpringRemotingStartEntry("START ("  + methodName + "): " + originalInvocation.getMethod().toGenericString(), invocation);
+                    entry.setMethodName(methodName);
+                    entry.setMethodSignature(originalInvocation.getMethod().toGenericString());
+                    entry.setUrl(getServiceUrl());
+                    entry.setServiceInterface(getServiceInterface().getName());
 
                     if(pref.isStackTraceEnabled()) {
                         entry.setStackTrace(EntryUtils.toEntry(Thread.currentThread().getStackTrace()));
@@ -90,7 +99,10 @@ public class PirasoHttpInvokerProxyFactoryBean extends HttpInvokerProxyFactoryBe
 
                 if(context.isMonitored() && pref.isEnabled(SpringPreferenceEnum.REMOTING_METHOD_CALL_ENABLED)) {
                     Level level = Level.get(SpringPreferenceEnum.REMOTING_ENABLED.getPropertyName());
-                    XMLEntry entry = new XMLEntry("END (" + methodName + "): Returned Value ", result);
+                    SpringRemotingEndEntry entry = new SpringRemotingEndEntry("END (" + methodName + "): Returned Value ", result);
+                    entry.setMethodName(methodName);
+                    entry.setUrl(getServiceUrl());
+                    entry.setServiceInterface(getServiceInterface().getName());
 
                     if(result.getException() != null) {
                         entry.setThrown(new ThrowableEntry(result.getException()));
