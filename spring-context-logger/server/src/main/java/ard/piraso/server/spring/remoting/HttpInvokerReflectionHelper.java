@@ -52,18 +52,18 @@ public class HttpInvokerReflectionHelper {
     }
 
     private Object invokeMethod(String name, Class<?> paramTypes, Object args) throws IOException {
-        return invokeMethod(name, new Class[] {paramTypes}, new Object[] {args});
+        return invokeMethod(name, new Class[]{paramTypes}, new Object[]{args});
     }
-    
+
     private Object invokeMethod(String name, Class<?>[] paramTypes, Object[] args) throws IOException {
         try {
             Method method = findMethod(name, paramTypes);
 
             return method.invoke(instance, args);
         } catch (InvocationTargetException e) {
-            if(RuntimeException.class.isInstance(e.getTargetException())) {
+            if (RuntimeException.class.isInstance(e.getTargetException())) {
                 throw (RuntimeException) e.getTargetException();
-            } else if(IOException.class.isInstance(e.getTargetException())) {
+            } else if (IOException.class.isInstance(e.getTargetException())) {
                 throw (IOException) e.getTargetException();
             }
 
@@ -82,35 +82,35 @@ public class HttpInvokerReflectionHelper {
     }
 
     public void prepareConnection(HttpURLConnection con, int contentLength) throws IOException {
-        invokeMethod("prepareConnection", new Class<?>[] {HttpURLConnection.class, Integer.TYPE}, new Object[] {con, contentLength});
+        invokeMethod("prepareConnection", new Class<?>[]{HttpURLConnection.class, Integer.TYPE}, new Object[]{con, contentLength});
     }
 
     public void writeRequestBody(
             HttpInvokerClientConfiguration config, HttpURLConnection con, ByteArrayOutputStream baos)
             throws IOException {
         invokeMethod("writeRequestBody",
-                new Class<?>[] {HttpInvokerClientConfiguration.class, HttpURLConnection.class, ByteArrayOutputStream.class},
-                new Object[] {config, con, baos});
+                new Class<?>[]{HttpInvokerClientConfiguration.class, HttpURLConnection.class, ByteArrayOutputStream.class},
+                new Object[]{config, con, baos});
     }
 
     public void validateResponse(HttpInvokerClientConfiguration config, HttpURLConnection con)
             throws IOException {
         invokeMethod("validateResponse",
-                new Class<?>[] {HttpInvokerClientConfiguration.class, HttpURLConnection.class},
-                new Object[] {config, con});
+                new Class<?>[]{HttpInvokerClientConfiguration.class, HttpURLConnection.class},
+                new Object[]{config, con});
     }
 
     public InputStream readResponseBody(HttpInvokerClientConfiguration config, HttpURLConnection con)
             throws IOException {
         return (InputStream) invokeMethod("readResponseBody",
-                new Class<?>[] {HttpInvokerClientConfiguration.class, HttpURLConnection.class},
-                new Object[] {config, con});
+                new Class<?>[]{HttpInvokerClientConfiguration.class, HttpURLConnection.class},
+                new Object[]{config, con});
     }
 
     public RemoteInvocationResult readRemoteInvocationResult(InputStream is, String codebaseUrl)
             throws IOException, ClassNotFoundException {
         return (RemoteInvocationResult) invokeMethod("readRemoteInvocationResult",
-                new Class<?>[] {InputStream.class, String.class},
-                new Object[] {is, codebaseUrl});
+                new Class<?>[]{InputStream.class, String.class},
+                new Object[]{is, codebaseUrl});
     }
 }

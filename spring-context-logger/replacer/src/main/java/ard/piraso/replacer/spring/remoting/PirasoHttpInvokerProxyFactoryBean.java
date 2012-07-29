@@ -52,43 +52,43 @@ public class PirasoHttpInvokerProxyFactoryBean extends HttpInvokerProxyFactoryBe
     protected RemoteInvocationResult executeRequest(RemoteInvocation invocation, MethodInvocation originalInvocation) throws Exception {
         ElapseTimeEntry elapseTime = null;
 
-        if(context.isMonitored()) {
+        if (context.isMonitored()) {
             try {
-                if(pref.isEnabled(SpringPreferenceEnum.REMOTING_ELAPSE_TIME_ENABLED)) {
+                if (pref.isEnabled(SpringPreferenceEnum.REMOTING_ELAPSE_TIME_ENABLED)) {
                     elapseTime = new ElapseTimeEntry();
                     elapseTime.start();
                 }
 
-                if(pref.isEnabled(SpringPreferenceEnum.REMOTING_METHOD_CALL_ENABLED)) {
+                if (pref.isEnabled(SpringPreferenceEnum.REMOTING_METHOD_CALL_ENABLED)) {
                     String declaringClass = originalInvocation.getMethod().getDeclaringClass().getName();
                     String methodName = originalInvocation.getMethod().getName();
 
                     Level level = Level.get(SpringPreferenceEnum.REMOTING_ENABLED.getPropertyName());
-                    SpringRemotingStartEntry entry = new SpringRemotingStartEntry("START ("  + methodName + "): " + originalInvocation.getMethod().toGenericString(), invocation);
+                    SpringRemotingStartEntry entry = new SpringRemotingStartEntry("START (" + methodName + "): " + originalInvocation.getMethod().toGenericString(), invocation);
                     entry.setMethodName(methodName);
                     entry.setMethodSignature(originalInvocation.getMethod().toGenericString());
                     entry.setUrl(getServiceUrl());
                     entry.setServiceInterface(getServiceInterface().getName());
 
-                    if(pref.isStackTraceEnabled()) {
+                    if (pref.isStackTraceEnabled()) {
                         entry.setStackTrace(EntryUtils.toEntry(Thread.currentThread().getStackTrace()));
                     }
 
                     ContextLogDispatcher.forward(level, new GroupChainId(declaringClass), entry);
                 }
-            } catch(Exception e) {
+            } catch (Exception e) {
                 LOG.warn(e.getMessage(), e);
             }
         }
 
         RemoteInvocationResult result = super.executeRequest(invocation, originalInvocation);
 
-        if(context.isMonitored()) {
+        if (context.isMonitored()) {
             try {
                 String declaringClass = originalInvocation.getMethod().getDeclaringClass().getName();
                 String methodName = originalInvocation.getMethod().getName();
 
-                if(elapseTime != null) {
+                if (elapseTime != null) {
                     elapseTime.stop();
 
                     Level level = Level.get(SpringPreferenceEnum.REMOTING_ENABLED.getPropertyName());
@@ -97,20 +97,20 @@ public class PirasoHttpInvokerProxyFactoryBean extends HttpInvokerProxyFactoryBe
                     ContextLogDispatcher.forward(level, new GroupChainId(declaringClass), entry);
                 }
 
-                if(context.isMonitored() && pref.isEnabled(SpringPreferenceEnum.REMOTING_METHOD_CALL_ENABLED)) {
+                if (context.isMonitored() && pref.isEnabled(SpringPreferenceEnum.REMOTING_METHOD_CALL_ENABLED)) {
                     Level level = Level.get(SpringPreferenceEnum.REMOTING_ENABLED.getPropertyName());
                     SpringRemotingEndEntry entry = new SpringRemotingEndEntry("END (" + methodName + "): Returned Value ", result);
                     entry.setMethodName(methodName);
                     entry.setUrl(getServiceUrl());
                     entry.setServiceInterface(getServiceInterface().getName());
 
-                    if(result.getException() != null) {
+                    if (result.getException() != null) {
                         entry.setThrown(new ThrowableEntry(result.getException()));
                     }
 
                     ContextLogDispatcher.forward(level, new GroupChainId(declaringClass), entry);
                 }
-            } catch(Exception e) {
+            } catch (Exception e) {
                 LOG.warn(e.getMessage(), e);
             }
         }

@@ -47,24 +47,24 @@ public class HttpInvokerRequestExecutorWrapper implements HttpInvokerRequestExec
     private static final Log LOG = LogFactory.getLog(HttpInvokerRequestExecutorWrapper.class);
 
     private ContextPreference pirasoContext = new PirasoEntryPointContext();
-    
+
     private HttpInvokerRequestExecutor delegate;
 
     private HttpInvokerReflectionHelper helper;
 
     public HttpInvokerRequestExecutorWrapper(HttpInvokerRequestExecutor delegate) {
         this.delegate = delegate;
-        if(SimpleHttpInvokerRequestExecutor.class.isInstance(delegate)) {
+        if (SimpleHttpInvokerRequestExecutor.class.isInstance(delegate)) {
             helper = new HttpInvokerReflectionHelper((SimpleHttpInvokerRequestExecutor) delegate);
         }
     }
-    
+
     private String getGroupId() {
         return (String) pirasoContext.getProperty(SpringRemotingProxyFactory.class, "groupId");
     }
 
     public RemoteInvocationResult executeRequest(HttpInvokerClientConfiguration config, RemoteInvocation invocation) throws Exception {
-        if(helper != null && pirasoContext.isMonitored()) {
+        if (helper != null && pirasoContext.isMonitored()) {
             try {
                 ByteArrayOutputStream baos = helper.getByteArrayOutputStream(invocation);
 
@@ -72,9 +72,9 @@ public class HttpInvokerRequestExecutorWrapper implements HttpInvokerRequestExec
                 helper.prepareConnection(con, baos.size());
                 con.setRequestProperty(REMOTE_ADDRESS_HEADER, pirasoContext.getEntryPoint().getRemoteAddr());
                 con.setRequestProperty(REQUEST_ID_HEADER, String.valueOf(pirasoContext.getRequestId()));
-                
+
                 String groupId = getGroupId();
-                if(groupId != null) {
+                if (groupId != null) {
                     con.setRequestProperty(GROUP_ID_HEADER, groupId);
                 }
 
@@ -83,7 +83,7 @@ public class HttpInvokerRequestExecutorWrapper implements HttpInvokerRequestExec
                 InputStream responseBody = helper.readResponseBody(config, con);
 
                 return helper.readRemoteInvocationResult(responseBody, config.getCodebaseUrl());
-            } catch(HttpInvokerReflectionException e) {
+            } catch (HttpInvokerReflectionException e) {
                 LOG.warn("Error on propagating piraso context. Will revert to direct delegation.", e);
             }
         }

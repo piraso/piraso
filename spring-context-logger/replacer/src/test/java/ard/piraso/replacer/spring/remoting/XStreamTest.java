@@ -23,6 +23,8 @@ import junit.framework.TestCase;
 import org.springframework.remoting.support.RemoteInvocation;
 
 import java.lang.reflect.Method;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Test for XStream serialization
@@ -58,9 +60,15 @@ public class XStreamTest extends TestCase {
 
         Method method = String.class.getMethod("valueOf", Object.class);
 
+        Map<String, String> map = new LinkedHashMap<String, String>();
+
+        map.put("a", "b");
+        map.put("c", "d");
+        map.put("e", "f");
+
         remote.setMethodName(method.getName());
         remote.setParameterTypes(method.getParameterTypes());
-        remote.setArguments(new Object[] {"Alvin", "de", "Leon", new TestNestedBean(new TestNestedBean(null))});
+        remote.setArguments(new Object[]{map, "Alvin", "de", "Leon", new TestNestedBean(new TestNestedBean(null))});
 
         System.out.println(XStreamUtils.XSTREAM.toXML(remote));
     }

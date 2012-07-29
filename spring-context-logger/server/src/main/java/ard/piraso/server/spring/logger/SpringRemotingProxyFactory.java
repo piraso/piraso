@@ -47,7 +47,7 @@ public class SpringRemotingProxyFactory extends AbstractSpringProxyFactory<HttpI
 
         @Override
         public void beforeCall(RegexMethodInterceptorEvent<HttpInvokerRequestExecutor> evt) {
-            if(getPref().isSpringRemotingEnabled()) {
+            if (getPref().isSpringRemotingEnabled()) {
                 ElapseTimeEntry entry = new ElapseTimeEntry();
                 entry.start();
 
@@ -58,8 +58,8 @@ public class SpringRemotingProxyFactory extends AbstractSpringProxyFactory<HttpI
 
         @Override
         public void afterCall(RegexMethodInterceptorEvent<HttpInvokerRequestExecutor> evt) {
-            if(getPref().isSpringRemotingEnabled()) {
-                if(getPref().isSpringRemotingMethodCallEnabled()) {
+            if (getPref().isSpringRemotingEnabled()) {
+                if (getPref().isSpringRemotingMethodCallEnabled()) {
                     MethodCallEntry entry = createMethodEntry(evt);
                     entry.setReturnedValue(new ObjectEntry(evt.getReturnedValue()));
 
@@ -74,8 +74,8 @@ public class SpringRemotingProxyFactory extends AbstractSpringProxyFactory<HttpI
 
         @Override
         public void exceptionCall(RegexMethodInterceptorEvent<HttpInvokerRequestExecutor> evt) {
-            if(getPref().isSpringRemotingEnabled()) {
-                if(getPref().isSpringRemotingMethodCallEnabled()) {
+            if (getPref().isSpringRemotingEnabled()) {
+                if (getPref().isSpringRemotingMethodCallEnabled()) {
                     MethodCallEntry entry = createMethodEntry(evt);
                     entry.setThrown(new ThrowableEntry(evt.getException()));
 
@@ -101,7 +101,7 @@ public class SpringRemotingProxyFactory extends AbstractSpringProxyFactory<HttpI
         entry.setArguments(EntryUtils.toEntry(arguments));
 
         // method stack trace only if debug is enabled
-        if(getPref().isStackTraceEnabled()) {
+        if (getPref().isStackTraceEnabled()) {
             entry.setStackTrace(EntryUtils.toEntry(Thread.currentThread().getStackTrace()));
         }
 

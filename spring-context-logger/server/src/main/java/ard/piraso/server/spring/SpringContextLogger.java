@@ -27,7 +27,7 @@ import org.springframework.remoting.httpinvoker.HttpInvokerRequestExecutor;
  * Create proxy spring context loggers
  */
 public final class SpringContextLogger {
-    
+
     public static HttpInvokerRequestExecutor createHttpInvoker(HttpInvokerRequestExecutor executor, String id) {
         HttpInvokerRequestExecutorWrapper wrapper = new HttpInvokerRequestExecutorWrapper(executor);
         SpringRemotingProxyFactory factory = new SpringRemotingProxyFactory(new GroupChainId(id));

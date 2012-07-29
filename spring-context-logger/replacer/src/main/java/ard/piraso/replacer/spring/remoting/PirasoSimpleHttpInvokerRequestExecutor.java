@@ -38,7 +38,7 @@ public class PirasoSimpleHttpInvokerRequestExecutor extends SimpleHttpInvokerReq
 
     @Override
     protected void writeRemoteInvocation(RemoteInvocation invocation, OutputStream os) throws IOException {
-        if(context.isMonitored()) {
+        if (context.isMonitored()) {
             context.addProperty(PirasoSimpleHttpInvokerRequestExecutor.class, METHOD_NAME_HEADER, invocation.getMethodName());
         }
 
@@ -48,7 +48,7 @@ public class PirasoSimpleHttpInvokerRequestExecutor extends SimpleHttpInvokerReq
     protected void prepareConnection(HttpURLConnection con, int contentLength) throws IOException {
         super.prepareConnection(con, contentLength);
 
-        if(context.isMonitored() && context.getEntryPoint() != null) {
+        if (context.isMonitored() && context.getEntryPoint() != null) {
             con.setRequestProperty(REMOTE_ADDRESS_HEADER, context.getEntryPoint().getRemoteAddr());
             con.setRequestProperty(REQUEST_ID_HEADER, String.valueOf(context.getRequestId()));
             con.setRequestProperty(METHOD_NAME_HEADER, String.valueOf(context.getProperty(PirasoSimpleHttpInvokerRequestExecutor.class, METHOD_NAME_HEADER)));
