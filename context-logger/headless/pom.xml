@@ -21,33 +21,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+        <groupId>ard.piraso</groupId>
+        <artifactId>context-logger</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    
+    <artifactId>context-logger-headless</artifactId>
+    <packaging>jar</packaging>
+    <name>context-logger-headless</name>
 
-  <parent>
-    <groupId>ard.piraso</groupId>
-    <artifactId>piraso</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
-  </parent>
-
-  <artifactId>context-logger</artifactId>
-  <packaging>pom</packaging>
-  <name>context-logger</name>
-
-  <modules>
-    <module>api</module>
-    <module>headless</module>
-    <module>io</module>
-    <module>assembly</module>
-    <module>piraso-maven-plugin</module>
-    <module>proxy</module>
-    <module>http-client</module>
-    <module>server</module>
-    <module>spring-web-server</module>
-  </modules>
-
-  <properties>
-    <commons.collections.version>3.2.1</commons.collections.version>
-    <jackson.version>1.9.0</jackson.version>
-  </properties>
+    <dependencies>
+      <dependency>
+        <groupId>${project.parent.groupId}</groupId>
+        <artifactId>context-logger-io</artifactId>
+        <version>${project.parent.version}</version>
+      </dependency>
+    </dependencies>
 </project>
