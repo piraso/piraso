@@ -73,8 +73,29 @@ public class EntryCriteria {
         return items.iterator().next();
     }
 
-    public List<Entry> list() {
-        final List<Entry> results = new LinkedList<Entry>();
+    public Entry firstResult() {
+        LinkedList<Entry> items = list();
+
+        if(CollectionUtils.isEmpty(items)) {
+            return null;
+        }
+
+        return items.getFirst();
+    }
+
+
+    public Entry lastResult() {
+        LinkedList<Entry> items = list();
+
+        if(CollectionUtils.isEmpty(items)) {
+            return null;
+        }
+
+        return items.getLast();
+    }
+
+    public LinkedList<Entry> list() {
+        final LinkedList<Entry> results = new LinkedList<Entry>();
 
         try {
             manager.visit(new IOEntryVisitor() {
