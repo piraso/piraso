@@ -25,26 +25,25 @@
     
     <parent>
         <groupId>ard.piraso</groupId>
-        <artifactId>context-logger</artifactId>
+        <artifactId>log4j-context-logger</artifactId>
         <version>1.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     
-    <artifactId>context-logger-headless</artifactId>
+    <artifactId>log4j-context-logger-headless</artifactId>
     <packaging>jar</packaging>
-    <name>context-logger-headless</name>
+    <name>log4j-context-logger-headless</name>
 
     <dependencies>
-      <dependency>
-        <groupId>${project.parent.groupId}</groupId>
-        <artifactId>context-logger-io</artifactId>
-        <version>${project.parent.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>${project.parent.groupId}</groupId>
-        <artifactId>log4j-context-logger-headless</artifactId>
-        <version>${project.parent.version}</version>
-        <scope>test</scope>
-      </dependency>
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>log4j-context-logger-api</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>context-logger-headless</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
     </dependencies>
 </project>

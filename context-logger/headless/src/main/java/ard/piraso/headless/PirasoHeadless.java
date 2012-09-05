@@ -67,6 +67,10 @@ public class PirasoHeadless {
         return reader.getManager();
     }
 
+    public EntryCriteria createCriteria() {
+        return new EntryCriteria(reader.getManager());
+    }
+
     public void start() {
         if(startedOnce) {
             reset();

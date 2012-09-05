@@ -68,6 +68,14 @@ public class IOEntryManager {
     public String getId() {
         return id;
     }
+
+    public void visit(IOEntryVisitor visitor) throws IOException {
+        List<IOEntryRequest> tmp = new ArrayList<IOEntryRequest>(requests.values());
+
+        for(IOEntryRequest request : tmp) {
+            request.visit(visitor);
+        }
+    }
     
     public void visit(List<Long> requestIds, IOEntryVisitor visitor) throws IOException {
         List<IOEntryRequest> tmp = new ArrayList<IOEntryRequest>(requests.values());
