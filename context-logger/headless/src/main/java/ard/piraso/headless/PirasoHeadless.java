@@ -34,7 +34,7 @@ import java.util.concurrent.Executors;
 public class PirasoHeadless {
 
     public static PirasoHeadless create(Preferences pref, String url) {
-        return create(pref, url);
+        return create(pref, url, null);
     }
 
     public static PirasoHeadless create(Preferences pref, String url, String ipAddress) {
@@ -44,6 +44,8 @@ public class PirasoHeadless {
     private IOEntryReader reader;
 
     private ExecutorService service = Executors.newSingleThreadExecutor();
+
+    private boolean startedOnce = false;
 
     private PirasoHeadless(Preferences pref, String url, String ipAddress) {
         this.reader = new IOEntryReader(new HttpEntrySource(pref, url, ipAddress));
@@ -57,13 +59,22 @@ public class PirasoHeadless {
         reader = reader.createNew();
     }
 
+    public IOEntryReader getReader() {
+        return reader;
+    }
+
     public IOEntryManager getManager() {
         return reader.getManager();
     }
 
     public void start() {
+        if(startedOnce) {
+            reset();
+        }
+
         service.submit(new Runnable() {
             public void run() {
+                startedOnce = true;
                 reader.start();
             }
         });
@@ -71,5 +82,9 @@ public class PirasoHeadless {
 
     public void stop() {
         reader.stop();
+    }
+
+    public void shutdown() {
+        service.shutdownNow();
     }
 }

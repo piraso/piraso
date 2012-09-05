@@ -21,6 +21,8 @@ package ard.piraso.api.log4j;
 import ard.piraso.api.Preferences;
 import org.apache.log4j.Level;
 
+import java.util.List;
+
 /**
  * Preference wrapper for log4j
  */
@@ -32,31 +34,69 @@ public class Log4jPreferenceWrapper {
         this.pref = pref;
     }
 
-    public void info(String logger) {
-        add(logger, Level.INFO);
+    public void setAllLoggers(List<String> loggers) {
+        for(String logger : loggers) {
+            all(logger);
+        }
     }
 
-    public void debug(String logger) {
-        add(logger, Level.DEBUG);
+    public void setInfoLoggers(List<String> loggers) {
+        for(String logger : loggers) {
+            info(logger);
+        }
     }
 
-    public void warn(String logger) {
-        add(logger, Level.WARN);
+    public void setWarningLoggers(List<String> loggers) {
+        for(String logger : loggers) {
+            warn(logger);
+        }
     }
 
-    public void error(String logger) {
-        add(logger, Level.ERROR);
+    public void setErrorLoggers(List<String> loggers) {
+        for(String logger : loggers) {
+            error(logger);
+        }
     }
 
-    public void fatal(String logger) {
-        add(logger, Level.FATAL);
+    public void setDebugLoggers(List<String> loggers) {
+        for(String logger : loggers) {
+            debug(logger);
+        }
     }
 
-    public void add(String logger) {
-        add(logger, Level.ALL);
+    public void setFatalLoggers(List<String> loggers) {
+        for(String logger : loggers) {
+            fatal(logger);
+        }
     }
 
-    public void add(String logger, Level level) {
+    public Log4jPreferenceWrapper info(String logger) {
+        return add(logger, Level.INFO);
+    }
+
+    public Log4jPreferenceWrapper debug(String logger) {
+        return add(logger, Level.DEBUG);
+    }
+
+    public Log4jPreferenceWrapper warn(String logger) {
+        return add(logger, Level.WARN);
+    }
+
+    public Log4jPreferenceWrapper error(String logger) {
+        return add(logger, Level.ERROR);
+    }
+
+    public Log4jPreferenceWrapper fatal(String logger) {
+        return add(logger, Level.FATAL);
+    }
+
+    public Log4jPreferenceWrapper all(String logger) {
+        return add(logger, Level.ALL);
+    }
+
+    public Log4jPreferenceWrapper add(String logger, Level level) {
         pref.addProperty("log4j." + logger + "." + level.toString(), true);
+
+        return this;
     }
 }

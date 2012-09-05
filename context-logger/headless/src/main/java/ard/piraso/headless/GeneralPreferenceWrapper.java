@@ -36,16 +36,31 @@ public class GeneralPreferenceWrapper {
         this.pref = pref;
     }
 
-    public void disableRequestScope() {
-        pref.addProperty(GeneralPreferenceEnum.NO_REQUEST_CONTEXT.getPropertyName(), true);
+    public void setNoRequestContext(boolean noRequestContext) {
+        pref.addProperty(GeneralPreferenceEnum.NO_REQUEST_CONTEXT.getPropertyName(), noRequestContext);
     }
 
-    public void enableStackTrace() {
-        pref.addProperty(GeneralPreferenceEnum.STACK_TRACE_ENABLED.getPropertyName(), true);
+    public void setEnableStackTrace(boolean  enableStackTrace) {
+        pref.addProperty(GeneralPreferenceEnum.STACK_TRACE_ENABLED.getPropertyName(), enableStackTrace);
     }
 
-    public void hideExternalResources() {
-        pref.addProperty(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName(), true);
+    public void setHideExternalResources(boolean hideExternalResources) {
+        pref.addProperty(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName(), hideExternalResources);
+    }
+
+    public GeneralPreferenceWrapper disableRequestScope() {
+        setNoRequestContext(true);
+        return this;
+    }
+
+    public GeneralPreferenceWrapper enableStackTrace() {
+        setEnableStackTrace(true);
+        return this;
+    }
+
+    public GeneralPreferenceWrapper hideExternalResources() {
+        setHideExternalResources(true);
+        return this;
     }
 
     public Preferences getPreferences() {
