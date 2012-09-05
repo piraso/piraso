@@ -40,11 +40,5 @@
         <artifactId>context-logger-io</artifactId>
         <version>${project.parent.version}</version>
       </dependency>
-      <dependency>
-        <groupId>${project.parent.groupId}</groupId>
-        <artifactId>log4j-context-logger-headless</artifactId>
-        <version>${project.parent.version}</version>
-        <scope>test</scope>
-      </dependency>
     </dependencies>
 </project>
