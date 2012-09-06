@@ -19,19 +19,29 @@
 package ard.piraso.headless.restriction;
 
 import ard.piraso.api.entry.Entry;
+import ard.piraso.api.entry.MessageEntry;
 
-/**
- * Provides type restriction.
- */
-public class TypeRestriction implements Restriction {
+import java.util.regex.Pattern;
 
-    private String type;
+public class MessageRegexRestriction implements Restriction {
 
-    public TypeRestriction(String type) {
-        this.type = type;
+    private Pattern pattern;
+
+    public MessageRegexRestriction(String regex) {
+        this(regex, 0);
+    }
+
+    public MessageRegexRestriction(String regex, int flag) {
+        this.pattern = Pattern.compile(regex, flag);
     }
 
     public boolean matches(Entry entry) {
-        return false;
+        if(!MessageEntry.class.isInstance(entry)) {
+            return false;
+        }
+
+        MessageEntry messageEntry = (MessageEntry) entry;
+
+        return pattern.matcher(messageEntry.getMessage()).matches();
     }
 }

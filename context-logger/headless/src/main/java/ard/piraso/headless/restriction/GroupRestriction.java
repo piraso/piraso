@@ -19,6 +19,8 @@
 package ard.piraso.headless.restriction;
 
 import ard.piraso.api.entry.Entry;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Group restriction
@@ -32,6 +34,18 @@ public class GroupRestriction implements Restriction {
     }
 
     public boolean matches(Entry entry) {
+        if(entry.getGroup() == null) {
+            return false;
+        }
+
+        if(CollectionUtils.isNotEmpty(entry.getGroup().getGroups())) {
+            for(String g : entry.getGroup().getGroups()) {
+                if(StringUtils.equals(group, g)) {
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
 }

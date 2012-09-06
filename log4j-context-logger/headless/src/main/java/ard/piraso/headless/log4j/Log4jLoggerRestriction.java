@@ -47,10 +47,6 @@ public class Log4jLoggerRestriction implements Restriction {
     }
 
     public boolean matches(Entry entry) {
-        if(!Log4jEntry.class.isInstance(entry)) {
-            return false;
-        }
-
-        return getLogger(entry).matches(logger);
+        return Log4jEntry.class.isInstance(entry) && getLogger(entry).matches(logger);
     }
 }

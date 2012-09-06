@@ -18,12 +18,14 @@
 
 package ard.piraso.headless.restriction;
 
+import java.util.regex.Pattern;
+
 /**
  * All restriction instance
  */
 public class Restrictions {
 
-    public static DisjunctionRestriction or() {
+    public static DisjunctionRestriction disjunction() {
         return new DisjunctionRestriction();
     }
 
@@ -31,11 +33,15 @@ public class Restrictions {
         return new ClassRestriction(clazz);
     }
 
-    public static Restriction type(String type) {
-        return new TypeRestriction(type);
-    }
-
     public static Restriction group(String group) {
         return new GroupRestriction(group);
+    }
+
+    public static Restriction messageRegex(String regex, boolean caseInsensitive) {
+        if(caseInsensitive) {
+            return new MessageRegexRestriction(regex, Pattern.CASE_INSENSITIVE);
+        }
+
+        return new MessageRegexRestriction(regex);
     }
 }

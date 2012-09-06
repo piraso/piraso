@@ -30,7 +30,7 @@ public class DisjunctionRestriction implements Restriction {
 
     private List<Restriction> restrictions = new LinkedList<Restriction>();
 
-    public DisjunctionRestriction add(Restriction restriction) {
+    public DisjunctionRestriction or(Restriction restriction) {
         restrictions.add(restriction);
 
         return this;
