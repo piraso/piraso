@@ -37,6 +37,10 @@ public class Restrictions {
         return new GroupRestriction(group);
     }
 
+    public static Restriction messageRegex(String regex) {
+        return messageRegex(regex, false);
+    }
+
     public static Restriction messageRegex(String regex, boolean caseInsensitive) {
         if(caseInsensitive) {
             return new MessageRegexRestriction(regex, Pattern.CASE_INSENSITIVE);
