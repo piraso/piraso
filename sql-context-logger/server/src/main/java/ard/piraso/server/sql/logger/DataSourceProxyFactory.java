@@ -37,8 +37,9 @@ public class DataSourceProxyFactory extends AbstractSQLProxyFactory<DataSource> 
 
     private static final Level BASE_LEVEL = Level.get(SQLPreferenceEnum.CONNECTION_ENABLED.getPropertyName());
 
-    public DataSourceProxyFactory(GroupChainId id) {
-        super(id, new RegexProxyFactory<DataSource>(DataSource.class));
+    @SuppressWarnings("unchecked")
+    public DataSourceProxyFactory(Class sourceClass, GroupChainId id) {
+        super(id, new RegexProxyFactory(sourceClass));
 
         factory.addMethodListener("getConnection", new GetConnectionListener());
     }

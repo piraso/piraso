@@ -36,7 +36,7 @@ public final class SQLContextLogger {
      * @return the proxy {@link DataSource} with context logging support.
      */
     public static DataSource create(DataSource dataSource, String id) {
-        DataSourceProxyFactory factory = new DataSourceProxyFactory(new GroupChainId(id));
+        DataSourceProxyFactory factory = new DataSourceProxyFactory(dataSource.getClass(), new GroupChainId(id));
 
         return factory.getProxy(dataSource);
     }
