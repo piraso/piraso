@@ -25,7 +25,7 @@
   <groupId>ard.piraso</groupId>
   <artifactId>piraso</artifactId>
   <packaging>pom</packaging>
-  <version>1.0</version>
+  <version>1.1-SNAPSHOT</version>
   <name>piraso</name>
   <url>https://github.com/alvinrdeleon/piraso</url>
 
