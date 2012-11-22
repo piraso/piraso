@@ -58,6 +58,7 @@
     </snapshotRepository>
   </distributionManagement>
 
+
   <scm>
     <connection>scm:git:https://github.com/alvinrdeleon/piraso.git</connection>
     <url>scm:git:https://github.com/alvinrdeleon/piraso.git</url>
