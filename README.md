@@ -1,5 +1,5 @@
-Piraso [![Build Status](https://buildhive.cloudbees.com/job/alvinrdeleon/job/piraso/badge/icon)](https://buildhive.cloudbees.com/job/alvinrdeleon/job/piraso/)
-=====
+![P](http://alvinrdeleon.github.com/piraso/piraso_32.png)iraso [![Build Status](https://buildhive.cloudbees.com/job/alvinrdeleon/job/piraso/badge/icon)](https://buildhive.cloudbees.com/job/alvinrdeleon/job/piraso/)
+=======
 
 ### Introduction
 
