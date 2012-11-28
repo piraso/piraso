@@ -5,7 +5,7 @@ Piraso [![Build Status](https://buildhive.cloudbees.com/job/alvinrdeleon/job/pir
 
 Development tool for debugging and analyzing request context log information captured from a supported java module.
 
-To learn more please see https://github.com/alvinrdeleon/piraso/wiki.
+To learn more please see http://alvinrdeleon.github.com/piraso.
 
 ## Author
 
