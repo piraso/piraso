@@ -20,3 +20,12 @@ To learn more please see https://github.com/alvinrdeleon/piraso/wiki.
     mvn deploy:deploy-file -DgroupId={groupId} -DartifactId={artifactId} -Dversion={version} -Dpackaging=java-source -DgeneratePom=false -Dfile={file}-sources.jar -Durl=file:///{piraso.home}/piraso-mvn-repo/releases/
 ```
 
+## Author
+
+Designed and built by [Alvin R. de Leon](https://github.com/alvinrdeleon/)
+
+## License
+
+Copyright 2012 Piraso
+
+Code licensed under [Apache License v2.0](http://www.apache.org/licenses/LICENSE-2.0).
