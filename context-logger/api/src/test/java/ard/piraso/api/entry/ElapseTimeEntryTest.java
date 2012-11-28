@@ -20,6 +20,7 @@ package ard.piraso.api.entry;
 
 import ard.piraso.api.AbstractJacksonTest;
 import ard.piraso.api.Level;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -34,6 +35,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Test for {@link ElapseTimeEntry} class.
  */
+@Ignore
 public class ElapseTimeEntryTest extends AbstractJacksonTest {
 
     @Test
