@@ -5,7 +5,7 @@
 
 Development tool for debugging and analyzing request context log information captured from a supported java module.
 
-To learn more please see http://alvinrdeleon.github.com/piraso.
+To learn more please see http://www.piraso.org/.
 
 ## Author
 
