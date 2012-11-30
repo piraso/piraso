@@ -1,0 +1,29 @@
+body {
+    padding-top: 60px;
+    padding-bottom: 40px;
+}
+
+a#piraso_logo.brand {
+    background: url(../../piraso_32.png) transparent no-repeat 0 4px;
+    padding-left: 32px;
+}
+
+h1#hero_logo {
+    height: 128px;
+}
+
+h1#hero_logo span.text {
+    position: relative;
+    top: -10px;
+    vertical-align: bottom;
+}
+
+h1#hero_logo span.github {
+    vertical-align: bottom;
+}
+
+ul.icons {
+    list-style-type: none;
+    margin-left: 2em;
+    text-indent: -0.8em;
+}

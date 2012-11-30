@@ -1,74 +1,143 @@
 <!DOCTYPE html>
-<html>
-
-  <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Piraso : Development tool for debugging and analyzing request context log information captured from a supported java module." />
-
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
+<html lang="en">
+<head>
+    <meta charset="utf-8">
     <title>Piraso</title>
-  </head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-  <body>
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/responsive.css" rel="stylesheet">
+    <link href="assets/css/font-awesome.css" rel="stylesheet">
+    <link href="assets/css/doc.css" rel="stylesheet">
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/alvinrdeleon/piraso">View on GitHub</a>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 
-          <h1 id="project_title">Piraso --12313131---</h1>
-          <h2 id="project_tagline">Development tool for debugging and analyzing request context log information captured from a supported java module.</h2>
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
+</head>
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/alvinrdeleon/piraso/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/alvinrdeleon/piraso/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a id="piraso_logo" class="brand" href="./index.html">iraso</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    <li class="active"><a href="./index.html">Home</a></li>
+                    <li><a href="#getting-started">Getting Started</a></li>
+                    <li><a href="#live-demo">Live Demo</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#screenshots">Screenshots</a></li>
+                    <li><a href="#tutorials">Tutorials</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- Main hero unit for a primary marketing message or call to action -->
+    <div class="hero-unit">
+        <h1 id="hero_logo">
+            <span class="icon"><img src="piraso_128.png"/></span><span class="text">iraso</span>
+        </h1>
+        <p>Development tool for debugging and analyzing request context log information captured from a supported java module.</p>
+
+        <div class="pull-right">
+            <iframe src="http://ghbtns.com/github-btn.html?user=alvinrdeleon&repo=piraso&type=watch&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="85px" height="20px"></iframe>
+            <iframe class="github-btn" src="http://ghbtns.com/github-btn.html?user=alvinrdeleon&repo=piraso&type=fork&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="80px" height="20px"></iframe>
+            <iframe class="github-btn" src="http://ghbtns.com/github-btn.html?user=alvinrdeleon&type=follow&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="20px"></iframe>
+        </div>
+        <p>
+            <a class="btn btn-primary btn-large">Getting Started</a>
+            <a class="btn btn-success btn-large">Live Demo &raquo;</a>
+        </p>
     </div>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h3>Welcome to GitHub Pages.</h3>
-
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
-
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
-
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
-<h3>Designer Templates</h3>
-
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
-
-<h3>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-      </section>
+    <!-- Example row of columns -->
+    <div class="row about">
+        <div class="span4">
+            <h3><i class="icon-bolt icon-large"></i> Easy to Setup</h3>
+            <p>Simply add the <a href="http://maven.apache.org/">maven</a> dependencies and include the plugin in your java web module to enable piraso.</p>
+        </div>
+        <div class="span4">
+            <h3><i class="icon-github icon-large"></i> Open Source</h3>
+            <p>Piraso are licensed under Apache 2.0 and maintained by the community on <a href="https://github.com/alvinrdeleon/piraso" target="_blank">GitHub</a>.</p>
+        </div>
+        <div class="span4">
+            <h3><i class="icon-leaf icon-large"></i> Spring Framework</h3>
+            <p>Piraso uses <a href="">Spring Framework</a>, which is the most popular application development framework for enterprise Java™.</p>
+        </div>
+        <div class="span4">
+            <h3><i class="icon-cogs icon-large"></i> Modular</h3>
+            <p>Developers can choose to enable specific the context loggers for your web module.</p>
+        </div>
+        <div class="span4">
+            <h3><i class="icon-resize-full icon-large"></i> Extendable</h3>
+            <p>Piraso is highly extendable, with this developers will be able to develop their your own context loggers for their specific needs.</p>
+        </div>
+        <div class="span4">
+            <h3><i class="icon-rss icon-large"></i> Stay Updated</h3>
+            <p>Be notified about updates by subscribing via <a href="#">RSS feed</a> or <a href="#">email</a>.</p>
+        </div>
     </div>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Piraso maintained by <a href="https://github.com/alvinrdeleon">alvinrdeleon</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
+    <hr>
 
-    
+    <footer>
+        <div class="row">
+            <div class="span5">
+                <h3>Contact</h3>
+                <ul class="icons">
+                    <li><i class="icon-envelope"></i> Email: <a href="mailto:alvinrdeleon@me.com">Alvin R. de Leon</a></li>
+                    <li><i class="icon-twitter"></i> Twitter: <a target="_blank" href="http://twitter.com/alvinrdeleon/">@alvinrdeleon</a></li>
+                    <li><i class="icon-wrench"></i> Work: Staff Software Engineer @ <a target="_blank" href="http://adchemy.com">Adchemy</a></li>
+                </ul>
+            </div>
+            <div class="span6">
+                <h3>Special Thanks</h3>
+                Special thanks to <a target="_blank" href="https://github.com/ashier">@ashier</a> and
+                <a target="_blank" href="https://github.com/badong2210">@badong2210</a> for design
+                review, advice, and some help.
+            </div>
+        </div>
+    </footer>
 
-  </body>
+</div> <!-- /container -->
+
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="assets/js/jquery.js"></script>
+<script src="assets/js/bootstrap-transition.js"></script>
+<script src="assets/js/bootstrap-alert.js"></script>
+<script src="assets/js/bootstrap-modal.js"></script>
+<script src="assets/js/bootstrap-dropdown.js"></script>
+<script src="assets/js/bootstrap-scrollspy.js"></script>
+<script src="assets/js/bootstrap-tab.js"></script>
+<script src="assets/js/bootstrap-tooltip.js"></script>
+<script src="assets/js/bootstrap-popover.js"></script>
+<script src="assets/js/bootstrap-button.js"></script>
+<script src="assets/js/bootstrap-collapse.js"></script>
+<script src="assets/js/bootstrap-carousel.js"></script>
+<script src="assets/js/bootstrap-typeahead.js"></script>
+
+</body>
 </html>
