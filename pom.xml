@@ -33,7 +33,7 @@
   <packaging>pom</packaging>
   <version>1.1-SNAPSHOT</version>
   <name>piraso</name>
-  <url>https://github.com/alvinrdeleon/piraso</url>
+  <url>http://www.piraso.org/</url>
 
   <licenses>
     <license>
