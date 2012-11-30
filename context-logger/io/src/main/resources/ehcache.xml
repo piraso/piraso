@@ -28,7 +28,7 @@
                   eternal="true"
                   overflowToDisk="true" />
 
-    <cache name="ard.piraso.io.util.IOEntrySerializable"
+    <cache name="org.piraso.io.util.IOEntrySerializable"
            maxElementsInMemory="1000"
            memoryStoreEvictionPolicy="LFU"
            eternal="true"
