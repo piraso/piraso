@@ -180,3 +180,9 @@ hr.soften {
     top: auto;
     bottom: 270px;
 }
+
+
+.icon-fix {
+    position: relative;
+    top: 2px;
+}
