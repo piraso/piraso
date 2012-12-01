@@ -27,3 +27,156 @@ ul.icons {
     margin-left: 2em;
     text-indent: -0.8em;
 }
+
+ul.items {
+    list-style-type: none;
+}
+
+section {
+    padding-top: 30px;
+}
+section > .page-header,
+section > .lead {
+    color: #5a5a5a;
+    margin-top: 0;
+}
+section > ul li {
+    margin-bottom: 5px;
+}
+/* Separators (hr) */
+
+.bs-docs-separator {
+    margin: 40px 0 39px;
+}
+/* Faded out hr */
+
+header h1 {
+    font-size: 45px;
+}
+
+hr.soften {
+    height: 1px;
+    margin: 70px 0;
+    background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
+    background-image: -moz-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
+    background-image: -ms-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
+    background-image: -o-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
+    border: 0;
+}
+
+.responsive-utilities th small {
+    display: block;
+    font-weight: normal;
+    color: #999999;
+}
+.responsive-utilities tbody th {
+    font-weight: normal;
+}
+.responsive-utilities td {
+    text-align: center;
+}
+.responsive-utilities td.is-visible {
+    color: #468847;
+    background-color: #dff0d8 !important;
+}
+.responsive-utilities td.is-hidden {
+    color: #cccccc;
+    background-color: #f9f9f9 !important;
+}
+/* Responsive tests
+------------------------- */
+
+.responsive-utilities-test {
+    margin-top: 5px;
+    margin-left: 0;
+    list-style: none;
+    overflow: hidden;
+    /* clear floats */
+
+}
+.responsive-utilities-test li {
+    position: relative;
+    float: left;
+    width: 25%;
+    height: 43px;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 43px;
+    color: #999999;
+    text-align: center;
+    border: 1px solid #dddddd;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+.responsive-utilities-test li + li {
+    margin-left: 10px;
+}
+.responsive-utilities-test span {
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+.responsive-utilities-test span {
+    color: #468847;
+    background-color: #dff0d8;
+    border: 1px solid #d6e9c6;
+}
+/* Sidenav for Docs
+-------------------------------------------------- */
+
+.bs-docs-sidenav {
+    width: 218px !important;
+    margin: 30px 0 0;
+    padding: 0;
+    background-color: white;
+    border: 2px solid #dddddd;
+    border-bottom-width: 3px;
+}
+.bs-docs-sidenav > li > a {
+    display: block;
+    width: 190px;
+    margin: 0 0 -1px;
+    padding: 8px 14px;
+}
+.bs-docs-sidenav > .active > a {
+    background-color: whitesmoke !important;
+    color: #666666;
+    position: relative;
+    z-index: 2;
+    padding: 9px 14px;
+    border: 0;
+    text-shadow: 0;
+}
+/* Chevrons */
+
+.bs-docs-sidenav .icon-chevron-right {
+    float: right;
+    margin-top: 2px;
+    margin-right: -6px;
+    opacity: .25;
+}
+.bs-docs-sidenav > li > a:hover {
+    color: gray !important;
+    background-color: whitesmoke !important;
+}
+.bs-docs-sidenav a:hover .icon-chevron-right {
+    opacity: .5;
+}
+.bs-docs-sidenav .active .icon-chevron-right,
+.bs-docs-sidenav .active a:hover .icon-chevron-right {
+    opacity: 1;
+}
+.bs-docs-sidenav.affix {
+    top: 40px;
+}
+.bs-docs-sidenav.affix-bottom {
+    position: absolute;
+    top: auto;
+    bottom: 270px;
+}
