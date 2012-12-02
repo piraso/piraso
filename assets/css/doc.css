@@ -186,3 +186,27 @@ hr.soften {
     position: relative;
     top: 2px;
 }
+
+table#platform-download {
+    font-size: 110%;
+}
+
+table#platform-download .icon-column {
+    width: 60px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+table#platform-download .icon-column img {
+    width: 32px;
+    width: 32px;
+}
+
+table#platform-download .os-column {
+    width: 180px;
+    vertical-align: middle;
+}
+
+table#platform-download .installer-column {
+    vertical-align: middle;
+}

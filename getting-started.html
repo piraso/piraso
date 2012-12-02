@@ -42,7 +42,7 @@
                     <li><a href="./index.html">Home</a></li>
                     <li class="active"><a href="./getting-started.html">Get Started</a></li>
                     <li><a href="#live-demo">Live Demo</a></li>
-                    <li><a href="#screenshots">Screenshots</a></li>
+                    <li><a href="./user-guide.html">Client User Guide</a></li>
                     <li><a href="#tutorials">Tutorials</a></li>
                 </ul>
             </div><!--/.nav-collapse -->
@@ -64,7 +64,7 @@
     <div class="row">
         <div class="span3 bs-docs-sidebar">
             <ul class="nav nav-list bs-docs-sidenav">
-                <li><a href="#robot-overview"><i class="icon-chevron-right"></i> Overview</a></li>
+                <li><a href="#piraso-overview"><i class="icon-chevron-right"></i> Overview</a></li>
                 <li><a href="#client-server"><i class="icon-chevron-right"></i> Client Server</a></li>
                 <li><a href="#client-download"><i class="icon-chevron-right"></i> Client Download</a></li>
                 <li><a href="#enabling"><i class="icon-chevron-right"></i> Enabling your Application</a></li>
@@ -75,7 +75,7 @@
 
             <!-- Overview
            ================================================== -->
-            <section id="robot-overview">
+            <section id="piraso-overview">
                 <div class="page-header">
                     <h2>Overview</h2>
                 </div>
@@ -85,7 +85,7 @@
                     on production.
                 </p>
 
-                <h3>Context Monitoring</h3>
+                <h3><i class=" icon-filter"></i> Context Monitoring</h3>
 
                 <p>
                     Monitor the traffic you want! Piraso lets you choose which traffic you want to monitor.
@@ -96,10 +96,19 @@
                 <ul class="items">
                     <li><span class="badge badge-success">1</span> Http request and response</li>
                     <li><span class="badge badge-info">2</span> Application logging</li>
-                    <li><span class="badge badge-warning">3</span> Database communication</li>
+                    <li><span class="badge badge-warning">3</span> SQL executions</li>
+                    <li><span class="badge badge-inverse">4</span> Spring remoting</li>
+                    <li><span class="badge badge-important">5</span> Hibernate calls</li>
                 </ul>
 
-                <h3>Debugging</h3>
+                <br />
+
+                <div class="alert alert-info">
+                    You can extend piraso monitoring capabilities by creating your own context loggers. Please see <a href="./tutorials.html">Tutorials</a> for details.
+                </div>
+
+
+                <h3><i class="icon-wrench"></i> Debugging</h3>
                 <p>
                     Supports debugging to the specific environment you really want to debug to. Developers usually need to recreate scenarios on their local machines before they will be able to see what is happening. With this you saves a lot of time.
                     Right now debugging are supported for the following:
@@ -124,7 +133,7 @@
                     </li>
                 </ul>
 
-                <h3>Performance Tuning</h3>
+                <h3><i class="icon-dashboard"></i> Performance Tuning</h3>
 
                 <p>
                 Provides elapse times which can be used to check performance.
@@ -142,7 +151,7 @@
                     </li>
                 </ul>
 
-                <h3>Learning</h3>
+                <h3><i class="icon-book"></i> Learning</h3>
                 <p>Piraso can also serve as fast way to let you learn a particular application.</p>
 
                 <ul>
@@ -158,17 +167,51 @@
                     <h2>Client Server</h2>
                 </div>
                 <p class="lead">
-                    Piraso is composed of two components. The first component that resides on the web application and
-                    second, the client that lets you do the actual monitoring.
+                    Piraso is composed of two components. The first component, Piraso Server, that resides on the web application and
+                    second, the Piraso Client, that lets you do the actual monitoring.
                 </p>
 
-
-                <h3>Server</h3>
+                <h3>Simple Flow</h3>
 
                 <p>
-                This component allows you to enable your web application to support piraso monitoring. You as a developer can decide which feature will be available for
+                The following diagrams shows a simple communication between piraso client and server components.
+                </p>
+
+                <img src="https://docs.google.com/drawings/pub?id=122tAIdojwkZh-edXEOKV6YBsYvlSda9r6akorE6snRw&amp;w=712&amp;h=274">
+
+                <p>
+                    <span class="label label-info">Heads up!</span>
+                    All communications between the components are through http, so no new socket server was created.
+                </p>
+
+                <h4>Piraso Server</h4>
+
+                <p>
+                This component allows you to enable your web application to support piraso monitoring. You as a developer can decide which context logger will be available for
                 monitoring.
                 </p>
+
+                <p>The server component consist of the following:</p>
+
+                <dl class="dl-horizontal">
+                    <dt>Piraso Servlet</dt>
+                    <dd>The piraso client connects to this servlet to request for a monitor. This will streams all logs using the response stream.</dd>
+                    <dt>Piraso Filter</dt>
+                    <dd>All traffic will go to this filter. This filter flags each request whether the request needs to be monitored or not.</dd>
+                    <dt>Context Loggers</dt>
+                    <dd>The context loggers determines whether the request is flagged as monitored, if monitored, this will stream the logs to the client response stream.</dd>
+                </dl>
+
+                <h4>Piraso Client</h4>
+
+                <p>
+                    The piraso client is <a href="http://netbeans.org/features/platform/">Netbeans Platform</a> desktop application. This component allows you to connect to the web piraso enabled application to start monitoring.
+                    This will connect to the piraso server component, provides its monitoring preferences and start receiving logs.
+                </p>
+
+                <div class="alert alert-info">
+                    Please see the <a href=".user-guide.html">Client User Guide</a> for more details.
+                </div>
 
                 <h3><i class="icon-github icon-large icon-fix"></i> GitHub Projects</h3>
 
@@ -178,10 +221,87 @@
 
                 <a class="btn btn-primary btn-large" href="https://github.com/alvinrdeleon/piraso">Server Project &raquo;</a>
                 <a class="btn btn-warning btn-large" href="https://github.com/alvinrdeleon/piraso-client">Client Project &raquo;</a>
+            </section>
 
-                <p></p>
+            <section id="client-download">
+                <div class="page-header">
+                    <h1>Client Download</h1>
+                </div>
+                <p class="lead">Before downloading, be sure to have JDK 6 Update 13 or later.</p>
 
+                <h3>Platform Download</h3>
 
+                <p>
+                    Select from the following Piraso Client Platform installers:
+                </p>
+
+                <table id="platform-download" class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th class="icon-column"></th>
+                        <th class="os-column">Operating System</th>
+                        <th class="installer-column">Installer</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="icon-column"><img src="./assets/img/apple.png"></td>
+                        <td class="os-column">Mac OSX</td>
+                        <td class="installer-column"><a href="#"><i class="icon-download-alt"></i> piraso-client - application-1.0-SNAPSHOT-macosx.tgz</a></td>
+                    </tr>
+                    <tr>
+                        <td class="icon-column"><img src="./assets/img/windows.png"></td>
+                        <td class="os-column">Windows</td>
+                        <td class="installer-column"><a href="#"><i class="icon-download-alt"></i> piraso-client - application-1.0-SNAPSHOT-windows.exe</a></td>
+                    </tr>
+                    <tr>
+                        <td class="icon-column"><img src="./assets/img/linux.png"></td>
+                        <td class="os-column">Linux</td>
+                        <td class="installer-column"><a href="#"><i class="icon-download-alt"></i> piraso-client - application-1.0-SNAPSHOT-linux.sh</a></td>
+                    </tr>
+                    <tr>
+                        <td class="icon-column"><img src="./assets/img/solaris.png"></td>
+                        <td class="os-column">Solaris</td>
+                        <td class="installer-column"><a href="#"><i class="icon-download-alt"></i> piraso-client - application-1.0-SNAPSHOT-solaris.sh</a></td>
+                    </tr>
+                    <tr>
+                        <td class="icon-column"><img src="./assets/img/zip.png"></td>
+                        <td class="os-column">Zip Distribution</td>
+                        <td class="installer-column"><a href="#"><i class="icon-download-alt"></i> piraso-client - application-1.0-SNAPSHOT.zip</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="alert alert-info">
+                    Please see the <a href="http://netbeans.org/community/releases/69/relnotes.html#system_requirements">Netbeans Platform System Requirements</a>.
+                </div>
+
+                <h3>Required Software</h3>
+
+                <p>NetBeans IDE runs on the Java SE Development Kit (JDK) which consists of the Java Runtime Environment plus developer tools for compiling, debugging, and running applications written in the Java language.</p>
+                <p>The tested JDK for this release are:</p>
+
+                <ul>
+                    <li>JDK 6 Update 13 or later is required. The 6.9.1 version of the IDE cannot be installed or run using JDK 5.0.</li>
+                </ul>
+
+                <p>You can download the JDK for your platform from one of the sites listed below: </p>
+
+                <ul>
+                    <li><b>Windows, Linux and Solaris</b>: <a href="http://java.sun.com/javase/downloads/index.jsp" target="_blank">http://java.sun.com/javase/downloads/index.jsp</a></li>
+                    <li><b>Mac OS X</b>: <a href="http://support.apple.com/downloads" target="_blank">http://support.apple.com/downloads</a><br>
+                        for Mac OS X 10.5 and higher (includes Java SE 6, version 1.6.0_17 for 64-bit Intel-based Macs (Core2Duo processors))
+                        <p><strong>Note</strong>: Java SE 6 is required to install and run NetBeans IDE 6.9.1. Java upgrades for Mac OS X are also available via Apple's Software Update mechanism. </p></li>
+                    <li><b>Open VMS</b>: <a href="http://h18012.www1.hp.com/java/download/index.html" target="_blank">http://h18012.www1.hp.com/java/download/index.html</a></li>
+                </ul>
+
+                <h3>Piraso in Action</h3>
+
+                <p>
+                Please check it out for your self to see piraso in action.
+                </p>
+
+                <a class="btn btn-success btn-large" href="./live-demo.html">Live Demo &raquo;</a>
             </section>
         </div>
     </div>
