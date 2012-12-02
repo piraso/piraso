@@ -210,3 +210,7 @@ table#platform-download .os-column {
 table#platform-download .installer-column {
     vertical-align: middle;
 }
+
+#under-construction {
+    font-size: 120%;
+}
