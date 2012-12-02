@@ -337,13 +337,17 @@
    └── pom.xml
 </pre>
 
-                <p>We only need to modify the <code>pom.xml</code> to make the web piraso enabled.</p>
+
+                <p>Piraso requires that you use <code><i class="icon-leaf icon-large"></i> Spring Framework</code> on your web project.</p>
+
+
+
 
             <h3>pom.xml</h3>
 
-            <p>
-            Add the maven plugin on <code>build</code> tag. This will only work if you have the same structure as shown above.
-            </p>
+            <p>We only need to modify the <code>pom.xml</code> to make the web module piraso enabled.</p>
+
+            <p><span class="badge badge-success">1</span> Add the maven plugin on <code>build</code> tag. This will only work if you have the same structure as shown above.</p>
 
             <pre class="prettyprint linenums">
 &lt;plugin&gt;
@@ -360,7 +364,7 @@
   &lt;/executions&gt;
 &lt;/plugin&gt;</pre>
 
-            <p>Add the piraso server dependency</p>
+            <p><span class="badge badge-info">2</span> Add the piraso server dependency</p>
 
             <pre class="prettyprint linenums">
 &lt;dependency&gt;
@@ -370,32 +374,32 @@
 &lt;/dependency&gt;</pre>
 
 
-                <p>Next step is to identify our context loggers. We do this by selecting what context-logger to activate and adding them as dependencies.</p>
+                <p><span class="badge badge-important">3</span> Next step is to identify our context loggers. We do this by selecting what context-logger to activate and adding them as dependencies.</p>
 
 
                 <table id="context-loggers" class="table table-hover">
                     <thead>
                     <tr>
                         <th>Context Logger</th>
-                        <th>Artifact Id</th>
+                        <th>Dependency</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
                         <td>log4j</td>
-                        <td><code>log4j-context-logger-server</code></td>
+                        <td><code>org.piraso:log4j-context-logger-server</code></td>
                     </tr>
                     <tr>
                         <td>sql</td>
-                        <td><code>sql-context-logger-server</code></td>
+                        <td><code>org.piraso:sql-context-logger-server</code></td>
                     </tr>
                     <tr>
                         <td>spring</td>
-                        <td><code>spring-context-logger-server</code></td>
+                        <td><code>org.piraso:spring-context-logger-server</code></td>
                     </tr>
                     <tr>
                         <td>hibernate</td>
-                        <td><code>hibernate-context-logger-server</code></td>
+                        <td><code>org.piraso:hibernate-context-logger-server</code></td>
                     </tr>
                     </tbody>
                 </table>
