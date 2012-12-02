@@ -1,0 +1,5 @@
+<dependency>
+  <groupId>org.piraso</groupId>
+  <artifactId>log4j-context-logger-server</artifactId>
+  <version>${piraso.version}</version>
+</dependency>

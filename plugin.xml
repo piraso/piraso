@@ -1,0 +1,13 @@
+<plugin>
+  <groupId>org.piraso</groupId>
+  <artifactId>piraso-maven-plugin</artifactId>
+  <version>${piraso.version}</version>
+  <executions>
+    <execution>
+      <phase>process-resources</phase>
+      <goals>
+        <goal>web-xml</goal>
+      </goals>
+    </execution>
+  </executions>
+</plugin>

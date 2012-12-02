@@ -8,7 +8,11 @@
 
     var $window = $(window)
 
-    // Disable certain links in docs
+      // make code pretty
+      window.prettyPrint && prettyPrint()
+
+
+      // Disable certain links in docs
     $('section [href^=#]').click(function (e) {
       e.preventDefault()
     })
@@ -20,9 +24,6 @@
       , bottom: 270
       }
     })
-
-    // make code pretty
-    window.prettyPrint && prettyPrint()
 
     // add-ons
     $('.add-on :checkbox').on('click', function () {

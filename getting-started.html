@@ -11,6 +11,7 @@
     <link href="assets/css/bootstrap.css" rel="stylesheet">
     <link href="assets/css/responsive.css" rel="stylesheet">
     <link href="assets/css/font-awesome.css" rel="stylesheet">
+    <link href="assets/js/google-code-prettify/prettify.css" rel="stylesheet">
     <link href="assets/css/doc.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -220,7 +221,7 @@
                 </p>
 
                 <a class="btn btn-primary btn-large" href="https://github.com/alvinrdeleon/piraso">Server Project &raquo;</a>
-                <a class="btn btn-warning btn-large" href="https://github.com/alvinrdeleon/piraso-client">Client Project &raquo;</a>
+                <a style="margin-left: 5px;" class="btn btn-warning btn-large" href="https://github.com/alvinrdeleon/piraso-client">Client Project &raquo;</a>
             </section>
 
             <section id="client-download">
@@ -302,6 +303,117 @@
                 </p>
 
                 <a class="btn btn-success btn-large" href="./live-demo.html">Live Demo &raquo;</a>
+            </section>
+
+            <section id="enabling">
+                <div class="page-header">
+                    <h1>Enabling your Application</h1>
+                </div>
+                <p class="lead">
+                    With a brief intro into the contents out of the way, we can focus on how to enable your web module to use Piraso.
+                </p>
+
+                <h3>Web Project</h3>
+
+                <p>
+                This is the typical maven web project folder structure.
+                </p>
+
+                <pre>
+  web-module/
+   ├── src/
+   │   ├── main/
+   │   │   ├── java/
+   │   │   ├── resources/
+   │   │   └── webapp/
+   │   │       ├── assets/
+   │   │       └── WEB-INF/
+   │   │           ├── jsp/
+   │   │           ├── web.xml
+   │   │           └── spring-servlet.xml
+   │   └── test/
+   │       ├── java/
+   │       └── resources/
+   └── pom.xml
+</pre>
+
+                <p>We only need to modify the <code>pom.xml</code> to make the web piraso enabled.</p>
+
+            <h3>pom.xml</h3>
+
+            <p>
+            Add the maven plugin on <code>build</code> tag.
+            </p>
+
+            <pre class="prettyprint linenums">
+&lt;plugin&gt;
+  &lt;groupId&gt;org.piraso&lt;/groupId&gt;
+  &lt;artifactId&gt;piraso-maven-plugin&lt;/artifactId&gt;
+  &lt;version&gt;${piraso.version}&lt;/version&gt;
+  &lt;executions&gt;
+    &lt;execution&gt;
+      &lt;phase&gt;process-resources&lt;/phase&gt;
+      &lt;goals&gt;
+        &lt;goal&gt;web-xml&lt;/goal&gt;
+      &lt;/goals&gt;
+    &lt;/execution&gt;
+  &lt;/executions&gt;
+&lt;/plugin&gt;</pre>
+
+            <p>Add the piraso server dependency</p>
+
+            <pre class="prettyprint linenums">
+&lt;dependency&gt;
+  &lt;groupId&gt;org.piraso&lt;/groupId&gt;
+  &lt;artifactId&gt;context-logger-spring-web-server&lt;/artifactId&gt;
+  &lt;version&gt;${piraso.version}&lt;/version&gt;
+&lt;/dependency&gt;</pre>
+
+
+                <p>Next step is to identify our context loggers. We do this by adding these context-loggers as dependencies.</p>
+
+
+                <table id="context-loggers" class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Context Logger</th>
+                        <th>Artifact Id</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>log4j</td>
+                        <td><code>log4j-context-logger-server</code></td>
+                    </tr>
+                    <tr>
+                        <td>sql</td>
+                        <td><code>sql-context-logger-server</code></td>
+                    </tr>
+                    <tr>
+                        <td>spring</td>
+                        <td><code>spring-context-logger-server</code></td>
+                    </tr>
+                    <tr>
+                        <td>hibernate</td>
+                        <td><code>hibernate-context-logger-server</code></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <p>
+                <span class="label label-success">Success!</span>
+                Once your done these steps on <code>pom.xml</code>. Your web module is now piraso enabled.
+                </p>
+            </section>
+
+
+            <section id="what-next">
+                <div class="page-header">
+                    <h1>What next?</h1>
+                </div>
+                <p class="lead">Head to the docs for information, examples, and code snippets, or take the next leap and customize Piraso.</p>
+                <a href="./user-guide.html" class="btn btn-large btn-primary">Client User Guide</a>
+                <a style="margin-left: 5px;" href="./tutorials.html" class="btn btn-large">Tutorials</a>
             </section>
         </div>
     </div>
