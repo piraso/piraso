@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Piraso</title>
+    <title>Getting Started · Piraso</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Development tool for debugging and analyzing request context log information captured from a supported java module.">
     <meta name="author" content="alvinrdeleon">
@@ -25,6 +25,19 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
+
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-36750268-1']);
+        _gaq.push(['_setDomainName', 'piraso.org']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
 </head>
 
 <body data-spy="scroll" data-target=".bs-docs-sidebar">
@@ -42,9 +55,9 @@
                 <ul class="nav">
                     <li><a href="./index.html">Home</a></li>
                     <li class="active"><a href="./getting-started.html">Get Started</a></li>
-                    <li><a href="#live-demo">Live Demo</a></li>
+                    <li><a href="./live-demo.html">Live Demo</a></li>
                     <li><a href="./user-guide.html">Client User Guide</a></li>
-                    <li><a href="#tutorials">Tutorials</a></li>
+                    <li><a href="./tutorials.html">Tutorials</a></li>
                 </ul>
             </div><!--/.nav-collapse -->
         </div>
@@ -105,7 +118,7 @@
                 <br />
 
                 <div class="alert alert-info">
-                    You can extend piraso monitoring capabilities by creating your own context loggers. Please see <a href="./tutorials.html">Tutorials</a> for details.
+                    You can extend piraso monitoring capabilities by creating your own context loggers. Please see <a onclick="_gaq.push(['_trackEvent', 'Getting started', 'Links', 'Tutorials']);" href="./tutorials.html">Tutorials</a> for details.
                 </div>
 
 
@@ -217,11 +230,11 @@
                 <h3><i class="icon-github icon-large icon-fix"></i> GitHub Projects</h3>
 
                 <p>
-                Piraso are licensed under Apache 2.0 and maintained by the community on <a href="https://github.com/alvinrdeleon/piraso" target="_blank">GitHub</a>.
+                Piraso are licensed under <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a> and maintained by the community on <a href="https://github.com/" target="_blank">GitHub</a>.
                 </p>
 
-                <a class="btn btn-primary btn-large" href="https://github.com/alvinrdeleon/piraso">Server Project &raquo;</a>
-                <a style="margin-left: 5px;" class="btn btn-warning btn-large" href="https://github.com/alvinrdeleon/piraso-client">Client Project &raquo;</a>
+                <a onclick="_gaq.push(['_trackEvent', 'Getting started', 'Links', 'Github Server Project']);" class="btn btn-primary btn-large" href="https://github.com/alvinrdeleon/piraso">Server Project &raquo;</a>
+                <a onclick="_gaq.push(['_trackEvent', 'Getting started', 'Links', 'Github Client Project']);" style="margin-left: 5px;" class="btn btn-warning btn-large" href="https://github.com/alvinrdeleon/piraso-client">Client Project &raquo;</a>
             </section>
 
             <section id="client-download">
@@ -248,33 +261,33 @@
                     <tr>
                         <td class="icon-column"><img src="./assets/img/apple.png"></td>
                         <td class="os-column">Mac OSX</td>
-                        <td class="installer-column"><a href="#"><i class="icon-download-alt"></i> piraso-client - application-1.0-SNAPSHOT-macosx.tgz</a></td>
+                        <td class="installer-column"><a onclick="_gaq.push(['_trackEvent', 'Getting started', 'Download', 'Mac OSX']);" href="#"><i class="icon-download-alt"></i> piraso-client - application-1.0-SNAPSHOT-macosx.tgz</a></td>
                     </tr>
                     <tr>
                         <td class="icon-column"><img src="./assets/img/windows.png"></td>
                         <td class="os-column">Windows</td>
-                        <td class="installer-column"><a href="#"><i class="icon-download-alt"></i> piraso-client - application-1.0-SNAPSHOT-windows.exe</a></td>
+                        <td class="installer-column"><a onclick="_gaq.push(['_trackEvent', 'Getting started', 'Download', 'Windows']);" href="#"><i class="icon-download-alt"></i> piraso-client - application-1.0-SNAPSHOT-windows.exe</a></td>
                     </tr>
                     <tr>
                         <td class="icon-column"><img src="./assets/img/linux.png"></td>
                         <td class="os-column">Linux</td>
-                        <td class="installer-column"><a href="#"><i class="icon-download-alt"></i> piraso-client - application-1.0-SNAPSHOT-linux.sh</a></td>
+                        <td class="installer-column"><a onclick="_gaq.push(['_trackEvent', 'Getting started', 'Download', 'Linux']);" href="#"><i class="icon-download-alt"></i> piraso-client - application-1.0-SNAPSHOT-linux.sh</a></td>
                     </tr>
                     <tr>
                         <td class="icon-column"><img src="./assets/img/solaris.png"></td>
                         <td class="os-column">Solaris</td>
-                        <td class="installer-column"><a href="#"><i class="icon-download-alt"></i> piraso-client - application-1.0-SNAPSHOT-solaris.sh</a></td>
+                        <td class="installer-column"><a onclick="_gaq.push(['_trackEvent', 'Getting started', 'Download', 'Solaris']);" href="#"><i class="icon-download-alt"></i> piraso-client - application-1.0-SNAPSHOT-solaris.sh</a></td>
                     </tr>
                     <tr>
                         <td class="icon-column"><img src="./assets/img/zip.png"></td>
                         <td class="os-column">Zip Distribution</td>
-                        <td class="installer-column"><a href="#"><i class="icon-download-alt"></i> piraso-client - application-1.0-SNAPSHOT.zip</a></td>
+                        <td class="installer-column"><a onclick="_gaq.push(['_trackEvent', 'Getting started', 'Download', 'Zip Distribution']);" href="#"><i class="icon-download-alt"></i> piraso-client - application-1.0-SNAPSHOT.zip</a></td>
                     </tr>
                     </tbody>
                 </table>
 
                 <div class="alert alert-info">
-                    Please see the <a href="http://netbeans.org/community/releases/69/relnotes.html#system_requirements">Netbeans Platform System Requirements</a>.
+                    Please see the <a onclick="_gaq.push(['_trackEvent', 'Getting started', 'Links', 'Netbeans Platform System Requirements']);" href="http://netbeans.org/community/releases/69/relnotes.html#system_requirements">Netbeans Platform System Requirements</a>.
                 </div>
 
                 <h3>Required Software</h3>
@@ -339,6 +352,10 @@
             <p><span class="badge badge-success">1</span> Add the maven plugin on <code>build</code> tag. This will only work if you have the same structure as shown above.</p>
 
             <pre class="prettyprint linenums">
+&lt;properties&gt;
+  &lt;piraso.version&gt;1.1&lt;/piraso.version&gt;
+&lt;/properties&gt;
+
 &lt;plugin&gt;
   &lt;groupId&gt;org.piraso&lt;/groupId&gt;
   &lt;artifactId&gt;piraso-maven-plugin&lt;/artifactId&gt;
@@ -405,9 +422,9 @@
                     <h1>What next?</h1>
                 </div>
                 <p class="lead">Take Piraso in action with live demo or head to the docs for information, examples, and code snippets, or take the next leap and customize Piraso.</p>
-                <a class="btn btn-success btn-large" href="./live-demo.html">Live Demo &raquo;</a>
-                <a style="margin-left: 5px;" href="./user-guide.html" class="btn btn-large btn-primary">Client User Guide &raquo;</a>
-                <a style="margin-left: 5px;" href="./tutorials.html" class="btn btn-large">Tutorials &raquo;</a>
+                <a onclick="_gaq.push(['_trackEvent', 'Getting started', 'What Next Links', 'Live Demo']);" class="btn btn-success btn-large" href="./live-demo.html">Live Demo &raquo;</a>
+                <a onclick="_gaq.push(['_trackEvent', 'Getting started', 'What Next Links', 'Client User Guide']);" style="margin-left: 5px;" href="./user-guide.html" class="btn btn-large btn-primary">Client User Guide &raquo;</a>
+                <a onclick="_gaq.push(['_trackEvent', 'Getting started', 'What Next Links', 'Tutorials']);" style="margin-left: 5px;" href="./tutorials.html" class="btn btn-large">Tutorials &raquo;</a>
             </section>
         </div>
     </div>
@@ -420,7 +437,7 @@
                 <h3>Contact</h3>
                 <ul class="icons">
                     <li><i class="icon-envelope"></i> Email: <a href="mailto:alvinrdeleon@me.com">Alvin R. de Leon</a></li>
-                    <li><i class="icon-linkedin"></i> Linkedin: <a target="_blank" href="http://www.linkedin.com/in/alvinrdeleon">http://www.linkedin.com/in/alvinrdeleon</a></li>
+                    <li><i class="icon-linkedin"></i> Linkedin: <a onclick="_gaq.push(['_trackEvent', 'Contact', 'Links', 'LinkedIn']);" target="_blank" href="http://www.linkedin.com/in/alvinrdeleon">http://www.linkedin.com/in/alvinrdeleon</a></li>
                     <li><i class="icon-twitter"></i> Twitter: <a target="_blank" href="http://twitter.com/alvinrdeleon/">@alvinrdeleon</a></li>
                     <li><i class="icon-wrench"></i> Work: Staff Software Engineer @ <a target="_blank" href="http://adchemy.com">Adchemy</a></li>
                 </ul>

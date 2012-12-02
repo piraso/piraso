@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Live Demo · Piraso</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Development tool for debugging and analyzing request context log information captured from a supported java module.">
+    <meta name="author" content="alvinrdeleon">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/responsive.css" rel="stylesheet">
+    <link href="assets/css/font-awesome.css" rel="stylesheet">
+    <link href="assets/js/google-code-prettify/prettify.css" rel="stylesheet">
+    <link href="assets/css/doc.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
+
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-36750268-1']);
+        _gaq.push(['_setDomainName', 'piraso.org']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+</head>
+
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a id="piraso_logo" class="brand" href="./index.html">iraso</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    <li><a href="./index.html">Home</a></li>
+                    <li class="active"><a href="./getting-started.html">Get Started</a></li>
+                    <li><a href="./live-demo.html">Live Demo</a></li>
+                    <li><a href="./user-guide.html">Client User Guide</a></li>
+                    <li><a href="./tutorials.html">Tutorials</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </div>
+</div>
+
+<!-- Subhead
+================================================== -->
+
+<header class="jumbotron subhead" id="overview">
+    <div class="container">
+        <h1><i class="icon-magic"></i> Live Demo</h1>
+        <p class="lead">Interactive self-guided tours through the Piraso client and a great way to guage the tool's capabilities.</p>
+    </div>
+</header>
+
+<div class="container">
+<div class="row">
+<div class="span3 bs-docs-sidebar">
+    <ul class="nav nav-list bs-docs-sidenav">
+        <li><a href="#requirements"><i class="icon-chevron-right"></i> Requirements</a></li>
+        <li><a href="#application-logging"><i class="icon-chevron-right"></i> Application Logging</a></li>
+        <li><a href="#sql-execution"><i class="icon-chevron-right"></i> SQL Executions</a></li>
+        <li><a href="#spring-remoting"><i class="icon-chevron-right"></i> Spring Remoting</a></li>
+    </ul>
+</div>
+<div class="span9">
+
+<!-- Requirement
+================================================== -->
+<section id="requirements">
+    <div class="page-header">
+        <h2>Requirements</h2>
+    </div>
+    <p class="lead">
+        Before we move on with the interactive demonstration, You should first do the following requirements.
+    </p>
+
+    <h3><i class="icon-download-alt"></i> Piraso Client Download</h3>
+
+    <p>
+    Please install Piraso client platform on your machine. Before downloading, be sure to have JDK 6 Update 13 or later.
+    </p>
+
+    <div class="row-fluid">
+        <div class="span6">
+            <h4>Download</h4>
+            <p>Get the piraso client and start with the live demos.</p>
+            <p><a onclick="_gaq.push(['_trackEvent', 'Live demo', 'Links', 'Client Download']);" href="./getting-started.html#client-download" class="btn btn-large btn-primary">Client Download  &raquo;</a></p>
+        </div>
+        <div class="span6">
+            <h4>User Guide</h4>
+            <p>Provides you a documentation guide on how to use Piraso Client.</p>
+            <p><a onclick="_gaq.push(['_trackEvent', 'Live demo', 'Links', 'User Guide']);" href="./user-guide.html" class="btn btn-large">User Guide &raquo;</a></p>
+        </div>
+    </div>
+
+    <h3><i class="icon-cogs"></i> Import Demo Settings</h3>
+
+    <p>
+    Import the live demo Piraso client settings. You can do this by following these steps:
+    </p>
+
+    <p><span class="badge badge-success">1</span> Open Piraso client and click on <code>File > Import Settings</code> menu.</p>
+
+    <p style="padding-left: 50px;">
+    <img src="./assets/img/import-settings.png">
+    </p>
+
+    <p><span class="badge badge-info">2</span> Copy the import link below.</p>
+
+    <div class="well">
+        http://piraso.org/live-demo-settings.prz
+    </div>
+
+    <p><span class="badge badge-important">3</span> Provide the import url and click on <code>Import</code>.</p>
+
+    <p>
+        <img src="./assets/img/import-dialog.png">
+    </p>
+
+    <div class="alert alert-success">
+        <strong>Success!</strong> You are now ready to start with the live demonstrations.
+    </div>
+</section>
+
+</div>
+</div>
+
+<hr>
+
+<footer>
+    <div class="row">
+        <div class="span5">
+            <h3>Contact</h3>
+            <ul class="icons">
+                <li><i class="icon-envelope"></i> Email: <a href="mailto:alvinrdeleon@me.com">Alvin R. de Leon</a></li>
+                <li><i class="icon-linkedin"></i> Linkedin: <a onclick="_gaq.push(['_trackEvent', 'Contact', 'Links', 'LinkedIn']);" target="_blank" href="http://www.linkedin.com/in/alvinrdeleon">http://www.linkedin.com/in/alvinrdeleon</a></li>
+                <li><i class="icon-twitter"></i> Twitter: <a target="_blank" href="http://twitter.com/alvinrdeleon/">@alvinrdeleon</a></li>
+                <li><i class="icon-wrench"></i> Work: Staff Software Engineer @ <a target="_blank" href="http://adchemy.com">Adchemy</a></li>
+            </ul>
+        </div>
+        <div class="span6">
+            <h3>Special Thanks</h3>
+            Special thanks to <a target="_blank" href="https://github.com/ashier">@ashier</a>,
+            <a target="_blank" href="https://github.com/badong2210">@badong2210</a>, and <a href="https://twitter.com/bernardlago">@bernardlago</a> for design
+            review, advice, and some help.
+        </div>
+    </div>
+</footer>
+
+</div> <!-- /container -->
+
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+<script src="assets/js/jquery.js"></script>
+<script src="assets/js/google-code-prettify/prettify.js"></script>
+<script src="assets/js/bootstrap-transition.js"></script>
+<script src="assets/js/bootstrap-alert.js"></script>
+<script src="assets/js/bootstrap-modal.js"></script>
+<script src="assets/js/bootstrap-dropdown.js"></script>
+<script src="assets/js/bootstrap-scrollspy.js"></script>
+<script src="assets/js/bootstrap-tab.js"></script>
+<script src="assets/js/bootstrap-tooltip.js"></script>
+<script src="assets/js/bootstrap-popover.js"></script>
+<script src="assets/js/bootstrap-button.js"></script>
+<script src="assets/js/bootstrap-collapse.js"></script>
+<script src="assets/js/bootstrap-carousel.js"></script>
+<script src="assets/js/bootstrap-typeahead.js"></script>
+<script src="assets/js/bootstrap-affix.js"></script>
+<script src="assets/js/application.js"></script>
+
+</body>
+</html>

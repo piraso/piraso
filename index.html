@@ -24,6 +24,19 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
+
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-36750268-1']);
+        _gaq.push(['_setDomainName', 'piraso.org']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
 </head>
 
 <body>
@@ -41,9 +54,9 @@
                 <ul class="nav">
                     <li class="active"><a href="./index.html">Home</a></li>
                     <li><a href="./getting-started.html">Get Started</a></li>
-                    <li><a href="#live-demo">Live Demo</a></li>
+                    <li><a href="./live-demo.html">Live Demo</a></li>
                     <li><a href="./user-guide.html">Client User Guide</a></li>
-                    <li><a href="#tutorials">Tutorials</a></li>
+                    <li><a href="./tutorials.html">Tutorials</a></li>
                 </ul>
             </div><!--/.nav-collapse -->
         </div>
@@ -71,8 +84,8 @@
             <iframe class="github-btn" src="http://ghbtns.com/github-btn.html?user=alvinrdeleon&type=follow&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="20px"></iframe>
         </div>
         <p>
-            <a class="btn btn-primary btn-large" href="./getting-started.html">Get Started</a>
-            <a class="btn btn-success btn-large" href="./live-demo.html">Live Demo &raquo;</a>
+            <a onclick="_gaq.push(['_trackEvent', 'index', 'Links', 'Download 1.0']);" class="btn btn-primary btn-large" href="./getting-started.html">Get Started &raquo;</a>
+            <a onclick="_gaq.push(['_trackEvent', 'index', 'Links', 'Live Demo']);" class="btn btn-success btn-large" href="./live-demo.html">Live Demo &raquo;</a>
         </p>
     </div>
 
@@ -84,7 +97,7 @@
         </div>
         <div class="span4">
             <h3><i class="icon-github icon-large"></i> Open Source</h3>
-            <p>Piraso are licensed under <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a> and maintained by the community on <a href="https://github.com/alvinrdeleon/piraso" target="_blank">GitHub</a>.</p>
+            <p>Piraso are licensed under <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a> and maintained by the community on <a onclick="_gaq.push(['_trackEvent', 'index', 'Links', 'Github Project']);" href="https://github.com/alvinrdeleon/piraso" target="_blank">GitHub</a>.</p>
         </div>
         <div class="span4">
             <h3><i class="icon-leaf icon-large"></i> Spring Framework</h3>
@@ -112,7 +125,7 @@
                 <h3>Contact</h3>
                 <ul class="icons">
                     <li><i class="icon-envelope"></i> Email: <a href="mailto:alvinrdeleon@me.com">Alvin R. de Leon</a></li>
-                    <li><i class="icon-linkedin"></i> Linkedin: <a target="_blank" href="http://www.linkedin.com/in/alvinrdeleon">http://www.linkedin.com/in/alvinrdeleon</a></li>
+                    <li><i class="icon-linkedin"></i> Linkedin: <a onclick="_gaq.push(['_trackEvent', 'Contact', 'Links', 'LinkedIn']);" target="_blank" href="http://www.linkedin.com/in/alvinrdeleon">http://www.linkedin.com/in/alvinrdeleon</a></li>
                     <li><i class="icon-twitter"></i> Twitter: <a target="_blank" href="http://twitter.com/alvinrdeleon/">@alvinrdeleon</a></li>
                     <li><i class="icon-wrench"></i> Work: Staff Software Engineer @ <a target="_blank" href="http://adchemy.com">Adchemy</a></li>
                 </ul>
