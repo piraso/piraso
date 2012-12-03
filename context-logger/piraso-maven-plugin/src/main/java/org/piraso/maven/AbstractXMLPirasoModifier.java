@@ -41,19 +41,23 @@ public abstract class AbstractXMLPirasoModifier extends AbstractMojo {
 
     protected Document document;
 
-    protected void writeDocument(File outputDirectory, String fileName) throws TransformerException, FileNotFoundException {
-        File output = new File(outputDirectory, fileName);
 
-        if(!outputDirectory.isDirectory()) {
-            outputDirectory.mkdirs();
+
+    protected void writeDocument(File outputDirectory, String fileName) throws TransformerException, FileNotFoundException {
+        writeDocument(new File(outputDirectory, fileName));
+    }
+
+    protected void writeDocument(File outputFile) throws TransformerException, FileNotFoundException {
+        if(!outputFile.getParentFile().isDirectory()) {
+            outputFile.getParentFile().mkdirs();
         }
 
-        getLog().info("Piraso output xml file: " + output.toString());
+        getLog().info("Piraso output xml file: " + outputFile.toString());
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
 
-        StreamResult outputTarget = new StreamResult(new FileOutputStream(output));
+        StreamResult outputTarget = new StreamResult(new FileOutputStream(outputFile));
         DOMSource source = new DOMSource(document);
         transformer.transform(source, outputTarget);
     }

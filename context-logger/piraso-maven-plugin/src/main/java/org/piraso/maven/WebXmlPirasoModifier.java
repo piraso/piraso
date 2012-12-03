@@ -43,7 +43,7 @@ public class WebXmlPirasoModifier extends AbstractXMLPirasoModifier {
     /**
      * the web.xml file to modify
      *
-     * @parameter default-value="${maven.war.webxml}"
+     * @parameter default-value="${project.basedir}/src/main/webapp/WEB-INF/web.xml"
      */
     private File webXml;
 
@@ -97,7 +97,9 @@ public class WebXmlPirasoModifier extends AbstractXMLPirasoModifier {
         insertFilterAndServletElement(root, firstFilterOrServlet);
 
         try {
-            writeDocument(outputDirectory, webXml.getName());
+            File outputFile = new File(outputDirectory, webXml.getName());
+            writeDocument(outputFile);
+            getPluginContext().put("maven.war.webxml", outputFile.getAbsolutePath());
         } catch (Exception e) {
             throw new MojoExecutionException(e.getMessage(), e);
         }
