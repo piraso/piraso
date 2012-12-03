@@ -21,6 +21,7 @@ package org.piraso.maven;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.HashMap;
 
 /**
  * Test for {@link WebXmlPirasoModifier} class.
@@ -29,6 +30,7 @@ public class WebXmlPirasoModifierTest {
     @Test
     public void testExecute() throws Exception {
         WebXmlPirasoModifier modifier = new WebXmlPirasoModifier();
+        modifier.setPluginContext(new HashMap());
 
         File webXml = new File(WebXmlPirasoModifier.class.getResource("/web.xml").getFile());
         File parent = new File(webXml.getParentFile(), "new");
@@ -47,6 +49,7 @@ public class WebXmlPirasoModifierTest {
     @Test
     public void testExecute2() throws Exception {
         WebXmlPirasoModifier modifier = new WebXmlPirasoModifier();
+        modifier.setPluginContext(new HashMap());
 
         File webXml = new File(WebXmlPirasoModifier.class.getResource("/web2.xml").getFile());
         File parent = new File(webXml.getParentFile(), "new2");
