@@ -20,6 +20,8 @@ package org.piraso.maven;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.project.MavenProject;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -32,6 +34,12 @@ import java.io.File;
  * @goal web-xml
  */
 public class WebXmlPirasoModifier extends AbstractXMLPirasoModifier {
+
+    /**
+     * @parameter default-value="${project}"
+     * @required
+     */
+    protected MavenProject project;
 
     /**
      * piraso logging path
@@ -64,6 +72,10 @@ public class WebXmlPirasoModifier extends AbstractXMLPirasoModifier {
 
     public void setWebXml(File webXml) {
         this.webXml = webXml;
+    }
+
+    public void setProject(MavenProject project) {
+        this.project = project;
     }
 
     /**
@@ -99,7 +111,7 @@ public class WebXmlPirasoModifier extends AbstractXMLPirasoModifier {
         try {
             File outputFile = new File(outputDirectory, webXml.getName());
             writeDocument(outputFile);
-            getPluginContext().put("maven.war.webxml", outputFile.getAbsolutePath());
+            project.getProperties().setProperty("maven.war.webxml", outputFile.getAbsolutePath());
         } catch (Exception e) {
             throw new MojoExecutionException(e.getMessage(), e);
         }

@@ -18,10 +18,15 @@
 
 package org.piraso.maven;
 
+import org.apache.maven.project.MavenProject;
 import org.junit.Test;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Properties;
+
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 /**
  * Test for {@link WebXmlPirasoModifier} class.
@@ -30,7 +35,10 @@ public class WebXmlPirasoModifierTest {
     @Test
     public void testExecute() throws Exception {
         WebXmlPirasoModifier modifier = new WebXmlPirasoModifier();
-        modifier.setPluginContext(new HashMap());
+
+        MavenProject project = mock(MavenProject.class);
+        doReturn(new Properties()).when(project).getProperties();
+        modifier.setProject(project);
 
         File webXml = new File(WebXmlPirasoModifier.class.getResource("/web.xml").getFile());
         File parent = new File(webXml.getParentFile(), "new");
@@ -49,7 +57,10 @@ public class WebXmlPirasoModifierTest {
     @Test
     public void testExecute2() throws Exception {
         WebXmlPirasoModifier modifier = new WebXmlPirasoModifier();
-        modifier.setPluginContext(new HashMap());
+
+        MavenProject project = mock(MavenProject.class);
+        doReturn(new Properties()).when(project).getProperties();
+        modifier.setProject(project);
 
         File webXml = new File(WebXmlPirasoModifier.class.getResource("/web2.xml").getFile());
         File parent = new File(webXml.getParentFile(), "new2");
