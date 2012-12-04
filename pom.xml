@@ -69,6 +69,8 @@
   </scm>
 
   <modules>
+    <module>piraso-assembly</module>
+    <module>piraso-maven-plugin</module>
     <module>context-logger</module>
     <module>java-context-logger</module>
     <module>spring-context-logger</module>

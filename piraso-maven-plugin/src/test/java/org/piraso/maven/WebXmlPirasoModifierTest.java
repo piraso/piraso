@@ -22,7 +22,6 @@ import org.apache.maven.project.MavenProject;
 import org.junit.Test;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Properties;
 
 import static org.mockito.Mockito.doReturn;

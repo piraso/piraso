@@ -23,12 +23,12 @@
 
   <parent>
     <groupId>org.piraso</groupId>
-    <artifactId>context-logger</artifactId>
+    <artifactId>piraso</artifactId>
     <version>1.1-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>context-logger-assembly</artifactId>
+  <artifactId>piraso-assembly</artifactId>
   <packaging>jar</packaging>
-  <name>context-logger-assembly</name>
+  <name>piraso-assembly</name>
 </project>
