@@ -77,6 +77,8 @@
     <module>sql-context-logger</module>
     <module>hibernate-context-logger</module>
     <module>log4j-context-logger</module>
+    <module>piraso-headless</module>
+    <module>piraso-spring-web-server</module>
   </modules>
 
   <properties>

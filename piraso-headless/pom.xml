@@ -23,20 +23,20 @@
     
     <parent>
         <groupId>org.piraso</groupId>
-        <artifactId>context-logger</artifactId>
+        <artifactId>piraso</artifactId>
         <version>1.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     
-    <artifactId>context-logger-headless</artifactId>
+    <artifactId>piraso-headless</artifactId>
     <packaging>jar</packaging>
-    <name>context-logger-headless</name>
+    <name>piraso-headless</name>
 
     <dependencies>
       <dependency>
         <groupId>${project.parent.groupId}</groupId>
         <artifactId>context-logger-io</artifactId>
-        <version>${project.parent.version}</version>
+        <version>${project.version}</version>
       </dependency>
     </dependencies>
 </project>
