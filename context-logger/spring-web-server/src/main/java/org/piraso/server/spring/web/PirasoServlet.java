@@ -18,10 +18,7 @@
 
 package org.piraso.server.spring.web;
 
-import org.piraso.server.service.ResponseLoggerService;
-import org.piraso.server.service.ResponseLoggerServiceImpl;
-import org.piraso.server.service.User;
-import org.piraso.server.service.UserRegistry;
+import org.piraso.server.service.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.HttpRequestHandler;

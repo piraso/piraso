@@ -120,7 +120,10 @@ public class UserRegistry {
     private ResponseLoggerService stopServiceIfExist(User user) throws IOException {
         if(isUserExist(user)) {
             ResponseLoggerService logger = userLoggerMap.get(user);
-            logger.stop();
+
+            if(logger.isAlive()) {
+                logger.stop();
+            }
 
             return logger;
         }
@@ -148,6 +151,8 @@ public class UserRegistry {
             }
 
             stopServiceIfExist(user);
+            service.addStopListener(new StoppedLoggerHandler());
+
             userLoggerMap.put(user, service);
         } finally {
             lock.unlock();
@@ -173,6 +178,22 @@ public class UserRegistry {
             }
         } finally {
             lock.unlock();
+        }
+    }
+
+    private class StoppedLoggerHandler implements StopLoggerListener {
+
+        public void stopped(StopLoggerEvent evt) {
+            lock.lock();
+
+            try {
+                ResponseLoggerService service = (ResponseLoggerService) evt.getSource();
+                removeUser(service.getUser());
+            } catch (IOException e) {
+                LOG.warn(e.getMessage(), e);
+            } finally {
+                lock.unlock();
+            }
         }
     }
 }

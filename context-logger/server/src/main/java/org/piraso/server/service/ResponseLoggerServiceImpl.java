@@ -274,7 +274,7 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
      *
      * @throws IOException on io error
      */
-    private void waitTillNoEntry() throws IOException {
+    private void waitWhileNoEntryOrTimedOut() throws IOException {
         if(transferQueue.isEmpty()) {
             long start = System.currentTimeMillis();
 
@@ -320,6 +320,7 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
                 Entry entry = transferQueue.remove(0);
 
                 // only do this for no id request
+                // clone and set request id to global id
                 if(preferences.isEnabled(GeneralPreferenceEnum.NO_REQUEST_CONTEXT.getPropertyName())) {
                     StringWriter writer = new StringWriter();
                     mapper.writeValue(writer, entry);
@@ -345,7 +346,7 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
         synchronized (this) {
             try {
                 while(isAlive()) {
-                    waitTillNoEntry();
+                    waitWhileNoEntryOrTimedOut();
                     writeAllTransfer();
                     throwWhenForcedStopped();
                 }
@@ -422,7 +423,7 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
      * {@inheritDoc}
      */
     public void fireStopEvent(StopLoggerEvent event) {
-        for(StopLoggerListener listener : Arrays.asList(listeners.getListeners(StopLoggerListener.class))) {
+        for(StopLoggerListener listener : listeners.getListeners(StopLoggerListener.class)) {
             listener.stopped(event);
         }
     }
