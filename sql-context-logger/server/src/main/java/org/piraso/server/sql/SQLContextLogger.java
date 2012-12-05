@@ -19,7 +19,9 @@
 package org.piraso.server.sql;
 
 import org.piraso.server.GroupChainId;
+import org.piraso.server.sql.logger.DataSourceBeanProxyFactory;
 import org.piraso.server.sql.logger.DataSourceProxyFactory;
+import org.springframework.beans.factory.FactoryBean;
 
 import javax.sql.DataSource;
 
@@ -41,4 +43,16 @@ public final class SQLContextLogger {
         return factory.getProxy(dataSource);
     }
 
+    /**
+     * Wraps the given {@link FactoryBean<DataSource>} to add support for context logging.
+     *
+     * @param beanFactory {@link FactoryBean<DataSource>} to add context logging support.
+     * @param id the unique identification for this dataSource.
+     * @return the proxy {@link FactoryBean<DataSource>} with context logging support.
+     */
+    public static FactoryBean createFactory(FactoryBean beanFactory, String id) {
+        DataSourceBeanProxyFactory proxyFactory = new DataSourceBeanProxyFactory(beanFactory.getClass(), new GroupChainId(id));
+
+        return proxyFactory.getProxy(beanFactory);
+    }
 }
