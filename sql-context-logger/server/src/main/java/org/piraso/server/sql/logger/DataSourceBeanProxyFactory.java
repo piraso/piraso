@@ -42,7 +42,7 @@ public class DataSourceBeanProxyFactory extends AbstractSQLProxyFactory<FactoryB
         @Override
         public void afterCall(RegexMethodInterceptorEvent<FactoryBean> evt) {
             DataSource dataSource = (DataSource) evt.getReturnedValue();
-            evt.setReturnedValue(new DataSourceProxyFactory(dataSource.getClass(), id).getProxy(dataSource));
+            evt.setReturnedValue(new DataSourceProxyFactory(DataSource.class, id).getProxy(dataSource));
         }
     }
 }
