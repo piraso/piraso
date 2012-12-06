@@ -218,3 +218,22 @@ table#platform-download .installer-column {
 .table.lead th, .table.lead td {
     line-height: 31.5px;
 }
+
+.table td.toolbar-icon {
+    text-align: center;
+    vertical-align: top;
+    width: 25px;
+}
+
+.table td.toolbar-big-icon {
+    text-align: center;
+    vertical-align: top;
+    width: 35px;
+}
+
+.table span.text-success {
+    color: #468847;
+}
+.table span.text-info {
+    color: #3A87AD;
+}

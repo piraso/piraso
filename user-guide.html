@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>User Guide · Piraso</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Development tool for debugging and analyzing request context log information captured from a supported java module. Piraso now supports sql and log4j context monitoring.">
+  <meta name="author" content="alvinrdeleon">
+
+  <!-- Le styles -->
+  <link href="assets/css/bootstrap.css" rel="stylesheet">
+  <link href="assets/css/responsive.css" rel="stylesheet">
+  <link href="assets/css/font-awesome.css" rel="stylesheet">
+  <link href="assets/js/google-code-prettify/prettify.css" rel="stylesheet">
+  <link href="assets/css/doc.css" rel="stylesheet">
+
+  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <!-- Fav and touch icons -->
+  <link rel="shortcut icon" href="assets/ico/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-36750268-1']);
+    _gaq.push(['_setDomainName', 'piraso.org']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+</head>
+
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <a id="piraso_logo" class="brand" href="./index.html">iraso</a>
+      <div class="nav-collapse collapse">
+        <ul class="nav">
+          <li><a href="./index.html">Home</a></li>
+          <li><a href="./getting-started.html">Get Started</a></li>
+          <li><a href="./live-demo.html">Live Demo</a></li>
+          <li class="active"><a href="./user-guide.html">Client User Guide</a></li>
+          <li><a href="./tutorials.html">Tutorials</a></li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </div>
+</div>
+
+<!-- Subhead
+================================================== -->
+
+<header class="jumbotron subhead" id="overview">
+  <div class="container">
+    <h1><i class="icon-book"></i> Client User Guide</h1>
+    <p class="lead">This provides a guide on how to use the Piraso client application.</p>
+  </div>
+</header>
+
+<div class="container">
+<div class="row">
+<div class="span3 bs-docs-sidebar">
+  <ul class="nav nav-list bs-docs-sidenav">
+    <li><a href="#piraso-overview"><i class="icon-chevron-right"></i> Overview</a></li>
+    <li><a href="#basic-concept"><i class="icon-chevron-right"></i> Basic Concept</a></li>
+    <li><a href="#workspace"><i class="icon-chevron-right"></i> Workspace</a></li>
+    <li><a href="#monitor-window"><i class="icon-chevron-right"></i> Monitor Window</a></li>
+    <li><a href="#request-explorer"><i class="icon-chevron-right"></i> Request Explorer</a></li>
+  </ul>
+</div>
+<div class="span9">
+
+<!-- Overview
+================================================== -->
+<section id="piraso-overview">
+  <div class="page-header">
+    <h2>Overview</h2>
+  </div>
+  <p class="lead">
+    Piraso Client is a <a target="_blank" href="http://netbeans.org/features/platform/index.html">NetBeans Platform</a> application that allows user to monitor Piraso enabled web application.
+  </p>
+
+  <div id="basic-concept">
+  <h3>Basic Concept</h3>
+
+  <p>
+    To get the most out of its capabilities and features, you should be familiar with its concepts.
+    Concepts describe the basic notions of the tool.
+  </p>
+
+  <dl class="dl-horizontal">
+    <dt>Monitor</dt>
+    <dd>A monitor contains context logging monitoring preferences. When created this will open in the <a href="#monitor-window">Monitor Window</a> and lets you start monitoring.</dd>
+    <dt>Context Logger</dt>
+    <dd>This determines the information we want to monitor in the Piraso enabled application. Example are SQL and log4j context loggers, which let you monitor SQL executions and log4j log entries respectively.</dd>
+    <dt>Profiles</dt>
+    <dd>Profiles are set of monitors. When created this will open all associated monitors in the <a href="#monitor-window">Monitor Window</a>.</dd>
+    <dt>Request</dt>
+    <dd>This determines the entries scope in a monitor. Monitor entries are usually group per request.</dd>
+  </dl>
+  </div>
+
+
+  <div id="workspace">
+  <h3>Workspace</h3>
+
+  <p>
+  Below shows the Piraso client application workspace.
+  </p>
+
+  <p>
+    <img src="./assets/img/workspace.png">
+  </p>
+
+  <div class="alert alert-info"><h4>Note</h4> To reset the windows to the original arrangement just click on <code>Window > Reset Windows</code> menu.</div>
+
+  <h4>General Toolbar</h4>
+
+  <table class="table table-hover table-striped">
+    <tbody>
+    <tr>
+      <td class="toolbar-big-icon">
+        <img src="./assets/img/new24.png">
+      </td>
+      <td>
+        Click this to create new Profile or Monitor instances.
+      </td>
+    </tr>
+    <tr>
+      <td class="toolbar-big-icon">
+        <img src="./assets/img/open24.png">
+      </td>
+      <td>
+          Click this button to open a saved Monitor request entries.
+      </td>
+    </tr>
+    <tr>
+      <td class="toolbar-big-icon">
+        <img src="./assets/img/save24.png">
+      </td>
+      <td>
+        Click this button to save the currently selected Monitor instance.
+      </td>
+    </tr>
+    <tr>
+      <td class="toolbar-big-icon">
+        <img src="./assets/img/start24.png">
+      </td>
+      <td>
+        Click this button to reconnect the disconnected Monitor instance.
+
+        <dl>
+          <dt>Connected</dt>
+          <dd>A monitor with icon <img src="./assets/img/status-active.png"> on the tab means that the Monitor instance is connected.</dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td class="toolbar-big-icon">
+        <img src="./assets/img/stop24.png">
+      </td>
+      <td>
+        Click this button to disconnect the Monitor instance.
+
+        <dl>
+          <dt>Disconnected</dt>
+          <dd>A monitor with icon <img src="./assets/img/status-stopped.png"> on the tab means that the Monitor instance is disconnected.</dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td class="toolbar-big-icon">
+        <img src="./assets/img/gnome_video_display24.png">
+      </td>
+      <td>
+        Click this button to manage Monitors.
+      </td>
+    </tr>
+    <tr>
+      <td class="toolbar-big-icon">
+        <img src="./assets/img/gnome_network_idle24.png">
+      </td>
+      <td>
+        Click this button to manage Profiles.
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  </div>
+
+
+  <div id="monitor-window">
+  <h3>Monitor Window</h3>
+
+  <p>
+    The window is tab-based. When you create a new monitor instance, it opens in its own tab.
+    This displays the monitor entries in a table captured from the piraso enabled application.
+  </p>
+
+  <p>
+    <img src="./assets/img/monitor-window.png">
+  </p>
+
+  <h4>Toolbar</h4>
+
+  <table class="table table-hover">
+    <tbody>
+    <tr>
+      <td class="toolbar-icon">
+        <img src="./assets/img/edit_clear.png">
+      </td>
+      <td>
+        Click this button to clear the current monitor request entries.
+      </td>
+    </tr>
+    <tr>
+      <td class="toolbar-icon">
+        <img src="./assets/img/find.png">
+      </td>
+      <td>
+        <p>
+        Click this button to initiate a new search. This toggles the display of the search pane.
+        </p>
+        <p>
+          <img src="./assets/img/find-bar.png">
+          <dl>
+            <dt>Match Case</dt>
+            <dd>If this check box is selected, Piraso client will distinguish between upper and lowercase letters while searching..</dd>
+            <dt>Whole Words</dt>
+            <dd>if this check box is selected, Piraso client will search for whole words only, that is, for character strings separated with spaces, tabs, punctuation, or special characters.</dd>
+            <dt>Regular Expression</dt>
+            <dd>If this check box is selected, the search string will be perceived as a regular expression.</dd>
+          </dl>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td class="toolbar-icon">
+        <img src="./assets/img/arrow-switch-270.png">
+      </td>
+      <td>
+        Click this button to toggle the auto-scrolling of received from the monitored application.
+        When the auto-scroll <img src="./assets/img/arrow-switch-270.png"> is active you won't be able to switch requests.
+        You need to explicitly disable <img src="./assets/img/arrow-switch-minus-270.png"> to be jump from one request to the other.
+      </td>
+    </tr>
+
+    </tbody>
+  </table>
+  </div>
+
+  <div id="request-explorer">
+    <h3>Request Explorer</h3>
+
+    <p>
+      Displays all Monitor instance and all its requests on tree view.
+    </p>
+
+    <div>
+      <div class="row">
+        <div class="span3 bs-docs-sidebar">
+          <img src="./assets/img/request-tree.png">
+        </div>
+        <div class="span6">
+          <h4>Toolbar</h4>
+
+          <table class="table table-hover">
+            <tbody>
+            <tr>
+              <td class="toolbar-icon">
+                <img src="./assets/img/gh-icon-collapse.png">
+              </td>
+              <td>
+                Click this button to collapse the request tree view.
+              </td>
+            </tr>
+            <tr>
+              <td class="toolbar-icon">
+                <img src="./assets/img/time.png">
+              </td>
+              <td>
+                  Click this button to toggle showing of colored nodes for recent requests.
+                <dl>
+                  <dt><span class="text-success">Green</span></dt>
+                  <dd>Request received within 10 secs.</dd>
+                  <dt><span class="text-info">Blue</span></dt>
+                  <dd>Requests received older than 10 secs but below 30 secs.</dd>
+                  <dt>Black</dt>
+                  <dd>Requests received older than 30 secs.</dd>
+                </dl>
+              </td>
+            </tr>
+            <tr>
+              <td class="toolbar-icon">
+                <img src="./assets/img/target_arrow.png">
+              </td>
+              <td>
+                Select a monitor and click on this button to target the monitor node on the request tree view.
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+    </div>
+
+  </div>
+  </div>
+
+</section>
+
+</div>
+</div>
+
+<hr>
+
+<footer>
+  <div class="row">
+    <div class="span5">
+      <h3>Contact</h3>
+      <ul class="icons">
+        <li><i class="icon-envelope"></i> Email: <a href="mailto:alvinrdeleon@me.com">Alvin R. de Leon</a></li>
+        <li><i class="icon-linkedin"></i> Linkedin: <a onclick="_gaq.push(['_trackEvent', 'Contact', 'Links', 'LinkedIn']);" target="_blank" href="http://www.linkedin.com/in/alvinrdeleon">http://www.linkedin.com/in/alvinrdeleon</a></li>
+        <li><i class="icon-twitter"></i> Twitter: <a target="_blank" href="http://twitter.com/alvinrdeleon/">@alvinrdeleon</a></li>
+        <li><i class="icon-wrench"></i> Work: Staff Software Engineer @ <a target="_blank" href="http://adchemy.com">Adchemy</a></li>
+      </ul>
+    </div>
+    <div class="span6">
+      <h3>Special Thanks</h3>
+      Special thanks to <a target="_blank" href="https://github.com/ashier">@ashier</a>,
+      <a target="_blank" href="https://github.com/badong2210">@badong2210</a>, <a href="https://www.facebook.com/jctmendoza">@jctmendoza</a>, and <a href="https://twitter.com/bernardlago">@bernardlago</a> for design
+      review, advice, and some help.
+    </div>
+  </div>
+</footer>
+
+</div> <!-- /container -->
+
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="assets/js/jquery.js"></script>
+<script src="assets/js/google-code-prettify/prettify.js"></script>
+<script src="assets/js/bootstrap-transition.js"></script>
+<script src="assets/js/bootstrap-alert.js"></script>
+<script src="assets/js/bootstrap-modal.js"></script>
+<script src="assets/js/bootstrap-dropdown.js"></script>
+<script src="assets/js/bootstrap-scrollspy.js"></script>
+<script src="assets/js/bootstrap-tab.js"></script>
+<script src="assets/js/bootstrap-tooltip.js"></script>
+<script src="assets/js/bootstrap-popover.js"></script>
+<script src="assets/js/bootstrap-button.js"></script>
+<script src="assets/js/bootstrap-collapse.js"></script>
+<script src="assets/js/bootstrap-carousel.js"></script>
+<script src="assets/js/bootstrap-typeahead.js"></script>
+<script src="assets/js/bootstrap-affix.js"></script>
+<script src="assets/js/application.js"></script>
+
+</body>
+</html>
