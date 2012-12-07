@@ -80,11 +80,16 @@
   <ul class="nav nav-list bs-docs-sidenav">
     <li><a href="#piraso-overview"><i class="icon-chevron-right"></i> Overview</a></li>
     <li><a href="#basic-concept"><i class="icon-chevron-right"></i> Basic Concepts</a></li>
-    <li><a href="#workspace"><i class="icon-chevron-right"></i> Workspace</a></li>
     <li><a href="#monitor-window"><i class="icon-chevron-right"></i> Monitor Window</a></li>
     <li><a href="#request-explorer"><i class="icon-chevron-right"></i> Request Explorer</a></li>
     <li><a href="#manage-monitors"><i class="icon-chevron-right"></i> Manage Monitors</a></li>
     <li><a href="#monitor-preferences"><i class="icon-chevron-right"></i> Monitor Preferences</a></li>
+    <li><a href="#manage-profiles"><i class="icon-chevron-right"></i> Manage Profiles</a></li>
+    <li><a href="#entry-views"><i class="icon-chevron-right"></i> Entry Views</a></li>
+    <li><a href="#request-view"><i class="icon-chevron-right"></i> Request View</a></li>
+    <li><a href="#log4j-view"><i class="icon-chevron-right"></i> Log4j View</a></li>
+    <li><a href="#sql-view"><i class="icon-chevron-right"></i> SQL View</a></li>
+    <li><a href="#sql-data-view"><i class="icon-chevron-right"></i> SQL Data View</a></li>
     <li><a href="#comments"><i class="icon-chevron-right"></i> Comments</a></li>
   </ul>
 </div>
@@ -120,10 +125,7 @@
     <dt>Request</dt>
     <dd>This determines the entries scope in a monitor. Monitor entries are usually group per request.</dd>
   </dl>
-  </div>
 
-
-  <div id="workspace">
   <h3>Workspace</h3>
 
   <p>
@@ -483,6 +485,225 @@
       <img src="./assets/img/spring-pref.png">
     </p>
   </div>
+</section>
+
+<section id="manage-profiles">
+  <div class="page-header">
+    <h1>Manage Profiles</h1>
+  </div>
+
+  <p class="lead">
+    Profiles are set of monitors. When created this will open all associated monitors in the <a href="#monitor-window">Monitor Window</a>.
+  </p>
+
+  <p>
+    <img src="./assets/img/manage-profiles.png">
+  </p>
+
+  <h4>1. Profile List</h4>
+  <p>
+    This list all the profiles created. When the <code>Show Working Set</code> checkbox is selected only the
+    profiles associated to the Working Set will be shown. Deselecting the checkbox will show all
+    created Profiles.
+  </p>
+  <p>
+    You can edit a profile, by selecting the profile from the list, do an update and click on <code>Save</code>.
+  </p>
+  <p>
+    You can remove a profile, by selecting the profile from the list, and click on <code>Remove</code>.
+  </p>
+  <h4>2. Profile Details</h4>
+  <p>
+    This fields defines the profile details. These fields are defined below:
+  </p>
+  <dl>
+    <dt>Name</dt>
+    <dd>Unique identifier for your profile.</dd>
+    <dt>Description</dt>
+    <dd>The profile description.</dd>
+  </dl>
+  <h4>3. Associated Monitors</h4>
+  <p>
+    This is a table showing all associated monitors.
+  </p>
+</section>
+
+<section id="entry-views">
+  <div class="page-header">
+    <h1>Entry Views</h1>
+  </div>
+
+  <p class="lead">
+    An Entry View is a window that provides a detail information of a particular request entry.
+  </p>
+
+  <h2>Message View</h2>
+
+  <p>
+    This is a generic view that displays a simple message entry.
+  </p>
+
+  <p><img src="./assets/img/message-view.png"></p>
+
+  <div id="request-view">
+  <h2>Request View</h2>
+
+  <p>
+    This displays the entry http request information.
+  </p>
+
+  <p><img src="./assets/img/request-view2.png"></p>
+
+  <h3>Cookies</h3>
+  <p>
+    This displays all the Http Request cookies.
+  </p>
+
+  <p><img src="./assets/img/request-cookies.png"></p>
+
+  <h3>Headers</h3>
+  <p>
+    This displays all the Http Request headers.
+  </p>
+
+  <p><img src="./assets/img/request-headers.png"></p>
+
+  <h3>Parameters</h3>
+  <p>
+    This displays all the Http Request parameters.
+  </p>
+
+  <p><img src="./assets/img/request-parameter.png"></p>
+  </div>
+
+  <div id="log4j-view">
+    <h2>Log4j View</h2>
+
+    <p>
+      Click on a log4j entry from the <a href="#monitor-window">Monitor Window</a> to show this view.
+    </p>
+
+    <p><img src="./assets/img/log4j-view.png"></p>
+
+    <h3>Exception</h3>
+    <p>
+      Click this button to show the exception. This will only show when the selected log4j entry has an associated exception.
+    </p>
+
+    <p><img src="./assets/img/log4j-exception-view.png"></p>
+
+    <h3>Stack trace</h3>
+    <p>
+      When stack trace logging is enabled this button shows the log4j entry stack trace.
+    </p>
+
+    <p><img src="./assets/img/log4j-stacktrace-view.png"></p>
+
+
+    <table class="table table-hover">
+      <tbody>
+      <tr>
+        <td class="toolbar-icon">
+          <img src="./assets/img/properties.png">
+        </td>
+        <td>
+          Click this button to show the table of the set query parameters.
+        </td>
+      </tr>
+      <tr>
+        <td class="toolbar-icon">
+          <img src="./assets/img/filter.png">
+        </td>
+        <td>
+          Click this button filter the stack trace from the <code>Exception</code> and <code>Stack trace</code> view.
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="sql-view">
+  <h2>SQL View</h2>
+  
+  <p>When a <code>SQL Prepared Statement</code> entry is selected, this view will activate and shows the SQL statement.</p>
+  
+  <p><img src="./assets/img/sql-view.png"></p>
+
+  <h4>Toolbar</h4>
+
+  <table class="table table-hover">
+    <tbody>
+    <tr>
+      <td class="toolbar-icon">
+        <img src="./assets/img/properties.png">
+      </td>
+      <td>
+        Click this button to show the table of the set query parameters.
+      </td>
+    </tr>
+    <tr>
+      <td class="toolbar-icon">
+        <img src="./assets/img/replace_variables.png">
+      </td>
+      <td>
+        Click this button to replace all sql parameters into literal values.
+      </td>
+    </tr>
+    <tr>
+      <td class="toolbar-icon">
+        <img src="./assets/img/format.png">
+      </td>
+      <td>
+        Click this button to format the SQL statement.
+      </td>
+    </tr>
+    <tr>
+      <td class="toolbar-icon">
+        <img src="./assets/img/copy.png">
+      </td>
+      <td>
+        Click this button to copy the SQL statement.
+      </td>
+    </tr>
+
+    </tbody>
+  </table>
+  </div>
+
+  <div id="sql-data-view">
+    <h2>SQL Data View</h2>
+
+    <p>When a <code>SQL Result Set</code> entry is selected, this view will activate and shows the retrieved records from the database.</p>
+
+    <p><img src="./assets/img/sql-data-view.png"></p>
+
+    <h4>Toolbar</h4>
+
+    <table class="table table-hover">
+      <tbody>
+      <tr>
+        <td class="toolbar-icon">
+          <img src="./assets/img/properties.png">
+        </td>
+        <td>
+          Click this button to show the table column meta data definitions.
+        </td>
+      </tr>
+      <tr>
+        <td class="toolbar-icon">
+          <img src="./assets/img/copy.png">
+        </td>
+        <td>
+          Click this button to copy the records as CSV.
+        </td>
+      </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+
+  
 </section>
 
 <section id="comments">
