@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
   <meta charset="utf-8">
   <title>User Guide · Piraso</title>
@@ -90,6 +90,7 @@
     <li><a href="#log4j-view"><i class="icon-chevron-right"></i> Log4j View</a></li>
     <li><a href="#sql-view"><i class="icon-chevron-right"></i> SQL View</a></li>
     <li><a href="#sql-data-view"><i class="icon-chevron-right"></i> SQL Data View</a></li>
+    <li><a href="#usability"><i class="icon-chevron-right"></i> Usability Preferences</a></li>
     <li><a href="#comments"><i class="icon-chevron-right"></i> Comments</a></li>
   </ul>
 </div>
@@ -599,7 +600,6 @@
 
     <p><img src="./assets/img/log4j-stacktrace-view.png"></p>
 
-
     <table class="table table-hover">
       <tbody>
       <tr>
@@ -620,6 +620,18 @@
       </tr>
       </tbody>
     </table>
+
+    <h3>XML</h3>
+
+    <p>When a log4j entry has a XML message then this view will be available. This will pretify the XML message as displayed below.</p>
+
+    <p><img src="./assets/img/log4j-xml-view.png"></p>
+
+    <h3>URL</h3>
+
+    <p>When a log4j entry has a URL message then this view will be available. This will pretify the URL as displayed below.</p>
+
+    <p><img src="./assets/img/log4j-url-view.png"></p>
   </div>
 
   <div id="sql-view">
@@ -701,9 +713,46 @@
       </tbody>
     </table>
   </div>
+</section>
 
+<section id="usability">
+  <div class="page-header">
+    <h1>Usability Preferences</h1>
+  </div>
 
-  
+  <p class="lead">Some usability preference features available for user experience.</p>
+
+  <h3>Monitor Instance View</h3>
+
+  <p>
+    This allows user to select what columns to display on the <a href="#monitor-window">Monitor Window</a>.
+    This can be accessed from <code>View > Monitor Instance View</code> menu.
+  </p>
+
+  <p>
+    <img src="./assets/img/view-monitor-menu.png">
+    <img src="./assets/img/view-monitor-menu-items.png">
+  </p>
+
+  <h3>Font</h3>
+
+  <p>This allows user to change to font size. This can be accessed from <code>View > Font</code> menu.</p>
+
+  <p>
+    <img src="./assets/img/view-font-menu.png">
+    <img src="./assets/img/view-font-menu-items.png">
+  </p>
+
+  <h3>Working Set</h3>
+
+  <p>
+    This allows user to manage Working Set. With working set users group Monitors and Profiles.
+    This can be accessed from <code>Tools > Manage Working Set</code> menu.</p>
+  </p>
+
+  <p>
+    <img src="./assets/img/working-set.png">
+  </p>
 </section>
 
 <section id="comments">
