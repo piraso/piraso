@@ -83,6 +83,8 @@
     <li><a href="#workspace"><i class="icon-chevron-right"></i> Workspace</a></li>
     <li><a href="#monitor-window"><i class="icon-chevron-right"></i> Monitor Window</a></li>
     <li><a href="#request-explorer"><i class="icon-chevron-right"></i> Request Explorer</a></li>
+    <li><a href="#manage-monitors"><i class="icon-chevron-right"></i> Manage Monitors</a></li>
+    <li><a href="#monitor-preferences"><i class="icon-chevron-right"></i> Monitor Preferences</a></li>
     <li><a href="#comments"><i class="icon-chevron-right"></i> Comments</a></li>
   </ul>
 </div>
@@ -106,13 +108,15 @@
     Concepts describe the basic notions of the tool.
   </p>
 
-  <dl class="dl-horizontal">
+  <dl>
     <dt>Monitor</dt>
     <dd>A monitor contains context logging monitoring preferences. When created this will open in the <a href="#monitor-window">Monitor Window</a> and lets you start monitoring.</dd>
     <dt>Context Logger</dt>
     <dd>This determines the information we want to monitor in the Piraso enabled application. Example are SQL and log4j context loggers, which let you monitor SQL executions and log4j log entries respectively.</dd>
     <dt>Profiles</dt>
     <dd>Profiles are set of monitors. When created this will open all associated monitors in the <a href="#monitor-window">Monitor Window</a>.</dd>
+    <dt>Entry</dt>
+    <dd>This is a monitor entry. An entry corresponds to one row in the <a href="#monitor-window">Monitor Window</a>.</dd>
     <dt>Request</dt>
     <dd>This determines the entries scope in a monitor. Monitor entries are usually group per request.</dd>
   </dl>
@@ -324,6 +328,161 @@
   </div>
   </div>
 
+</section>
+
+<section id="manage-monitors">
+  <div class="page-header">
+    <h1>Manage Monitors</h1>
+  </div>
+    <p class="lead">
+      This window allows you to manage Monitors. In here you configure the application to be monitored given the url and
+      the context logger preferences.
+    </p>
+
+    <p>
+    <img src="./assets/img/manage-monitors.png">
+    </p>
+
+    <h4>1. Monitor List</h4>
+    <p>
+      This list all the monitors created. When the <code>Show Working Set</code> checkbox is selected only the
+      Monitors associated to the Working Set will be shown. Deselecting the checkbox will show all
+      created Monitors.
+    </p>
+    <p>
+      You can edit a monitor, by selecting the monitor from the list, do an update and click on <code>Save</code>.
+    </p>
+    <p>
+      You can remove a monitor, by selecting the monitor from the list, and click on <code>Remove</code>.
+    </p>
+    <h4>2. Context Logger Preferences</h4>
+    <p>
+      These are context logger preferences for the selected monitor. This is the preference you customize to configure
+      the amount of information you want to receive during your monitoring.
+    </p>
+    <h4>3. Monitor Details</h4>
+    <p>
+      This fields defines the monitor details. These fields are defined below:
+
+      <dl>
+        <dt>Name</dt>
+        <dd>Unique identifier for your monitor.</dd>
+        <dt>URL</dt>
+        <dd>This is the piraso enabled application logging URL.</dd>
+        <dt>Watch</dt>
+        <dd>Determines whether you want to watch your own traffic or watch others by providing their IP address.</dd>
+      </dl>
+    </p>
+
+  <div id="monitor-preferences">
+
+    <h2>Monitor Preferences</h2>
+
+    <p>
+    These are context logger preferences for the selected monitor. This is the preference you customize to configure
+    the amount of information you want to receive during your monitoring.
+    </p>
+
+    <h3>General Monitor Preferences</h3>
+
+    <p>These are your general monitoring preferences.</p>
+
+    <p>
+    <img src="./assets/img/general-pref.png">
+    </p>
+
+    <dl>
+      <dt>Enable stacktrace for the support entries</dt>
+      <dd>Select this if you want your request entries to support stack trace. Please do note that only those entries that support it will show the stack trace.</dd>
+      <dt>Enable hiding of external resources</dt>
+      <dd>Deselect this if you want that every request should be track including request for external or static resources.</dd>
+      <dt>Disable request context</dt>
+      <dd>Select this if you don't want the Monitor instance to separate per request. This will display request entries in a single table.</dd>
+    </dl>
+
+    <div id="stacktrace-filter">
+      <h4>Manage Stack Trace Filter</h4>
+
+      <p>
+        Go to <code>Tools > Manage Stack Trace Filter</code> to manage your stack trace filter.
+        This enables you to only filter the pattern specified from this window.
+      </p>
+
+      <p>
+        <img src="./assets/img/stacktrace-pref.png">
+      </p>
+
+      <div class="alert alert-info">
+        <h4>Note</h4>
+        Stack trace filter will help you easily see the application class flows.
+      </div>
+    </div>
+
+    <h3>Log4j Monitor Preferences</h3>
+
+    <p>
+      This determines the log4j context logger monitor preferences.
+      In here you can select which logger log entries and their corresponding log levels should appear for monitoring.
+    </p>
+
+    <p>
+      <img src="./assets/img/log4j-pref.png">
+    </p>
+
+    <p>
+      Go to <code>Tools > Log4j Loggers</code> to open the Log4j Logger dialog and manage your loggers.
+    </p>
+
+    <p>
+      <img src="./assets/img/log4j-logger.png">
+    </p>
+
+    <div class="alert alert-info">
+      <h4>Notes</h4>
+      <ul>
+        <li>Logger's are sorted by description ascending.</li>
+        <li>All log4j entries supports stack trace.</li>
+      </ul>
+    </div>
+
+    <h3>SQL Monitor Preferences</h3>
+
+    <p>This determines the SQL context logger monitor preferences.</p>
+
+    <p>
+      <img src="./assets/img/sql-pref.png">
+    </p>
+
+    <dl>
+      <dt>Enable connection logs</dt>
+      <dd>Select if you want to monitor SQL Connection log entries.</dd>
+      <dt>Enable prepared statement logs</dt>
+      <dd>Select if you want to monitor SQL Prepared Statement log entries.</dd>
+      <dt>Enable result set logs</dt>
+      <dd>Select if you want to monitor SQL Result Set log entries.</dd>
+    </dl>
+
+    <div class="alert alert-info">
+      <h4>Notes</h4>
+      <ul>
+        <li>Only the method call logs supports stack trace.</li>
+        <li>Only up to 100 records will be log unless the <code>SQL result set all data logs</code>  is selected.</li>
+        <li>Be careful in enabling the <code>SQL result set method logs</code>, this may cause to much log entries. Enable only when the need arises.</li>
+      </ul>
+    </div>
+
+    <h3>Spring Monitor Preferences</h3>
+
+    <p>
+      This determines the Spring context logger monitor preferences.
+      Right now only <code>Spring Remoting</code> is supported.
+      This is needed when you want to cascade the monitor context from one server to the other when doing a remote call.
+    </p>
+
+    <p>
+      <img src="./assets/img/spring-pref.png">
+    </p>
+  </div>
 </section>
 
 <section id="comments">
