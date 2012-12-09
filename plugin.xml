@@ -1,13 +1,33 @@
-<plugin>
-  <groupId>org.piraso</groupId>
-  <artifactId>piraso-maven-plugin</artifactId>
-  <version>${piraso.version}</version>
-  <executions>
-    <execution>
-      <phase>process-resources</phase>
-      <goals>
-        <goal>web-xml</goal>
-      </goals>
-    </execution>
-  </executions>
-</plugin>
+<profile>
+  <id>piraso</id>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.piraso</groupId>
+        <artifactId>piraso-maven-plugin</artifactId>
+        <version>${piraso.version}</version>
+        <executions>
+          <execution>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>web-xml</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>org.piraso</groupId>
+      <artifactId>piraso-spring-web-server</artifactId>
+      <version>${piraso.version}</version>
+    </dependency>
+
+    <!--
+      - NOTE:
+      - include context logger dependencies here.
+      -->
+
+  </dependencies>
+</profile>

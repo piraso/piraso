@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8">
     <title>Getting Started · Piraso</title>
@@ -327,7 +327,7 @@
                 <h3>Web Project</h3>
 
                 <p>
-                This is the typical maven web project folder structure.
+                This is the default maven web project folder structure.
                 </p>
 
                 <pre>
@@ -352,41 +352,48 @@
 
             <p>We only need to modify the <code>pom.xml</code> to make the web module piraso enabled.</p>
 
-            <p><span class="badge badge-success">1</span> Add the maven plugin on <code>build</code> tag. This will only work if you have the same structure as shown above.</p>
+            <p><span class="badge badge-success">1</span> Add the following priaso maven profile.</p>
 
             <pre class="prettyprint linenums">
-&lt;properties&gt;
-  &lt;piraso.version&gt;1.1&lt;/piraso.version&gt;
-&lt;/properties&gt;
+&lt;profile&gt;
+  &lt;id&gt;piraso&lt;/id&gt;
+  &lt;build&gt;
+    &lt;plugins&gt;
+      &lt;plugin&gt;
+        &lt;groupId&gt;org.piraso&lt;/groupId&gt;
+        &lt;artifactId&gt;piraso-maven-plugin&lt;/artifactId&gt;
+        &lt;version&gt;${piraso.version}&lt;/version&gt;
+        &lt;executions&gt;
+          &lt;execution&gt;
+            &lt;phase&gt;process-resources&lt;/phase&gt;
+            &lt;goals&gt;
+              &lt;goal&gt;web-xml&lt;/goal&gt;
+            &lt;/goals&gt;
+          &lt;/execution&gt;
+        &lt;/executions&gt;
+      &lt;/plugin&gt;
+    &lt;/plugins&gt;
+  &lt;/build&gt;
+  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.piraso&lt;/groupId&gt;
+      &lt;artifactId&gt;piraso-spring-web-server&lt;/artifactId&gt;
+      &lt;version&gt;${piraso.version}&lt;/version&gt;
+    &lt;/dependency&gt;
 
-&lt;plugin&gt;
-  &lt;groupId&gt;org.piraso&lt;/groupId&gt;
-  &lt;artifactId&gt;piraso-maven-plugin&lt;/artifactId&gt;
-  &lt;version&gt;${piraso.version}&lt;/version&gt;
-  &lt;executions&gt;
-    &lt;execution&gt;
-      &lt;phase&gt;process-resources&lt;/phase&gt;
-      &lt;goals&gt;
-        &lt;goal&gt;web-xml&lt;/goal&gt;
-      &lt;/goals&gt;
-    &lt;/execution&gt;
-  &lt;/executions&gt;
-&lt;/plugin&gt;</pre>
+    &lt;!--
+      - NOTE:
+      - Include context logger dependencies here.
+      --&gt;
 
-            <p><span class="badge badge-info">2</span> Add the piraso server dependency</p>
+  &lt;/dependencies&gt;
+&lt;/profile&gt;
+</pre>
 
-            <pre class="prettyprint linenums">
-&lt;dependency&gt;
-  &lt;groupId&gt;org.piraso&lt;/groupId&gt;
-  &lt;artifactId&gt;piraso-spring-web-server&lt;/artifactId&gt;
-  &lt;version&gt;${piraso.version}&lt;/version&gt;
-&lt;/dependency&gt;</pre>
+                <p><span class="badge badge-important">2</span> Next step is to identify the context loggers to support. We do this adding the selected context loggers as dependencies.</p>
 
 
-                <p><span class="badge badge-important">3</span> Next step is to identify our context loggers. We do this by selecting what context-logger to activate and adding them as dependencies.</p>
-
-
-                <table id="context-loggers" class="table table-hover">
+                <table id="context-loggers" class="table table-hover table-striped">
                     <thead>
                     <tr>
                         <th>Context Logger</th>
@@ -395,28 +402,44 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td>log4j</td>
-                        <td><code>org.piraso:log4j-context-logger-server</code></td>
+                        <td><code>log4j</code></td>
+                        <td>
+                          <pre class="prettyprint linenums">
+&lt;dependency&gt;
+  &lt;groupId&gt;org.piraso&lt;/groupId&gt;
+  &lt;artifactId&gt;log4j-context-logger-server&lt;/artifactId&gt;
+  &lt;version&gt;${piraso.version}&lt;/version&gt;
+&lt;/dependency&gt;</pre>
+                        </td>
                     </tr>
                     <tr>
-                        <td>sql</td>
-                        <td><code>org.piraso:sql-context-logger-server</code></td>
+                        <td><code>sql</code></td>
+                        <td>
+                          <pre class="prettyprint linenums">
+&lt;dependency&gt;
+  &lt;groupId&gt;org.piraso&lt;/groupId&gt;
+  &lt;artifactId&gt;sql-context-logger-server&lt;/artifactId&gt;
+  &lt;version&gt;${piraso.version}&lt;/version&gt;
+&lt;/dependency&gt;</pre>
+                        </td>
                     </tr>
                     <tr>
-                        <td>spring</td>
-                        <td><code>org.piraso:spring-context-logger-server</code></td>
-                    </tr>
-                    <tr>
-                        <td>hibernate</td>
-                        <td><code>org.piraso:hibernate-context-logger-server</code></td>
+                        <td><code>spring</code></td>
+                        <td>
+                          <pre class="prettyprint linenums">
+&lt;dependency&gt;
+  &lt;groupId&gt;org.piraso&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-context-logger-server&lt;/artifactId&gt;
+  &lt;version&gt;${piraso.version}&lt;/version&gt;
+&lt;/dependency&gt;</pre>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
 
-                <p>
-                <span class="label label-success">Success!</span>
-                Once you've done these steps on <code>pom.xml</code>. Your web module is now piraso enabled.
-                </p>
+                <div class="alert alert-info">
+                Run maven command with <code>-Ppiraso</code> to enable piraso in you web application.
+                </div>
             </section>
 
             <section id="what-next">
