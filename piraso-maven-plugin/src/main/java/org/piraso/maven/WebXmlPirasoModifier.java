@@ -20,6 +20,10 @@ package org.piraso.maven;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
 import org.w3c.dom.Element;
@@ -31,35 +35,32 @@ import java.io.File;
 /**
  * Web xml Piraso modifier.
  *
- * @goal web-xml
  */
+@Mojo(name="web-xml", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, threadSafe = true)
 public class WebXmlPirasoModifier extends AbstractXMLPirasoModifier {
 
     /**
-     * @parameter default-value="${project}"
-     * @required
+     * The Maven project.
      */
+    @Component
     protected MavenProject project;
 
     /**
      * piraso logging path
-     *
-     * @parameter default-value="/piraso/logging"
      */
+    @Parameter( defaultValue = "/piraso/logging", required = true )
     private String pirasoLoggingPath = "/piraso/logging";
 
     /**
      * the web.xml file to modify
-     *
-     * @parameter default-value="${project.basedir}/src/main/webapp/WEB-INF/web.xml"
      */
+    @Parameter( defaultValue = "${project.basedir}/src/main/webapp/WEB-INF/web.xml", required = true )
     private File webXml;
 
     /**
      * output directed
-     *
-     * @parameter default-value="${project.build.directory}/piraso/WEB-INF/"
      */
+    @Parameter( defaultValue = "${project.build.directory}/piraso/WEB-INF/", required = true)
     private File outputDirectory;
 
     public void setOutputDirectory(File outputDirectory) {

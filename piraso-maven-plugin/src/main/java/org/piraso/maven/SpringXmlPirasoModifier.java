@@ -21,6 +21,9 @@ package org.piraso.maven;
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -29,30 +32,26 @@ import java.util.List;
 
 /**
  * Spring xml modifier for piraso.
- *
- * @goal spring-xml
  */
+@Mojo(name="spring-xml", threadSafe = true)
 public class SpringXmlPirasoModifier extends AbstractXMLPirasoModifier {
 
     /**
      * the spring.xml file to modify
-     *
-     * @parameter
      */
+    @Parameter(required = true)
     private File springXml;
 
     /**
      * output directed
-     *
-     * @parameter
      */
+    @Parameter(required = true)
     private File outputDirectory;
 
     /**
      * Class replacements
-     *
-     * @parameter
      */
+    @Parameter(required = true)
     private List<ClassReplacement> classReplacements;
 
     public void setClassReplacements(List<ClassReplacement> classReplacements) {
