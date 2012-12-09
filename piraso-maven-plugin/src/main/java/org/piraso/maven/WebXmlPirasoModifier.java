@@ -36,7 +36,7 @@ import java.io.File;
  * Web xml Piraso modifier.
  *
  */
-@Mojo(name="web-xml", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, threadSafe = true)
+@Mojo(name="web-xml", defaultPhase = LifecyclePhase.PROCESS_RESOURCES)
 public class WebXmlPirasoModifier extends AbstractXMLPirasoModifier {
 
     /**
