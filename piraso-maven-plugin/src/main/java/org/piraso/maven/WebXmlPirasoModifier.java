@@ -34,7 +34,7 @@ import java.io.File;
  *
  */
 @Mojo(name="web-xml", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, threadSafe = true)
-@Execute(phase = LifecyclePhase.PROCESS_RESOURCES)
+@Execute(goal = "web-xml", phase = LifecyclePhase.PROCESS_RESOURCES, lifecycle = "web-xml")
 public class WebXmlPirasoModifier extends AbstractXMLPirasoModifier {
 
     /**
