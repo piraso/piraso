@@ -9,7 +9,9 @@ import java.net.URI;
 public enum BridgeConfig implements HttpPirasoInitializer {
     INSTANCE;
 
-    private static final String PIRASO_BRIDGE_PROPERTY = "piraso.bridge.url";
+    private static final String PIRASO_BRIDGE_URL_PROPERTY = "piraso.bridge.url";
+
+    private static final String PIRASO_BRIDGE_ID_PROPERTY = "piraso.bridge.id";
 
     private static final String PIRASO_BRIDGE_ENV = "PIRASO_URL";
 
@@ -28,7 +30,7 @@ public enum BridgeConfig implements HttpPirasoInitializer {
     }
 
     public synchronized void init() {
-        String url = System.getProperty(PIRASO_BRIDGE_PROPERTY);
+        String url = System.getProperty(PIRASO_BRIDGE_URL_PROPERTY);
         if(url == null) {
             url = System.getenv(PIRASO_BRIDGE_ENV);
         }
@@ -65,6 +67,10 @@ public enum BridgeConfig implements HttpPirasoInitializer {
         }
 
         return enabled;
+    }
+
+    public String getIdentifier() {
+        return System.getProperty(PIRASO_BRIDGE_ID_PROPERTY);
     }
 
     public boolean isQueryAlways() {

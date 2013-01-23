@@ -7,13 +7,17 @@ import org.piraso.api.GeneralPreferenceEnum;
 import org.piraso.api.JacksonUtils;
 import org.piraso.api.Preferences;
 import org.piraso.api.entry.Entry;
+import org.piraso.proxy.RegexMethodInterceptorAdapter;
+import org.piraso.proxy.RegexMethodInterceptorEvent;
+import org.piraso.proxy.RegexProxyFactory;
 import org.piraso.server.bridge.net.HttpPirasoLogHandler;
 import org.piraso.server.service.*;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.lang.reflect.Method;
 
-public class BridgeLoggerServiceImpl implements ResponseLoggerService {
+public class BridgeLoggerServiceImpl extends RegexMethodInterceptorAdapter<Preferences> implements ResponseLoggerService {
 
     private static final Log LOG = LogFactory.getLog(BridgeLoggerServiceImpl.class);
 
@@ -23,10 +27,15 @@ public class BridgeLoggerServiceImpl implements ResponseLoggerService {
 
     private BridgeHttpHandlerFactory factory;
 
+    private RegexProxyFactory<Preferences> proxyFactory;
+
     public BridgeLoggerServiceImpl(BridgeLogger logger, BridgeHttpHandlerFactory factory) {
         this.logger = logger;
         this.factory = factory;
         mapper = JacksonUtils.MAPPER;
+
+        proxyFactory = new RegexProxyFactory<Preferences>(Preferences.class);
+        proxyFactory.addMethodListener(".*", this);
     }
 
     public User getUser() {
@@ -50,7 +59,7 @@ public class BridgeLoggerServiceImpl implements ResponseLoggerService {
     }
 
     public Preferences getPreferences() {
-        return logger.getPreferences();
+        return proxyFactory.getProxy(logger.getPreferences());
     }
 
     public void start() throws Exception {
@@ -96,5 +105,17 @@ public class BridgeLoggerServiceImpl implements ResponseLoggerService {
     }
 
     public void fireStopEvent(StopLoggerEvent event) {
+    }
+
+    @Override
+    public void afterCall(RegexMethodInterceptorEvent<Preferences> evt) {
+        if(BridgeConfig.INSTANCE.getIdentifier() != null) {
+            boolean bridgeEnabled = logger.getPreferences().isRegexEnabled("bridge." + BridgeConfig.INSTANCE.getIdentifier());
+            Method method = evt.getInvocation().getMethod();
+
+            if(method.getReturnType() == Boolean.TYPE && !bridgeEnabled) {
+                evt.setReturnedValue(false);
+            }
+        }
     }
 }
