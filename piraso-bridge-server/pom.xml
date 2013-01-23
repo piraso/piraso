@@ -28,9 +28,9 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>piraso-spring-web-server</artifactId>
+  <artifactId>piraso-bridge-server</artifactId>
   <packaging>jar</packaging>
-  <name>piraso-spring-web-server</name>
+  <name>piraso-bridge-server</name>
 
   <dependencies>
     <dependency>
@@ -46,13 +46,18 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>${project.parent.groupId}</groupId>
+      <artifactId>context-logger-http-client</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-core</artifactId>
       <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
-      <artifactId>spring-web</artifactId>
+      <artifactId>spring-context</artifactId>
       <version>${spring.version}</version>
     </dependency>
     <dependency>
@@ -62,8 +67,8 @@
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
       <version>2.4</version>
     </dependency>
   </dependencies>

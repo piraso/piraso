@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright (c) 2012. Piraso Alvin R. de Leon. All Rights Reserved.
+  ~
+  ~ See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The Piraso licenses this file to You under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+  <bean name="pirasoConnectionManager" class="org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager">
+    <property name="defaultMaxPerRoute" value="100"/>
+    <property name="maxTotal" value="100"/>
+  </bean>
+
+  <bean name="pirasoHttpParams" class="org.apache.http.params.BasicHttpParams"/>
+
+  <bean class="org.apache.http.params.HttpConnectionParamBean">
+    <constructor-arg ref="pirasoHttpParams"/>
+    <property name="connectionTimeout" value="10000"/>
+    <property name="soTimeout" value="30000"/>
+    <property name="socketBufferSize" value="8192"/>
+    <property name="tcpNoDelay" value="true"/>
+  </bean>
+
+  <bean class="org.apache.http.client.params.ClientParamBean">
+    <constructor-arg ref="pirasoHttpParams"/>
+    <property name="allowCircularRedirects" value="true"/>
+    <property name="handleRedirects" value="true"/>
+  </bean>
+
+  <bean name="pirasoHttpClient" class="org.apache.http.impl.client.DefaultHttpClient">
+    <constructor-arg ref="pirasoConnectionManager"/>
+    <constructor-arg ref="pirasoHttpParams"/>
+  </bean>
+
+  <bean id="pirasoGetBridgeRegistryHandler" class="org.piraso.server.bridge.net.HttpPirasoGetBridgeRegistryHandler" scope="prototype">
+    <constructor-arg index="0" ref="pirasoHttpClient"/>
+    <constructor-arg index="1">
+      <bean class="org.apache.http.protocol.BasicHttpContext"/>
+    </constructor-arg>
+  </bean>
+
+  <bean id="pirasoIDRequestHandler" class="org.piraso.server.bridge.net.HttpPirasoIDRequestHandler" scope="prototype">
+    <constructor-arg index="0" ref="pirasoHttpClient"/>
+    <constructor-arg index="1">
+      <bean class="org.apache.http.protocol.BasicHttpContext"/>
+    </constructor-arg>
+  </bean>
+
+  <bean id="pirasoLogHandler" class="org.piraso.server.bridge.net.HttpPirasoLogHandler" scope="prototype">
+    <constructor-arg index="0" ref="pirasoHttpClient"/>
+    <constructor-arg index="1">
+      <bean class="org.apache.http.protocol.BasicHttpContext"/>
+    </constructor-arg>
+  </bean>
+
+  <bean id="pirasoTestHandler" class="org.piraso.client.net.HttpPirasoTestHandler" scope="prototype">
+    <constructor-arg index="0" ref="pirasoHttpClient"/>
+    <constructor-arg index="1">
+      <bean class="org.apache.http.protocol.BasicHttpContext"/>
+    </constructor-arg>
+  </bean>
+
+  <bean id="pirasoHandlerFactory" class="org.piraso.server.bridge.BridgeHttpHandlerFactory"/>
+
+  <bean id="pirasoLoggerRegistry" class="org.piraso.server.bridge.BridgeLoggerRegistryImpl">
+    <property name="factory" ref="pirasoHandlerFactory"/>
+  </bean>
+
+  <bean id="pirasoRequestIDGenerator" class="org.piraso.server.bridge.BridgeIDGenerator">
+    <property name="factory" ref="pirasoHandlerFactory"/>
+  </bean>
+
+  <bean class="org.piraso.server.PirasoContextIDGenerator" factory-method="valueOf">
+    <constructor-arg value="INSTANCE" />
+    <property name="idGenerator" ref="pirasoRequestIDGenerator"/>
+  </bean>
+
+  <bean id="bridgeConfig" class="org.piraso.server.bridge.BridgeConfig" factory-method="valueOf" init-method="init">
+    <constructor-arg value="INSTANCE" />
+    <property name="factory" ref="pirasoHandlerFactory"/>
+  </bean>
+
+  <bean class="org.piraso.server.service.LoggerRegistrySingleton" factory-method="valueOf">
+    <constructor-arg value="INSTANCE" />
+    <property name="registry" ref="pirasoLoggerRegistry" />
+  </bean>
+</beans>

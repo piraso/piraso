@@ -18,7 +18,7 @@
 
 package org.piraso.server;
 
-import org.piraso.api.IDGenerator;
+import org.piraso.api.IntegerIDGenerator;
 import org.piraso.api.PirasoLogger;
 import org.apache.commons.logging.Log;
 import org.springframework.beans.BeansException;
@@ -30,14 +30,14 @@ public abstract class AbstractContextLoggerBeanProcessor<T> implements ContextLo
 
     private static final Log LOG = PirasoLogger.getProxyEntry();
 
-    private static final IDGenerator generator = new IDGenerator();
+    private static final IntegerIDGenerator generator = new IntegerIDGenerator();
 
     private Class<T> clazz;
     private int order;
 
     public AbstractContextLoggerBeanProcessor(Class<T> clazz) {
         this.clazz = clazz;
-        order = (int) generator.next();
+        order = generator.next();
     }
 
     /**

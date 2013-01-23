@@ -20,8 +20,10 @@ package org.piraso.server;
 
 import org.piraso.api.GeneralPreferenceEnum;
 import org.piraso.api.Level;
+import org.piraso.api.LongIDGenerator;
 import org.piraso.api.entry.Entry;
 import org.piraso.api.entry.MessageEntry;
+import org.piraso.server.service.DefaultUserRegistryImpl;
 import org.piraso.server.service.ResponseLoggerService;
 import org.piraso.server.service.User;
 import org.piraso.server.service.UserRegistry;
@@ -54,10 +56,11 @@ public class PirasoContextTest {
 
     @Before
     public void setUp() throws Exception {
-        registry = spy(new UserRegistry());
+        registry = spy(new DefaultUserRegistryImpl());
         request = mockRequest(MONITORED_ADDR);
         pirasoRequest = new TestPirasoRequest(request);
 
+        PirasoContextIDGenerator.INSTANCE.setIdGenerator(new LongIDGenerator());
         context = new PirasoContext(pirasoRequest, registry);
     }
 

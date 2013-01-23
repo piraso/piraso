@@ -18,6 +18,12 @@
 
 package org.piraso.server.spring.web;
 
+import org.apache.commons.lang.Validate;
+import org.piraso.api.JacksonUtils;
+import org.piraso.api.entry.Entry;
+import org.piraso.api.entry.RawEntry;
+import org.piraso.api.io.PirasoObjectLoaderRegistry;
+import org.piraso.server.PirasoContextIDGenerator;
 import org.piraso.server.service.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,6 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
 
 import static org.piraso.api.PirasoConstants.*;
 
@@ -73,6 +80,20 @@ public class PirasoServlet implements HttpRequestHandler {
         this.stopTimeout = stopTimeout;
     }
 
+    private void writeResponse(HttpServletResponse response, String contentType, String str) throws IOException {
+        PrintWriter out = response.getWriter();
+
+        try {
+            response.setContentType(contentType);
+            response.setCharacterEncoding(ENCODING_UTF_8);
+
+            out.write(str);
+            out.flush();
+        } finally {
+            out.close();
+        }
+    }
+
     public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if(request.getParameter(SERVICE_PARAMETER) == null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Request Parameter 'service' is required.");
@@ -81,26 +102,53 @@ public class PirasoServlet implements HttpRequestHandler {
 
         User user = registry.createOrGetUser(new PirasoHttpServletRequest(request));
 
-        if(SERVICE_START_PARAMETER_VALUE.equals(request.getParameter(SERVICE_PARAMETER))) {
+        if(SERVICE_GET_REGISTRY_PARAMETER_VALUE.equals(request.getParameter(SERVICE_PARAMETER))) {
+            retrieveRegistry(response);
+        } else if(SERVICE_LOG_PARAMETER_VALUE.equals(request.getParameter(SERVICE_PARAMETER))) {
+            log(request);
+        } else if(SERVICE_REQUEST_ID_PARAMETER_VALUE.equals(request.getParameter(SERVICE_PARAMETER))) {
+            writeResponse(response, PLAIN_CONTENT_TYPE, String.valueOf(PirasoContextIDGenerator.INSTANCE.next()));
+        } else if(SERVICE_START_PARAMETER_VALUE.equals(request.getParameter(SERVICE_PARAMETER))) {
             startLoggerService(request, response, user);
         } else if(SERVICE_STOP_PARAMETER_VALUE.equals(request.getParameter(SERVICE_PARAMETER))) {
             stopService(response, user);
         } else if(SERVICE_TEST_PARAMETER_VALUE.equals(request.getParameter(SERVICE_PARAMETER))) {
-            PrintWriter out = response.getWriter();
-
-            try {
-                response.setContentType(JSON_CONTENT_TYPE);
-                response.setCharacterEncoding(ENCODING_UTF_8);
-
-                out.write(String.format("{\"status\":\"%s\", \"version\":\"%s\"}", STATUS_OK, version));
-                out.flush();
-            } finally {
-                out.close();
-            }
+            writeResponse(response, JSON_CONTENT_TYPE, String.format("{\"status\":\"%s\", \"version\":\"%s\", \"bridgeSupported\": true}", STATUS_OK, version));
         } else {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                     String.format("Request Parameter 'service' with value '%s' is invalid.",
                             request.getParameter(SERVICE_PARAMETER)));
+        }
+    }
+
+    private void retrieveRegistry(HttpServletResponse response) throws IOException {
+        BridgeRegistry bridgeRegistry = new BridgeRegistry();
+
+        for(Map.Entry<User, ResponseLoggerService> entry : registry.getUserLoggerMap().entrySet()) {
+            bridgeRegistry.addLogger(new BridgeLogger(entry.getValue()));
+        }
+
+        writeResponse(response, JSON_CONTENT_TYPE, JacksonUtils.MAPPER.writeValueAsString(bridgeRegistry));
+    }
+
+    private void log(HttpServletRequest request) throws IOException {
+        String userContent = request.getParameter(USER_PARAMETER);
+        String requestId = request.getParameter(ENTRY_REQUEST_ID_PARAMETER);
+        String entryContent = request.getParameter(ENTRY_PARAMETER);
+        String entryClassName = request.getParameter(ENTRY_CLASS_NAME_PARAMETER);
+
+        Validate.notNull(userContent, "userContent should not be null.");
+
+        User user = JacksonUtils.MAPPER.readValue(userContent, User.class);
+
+        ResponseLoggerService service = registry.getLogger(user);
+
+        if(service != null && service.isAlive()) {
+            Validate.notNull(entryContent, "entryContent should not be null.");
+            Validate.notNull(entryClassName, "entryClassName should not be null.");
+
+            Entry entry = new RawEntry(Long.valueOf(requestId), entryClassName, entryContent);
+            service.log(entry);
         }
     }
 

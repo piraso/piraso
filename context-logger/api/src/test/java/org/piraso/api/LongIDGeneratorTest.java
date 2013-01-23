@@ -23,16 +23,16 @@ import org.junit.Test;
 import static junit.framework.Assert.assertEquals;
 
 /**
- * Test for {@link IDGenerator}.
+ * Test for {@link LongIDGenerator}.
  */
-public class IDGeneratorTest {
+public class LongIDGeneratorTest {
 
     @Test
     public void testNext() throws Exception {
-        IDGenerator generator = new IDGenerator();
+        LongIDGenerator generator = new LongIDGenerator();
 
-        assertEquals(1l, generator.next());
-        assertEquals(2l, generator.next());
-        assertEquals(3l, generator.next());
+        assertEquals(Long.valueOf(1l), generator.next());
+        assertEquals(Long.valueOf(2l), generator.next());
+        assertEquals(Long.valueOf(3l), generator.next());
     }
 }

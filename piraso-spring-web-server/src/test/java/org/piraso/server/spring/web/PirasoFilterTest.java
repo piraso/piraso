@@ -24,6 +24,7 @@ import org.piraso.server.PirasoEntryPoint;
 import org.piraso.server.dispatcher.ContextLogDispatcher;
 import org.piraso.server.dispatcher.DispatcherForwardEvent;
 import org.piraso.server.dispatcher.DispatcherForwardListener;
+import org.piraso.server.service.DefaultUserRegistryImpl;
 import org.piraso.server.service.UserRegistry;
 import org.junit.After;
 import org.junit.Before;
@@ -58,7 +59,7 @@ public class PirasoFilterTest {
 
     @Before
     public void setUp() throws Exception {
-        registry = spy(new UserRegistry());
+        registry = spy(new DefaultUserRegistryImpl());
         request = CommonMockObjects.mockRequest(MONITORED_ADDR);
         response = spy(new MockHttpServletResponse());
         chain = spy(new MockFilterChain());

@@ -33,6 +33,14 @@ public class User {
 
     public String activityUuid;
 
+    public User() {
+    }
+
+    public User(String remoteAddr, String activityUuid) {
+        this.remoteAddr = remoteAddr;
+        this.activityUuid = activityUuid;
+    }
+
     public User(PirasoRequest request) {
         remoteAddr = request.getRemoteAddr();
 
@@ -41,6 +49,14 @@ public class User {
         } else {
             activityUuid = UUID.randomUUID().toString();
         }
+    }
+
+    public void setRemoteAddr(String remoteAddr) {
+        this.remoteAddr = remoteAddr;
+    }
+
+    public void setActivityUuid(String activityUuid) {
+        this.activityUuid = activityUuid;
     }
 
     public String getRemoteAddr() {

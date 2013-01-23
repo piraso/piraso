@@ -30,13 +30,13 @@ import static org.mockito.Mockito.verify;
 /**
  * Test for {@link UserRegistry} class.
  */
-public class UserRegistryTest {
+public class DefaultUserRegistryImplTest {
 
     private UserRegistry registry;
 
     @Before
     public void setUp() throws Exception {
-        registry = new UserRegistry();
+        registry = new DefaultUserRegistryImpl();
     }
 
     @Test

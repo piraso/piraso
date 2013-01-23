@@ -16,21 +16,16 @@
  * limitations under the License.
  */
 
-package org.piraso.server.service;
+package org.piraso.api;
 
 /**
- * Singleton user registry.
+ * Sequential ID Generator.
  */
-public enum UserRegistrySingleton {
-    INSTANCE;
+public class IntegerIDGenerator implements NextGenerator<Integer> {
 
-    protected UserRegistry registry;
+    private int id = 0;
 
-    public void setRegistry(UserRegistry registry) {
-        this.registry = registry;
-    }
-
-    public UserRegistry getRegistry() {
-        return registry;
+    public Integer next() {
+        return ++id;
     }
 }

@@ -45,11 +45,27 @@ public final class PirasoConstants {
 
     public static final String SERVICE_TEST_PARAMETER_VALUE = "test";
 
+    public static final String SERVICE_GET_REGISTRY_PARAMETER_VALUE = "getRegistry";
+
+    public static final String SERVICE_REQUEST_ID_PARAMETER_VALUE = "requestId";
+
+    public static final String SERVICE_LOG_PARAMETER_VALUE = "log";
+
+    public static final String ENTRY_PARAMETER = "entry";
+
+    public static final String ENTRY_CLASS_NAME_PARAMETER = "entryClassName";
+
+    public static final String USER_PARAMETER = "userParameter";
+
+    public static final String ENTRY_REQUEST_ID_PARAMETER = "entryRequestId";
+
     public static final String ENCODING_UTF_8 = "UTF-8";
 
     public static final String STATUS_OK = "SUCCESS";
 
     public static final String XML_CONTENT_TYPE = "text/xml";
+
+    public static final String PLAIN_CONTENT_TYPE = "text/plain";
 
     public static final String JSON_CONTENT_TYPE = "application/json";
 

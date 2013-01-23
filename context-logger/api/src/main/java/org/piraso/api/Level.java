@@ -44,7 +44,7 @@ public class Level {
 
     public static Level get(String name) {
         return LEVELS.get(name);
-    }
+}
 
     public static boolean isLevel(String name) {
         return LEVELS.containsKey(name);

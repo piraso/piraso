@@ -32,6 +32,8 @@ public interface ResponseLoggerService {
 
     public String getId();
 
+    public Long getGlobalId();
+
     public String getWatchedAddr();
 
     public boolean isWatched(String remoteAddr);

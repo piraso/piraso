@@ -18,9 +18,11 @@
 
 package org.piraso.api.io;
 
+import org.codehaus.jackson.JsonGenerationException;
 import org.piraso.api.JacksonUtils;
 import org.piraso.api.entry.Entry;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.piraso.api.entry.RawEntry;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -68,15 +70,31 @@ public class PirasoEntryWriter implements Closeable {
         writer.flush();
     }
 
+    private String getEntryClassName(Entry entry) {
+        if(RawEntry.class.isInstance(entry)) {
+            return ((RawEntry) entry).getRawClassName();
+        }
+
+        return entry.getClass().getName();
+    }
+
+    private String getEntryContent(Entry entry) throws IOException {
+        if(RawEntry.class.isInstance(entry)) {
+            return ((RawEntry) entry).getRawContent();
+        }
+
+        return mapper.writeValueAsString(entry);
+    }
+
     private String createXMLString(Date date, Entry entry) throws ParserConfigurationException, SAXException, IOException, TransformerException {
         StringReader reader = new StringReader(String.format("<entry id=\"%d\" date=\"%s\" class-name=\"%s\"></entry>",
-                entry.getRequestId(), mapper.writeValueAsString(date), entry.getClass().getName()));
+                entry.getRequestId(), mapper.writeValueAsString(date), getEntryClassName(entry)));
 
         Document document = builder.parse(new InputSource(reader));
 
         NodeList nodeList = document.getElementsByTagName("entry");
         Element node = (Element) nodeList.item(0);
-        node.appendChild(document.createTextNode(mapper.writeValueAsString(entry)));
+        node.appendChild(document.createTextNode(getEntryContent(entry)));
 
         StringWriter out = new StringWriter();
         StreamResult outputTarget = new StreamResult(out);

@@ -18,7 +18,7 @@
 
 package org.piraso.io.util;
 
-import org.piraso.api.IDGenerator;
+import org.piraso.api.LongIDGenerator;
 import org.piraso.api.entry.RequestEntry;
 import org.piraso.api.entry.ResponseEntry;
 import org.piraso.api.io.EntryReadEvent;
@@ -42,7 +42,7 @@ public class IOEntryRequest {
     
     private Long id;
 
-    private IDGenerator generator;
+    private LongIDGenerator generator;
         
     private int count;
 
@@ -58,7 +58,7 @@ public class IOEntryRequest {
         this.cache = new IOEntryRequestCache(parentId, id);
         this.id = id;
         this.parentId = parentId;
-        this.generator = new IDGenerator();
+        this.generator = new LongIDGenerator();
 
         LOG.log(Level.INFO, String.format("IO Request with id '%s'.", id));
     }

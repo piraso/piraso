@@ -22,6 +22,7 @@ import org.piraso.api.JacksonUtils;
 import org.piraso.api.Preferences;
 import org.piraso.server.CommonMockObjects;
 import org.piraso.server.PirasoRequest;
+import org.piraso.server.service.DefaultUserRegistryImpl;
 import org.piraso.server.service.ResponseLoggerService;
 import org.piraso.server.service.User;
 import org.piraso.server.service.UserRegistry;
@@ -65,7 +66,7 @@ public class PirasoServletTest {
 
     @Before
     public void setUp() throws Exception {
-        registry = spy(new UserRegistry());
+        registry = spy(new DefaultUserRegistryImpl());
         request = CommonMockObjects.mockRequest(MONITORED_ADDR);
         pirasoRequest = new PirasoHttpServletRequest(request);
         response = spy(new MockHttpServletResponse());

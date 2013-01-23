@@ -18,7 +18,7 @@
 
 package org.piraso.server.sql.logger;
 
-import org.piraso.api.IDGenerator;
+import org.piraso.api.LongIDGenerator;
 import org.piraso.api.Level;
 import org.piraso.api.entry.ElapseTimeEntry;
 import org.piraso.api.sql.SQLDataTotalRowsEntry;
@@ -50,7 +50,7 @@ public class ResultSetProxyFactory extends AbstractSQLProxyFactory<ResultSet> {
      */
     private static final int MAX_RETURN_RESULT = 100;
 
-    private static final IDGenerator GENERATOR = new IDGenerator();
+    private static final LongIDGenerator GENERATOR = new LongIDGenerator();
 
     private static final Level METHOD_CALL_LEVEL = Level.get(SQLPreferenceEnum.RESULTSET_METHOD_CALL_ENABLED.getPropertyName());
 

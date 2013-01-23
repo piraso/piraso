@@ -40,9 +40,7 @@ public class PirasoContext implements ContextPreference {
 
     private static final Log LOG_ENTRY_POINT = PirasoLogger.getEntryPoint();
 
-    private static final IDGenerator ID_GENERATOR = new IDGenerator();
-
-    private UserRegistry registry;
+    private LoggerRegistry registry;
 
     private PirasoEntryPoint entryPoint;
 
@@ -59,15 +57,15 @@ public class PirasoContext implements ContextPreference {
     private GroupChainId refGroupChainId;
 
     public PirasoContext(PirasoEntryPoint entryPoint) {
-        this(entryPoint, UserRegistrySingleton.INSTANCE.getRegistry());
+        this(entryPoint, LoggerRegistrySingleton.INSTANCE.getRegistry());
     }
 
-    public PirasoContext(PirasoEntryPoint entryPoint, UserRegistry registry) {
+    public PirasoContext(PirasoEntryPoint entryPoint, LoggerRegistry registry) {
         this(entryPoint, registry, null);
     }
 
-    public PirasoContext(PirasoEntryPoint entryPoint, UserRegistry registry, ReferenceRequestEntry ref) {
-        this(ID_GENERATOR.next(), entryPoint, registry, ref, null);
+    public PirasoContext(PirasoEntryPoint entryPoint, LoggerRegistry registry, ReferenceRequestEntry ref) {
+        this(PirasoContextIDGenerator.INSTANCE.next(), entryPoint, registry, ref, null);
 
         if(LOG_ENTRY_POINT.isDebugEnabled()) {
             LOG_ENTRY_POINT.debug(String.format(
@@ -81,7 +79,7 @@ public class PirasoContext implements ContextPreference {
         }
     }
 
-    private PirasoContext(long requestId, PirasoEntryPoint entryPoint, UserRegistry registry, ReferenceRequestEntry ref, GroupChainId refGroupChainId) {
+    private PirasoContext(long requestId, PirasoEntryPoint entryPoint, LoggerRegistry registry, ReferenceRequestEntry ref, GroupChainId refGroupChainId) {
         this.requestId = requestId;
         this.registry = registry;
         this.entryPoint = entryPoint;

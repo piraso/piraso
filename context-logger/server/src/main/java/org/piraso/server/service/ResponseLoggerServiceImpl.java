@@ -19,7 +19,7 @@
 package org.piraso.server.service;
 
 import org.piraso.api.GeneralPreferenceEnum;
-import org.piraso.api.IDGenerator;
+import org.piraso.api.LongIDGenerator;
 import org.piraso.api.JacksonUtils;
 import org.piraso.api.Preferences;
 import org.piraso.api.entry.Entry;
@@ -39,7 +39,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -70,7 +69,7 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
      */
     private static final String RESPONSE_CONTENT_TYPE = "text/xml; charset=UTF-8";
 
-    private static final IDGenerator ID_GENERATOR = new IDGenerator();
+    private static final LongIDGenerator ID_GENERATOR = new LongIDGenerator();
 
 
     /**
@@ -230,6 +229,10 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
      */
     public String getId() {
         return getUser().getActivityUuid();
+    }
+
+    public Long getGlobalId() {
+        return globalId;
     }
 
     /**

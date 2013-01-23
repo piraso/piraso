@@ -51,7 +51,7 @@ public class HttpPirasoTestHandler extends AbstractHttpHandler {
     public HttpPirasoTestHandler(HttpClient client, HttpContext context) {
         super(client, context);
 
-        this.mapper = JacksonUtils.createMapper();
+        this.mapper = JacksonUtils.MAPPER;
     }
 
     @Override
@@ -94,10 +94,24 @@ public class HttpPirasoTestHandler extends AbstractHttpHandler {
         return status != null && STATUS_OK.equals(status.getStatus());
     }
 
+    public boolean isBridgetSupported() {
+        return isSuccess() && status.isBridgeSupported();
+    }
+
     public static class Status {
         private String status;
 
         private String version;
+
+        private boolean bridgeSupported;
+
+        public boolean isBridgeSupported() {
+            return bridgeSupported;
+        }
+
+        public void setBridgeSupported(boolean bridgeSupported) {
+            this.bridgeSupported = bridgeSupported;
+        }
 
         public String getStatus() {
             return status;
