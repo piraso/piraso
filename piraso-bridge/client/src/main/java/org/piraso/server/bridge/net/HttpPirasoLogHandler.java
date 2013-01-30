@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.piraso.api.PirasoConstants.*;
-import static org.piraso.api.PirasoConstants.ENCODING_UTF_8;
 
 public class HttpPirasoLogHandler extends AbstractHttpHandler {
 

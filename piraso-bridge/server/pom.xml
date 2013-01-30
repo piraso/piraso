@@ -5,13 +5,13 @@
 
   <parent>
     <groupId>org.piraso</groupId>
-    <artifactId>piraso</artifactId>
+    <artifactId>piraso-bridge</artifactId>
     <version>1.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>piraso-bridge-server-war</artifactId>
+  <artifactId>piraso-bridge-server</artifactId>
   <packaging>war</packaging>
-  <name>piraso-bridge-server-war</name>
+  <name>piraso-bridge-server</name>
 
   <properties>
     <javax.servlet.version>2.5</javax.servlet.version>
