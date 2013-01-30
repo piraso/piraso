@@ -18,23 +18,7 @@
   ~ limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-
-  <parent>
-    <groupId>org.piraso</groupId>
-    <artifactId>piraso</artifactId>
-    <version>1.1-SNAPSHOT</version>
-  </parent>
-
-  <artifactId>piraso-bridge</artifactId>
-  <packaging>pom</packaging>
-  <name>piraso-bridge</name>
-
-  <modules>
-    <module>client</module>
-    <module>web-client</module>
-    <module>server</module>
-  </modules>
-</project>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    <bean id="pirasoFilter" class="org.piraso.web.base.PirasoFilter"/>
+</beans>

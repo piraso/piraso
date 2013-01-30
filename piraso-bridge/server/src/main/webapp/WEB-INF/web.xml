@@ -15,7 +15,7 @@
   </context-param>
   <context-param>
     <param-name>contextClass</param-name>
-    <param-value>org.piraso.server.spring.web.PirasoWebApplicationContext</param-value>
+    <param-value>org.piraso.web.base.PirasoWebApplicationContext</param-value>
   </context-param>
   <context-param>
     <param-name>contextConfigLocation</param-name>

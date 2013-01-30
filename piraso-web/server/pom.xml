@@ -18,23 +18,37 @@
   ~ limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>org.piraso</groupId>
-    <artifactId>piraso</artifactId>
+    <artifactId>piraso-web</artifactId>
     <version>1.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>piraso-bridge</artifactId>
-  <packaging>pom</packaging>
-  <name>piraso-bridge</name>
+  <artifactId>piraso-web-server</artifactId>
+  <packaging>jar</packaging>
+  <name>piraso-web-server</name>
 
-  <modules>
-    <module>client</module>
-    <module>web-client</module>
-    <module>server</module>
-  </modules>
+  <dependencies>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>piraso-web-base</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>context-logger-server</artifactId>
+      <version>${project.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>${spring.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>

@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.util.List;
 
 public interface LoggerRegistry {
+
+    boolean isWatched(PirasoEntryPoint request) throws IOException;
+
     /**
      * Retrieve all {@link org.piraso.api.Preferences} given the monitored address.
      *

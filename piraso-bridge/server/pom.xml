@@ -195,8 +195,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.piraso</groupId>
-      <artifactId>piraso-spring-web-server</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>piraso-web-server</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

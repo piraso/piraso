@@ -16,34 +16,34 @@
  * limitations under the License.
  */
 
-package org.piraso.server.service;
+package org.piraso.web.base;
 
-import org.piraso.server.PirasoRequest;
+import org.piraso.server.PirasoResponse;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Map;
+import java.io.PrintWriter;
 
 /**
- * Registry of piraso users.
+ * Http implementation of {@link PirasoResponse}.
  */
-public interface UserRegistry extends LoggerRegistry {
+public class PirasoHttpServletResponse implements PirasoResponse {
 
-    boolean isUserExist(User user);
+    private HttpServletResponse response;
 
-    User createOrGetUser(PirasoRequest request);
+    public PirasoHttpServletResponse(HttpServletResponse response) {
+        this.response = response;
+    }
 
-    ResponseLoggerService getLogger(User user);
+    public void setContentType(String contentType) {
+        response.setContentType(contentType);
+    }
 
-    Map<User, ResponseLoggerService> getUserLoggerMap();
+    public void setCharacterEncoding(String encoding) {
+        response.setCharacterEncoding(encoding);
+    }
 
-    /**
-     * Associate user with a {@link ResponseLoggerService}.
-     *
-     * @param user the user
-     * @param service the response logger service
-     * @throws java.io.IOException on io error
-     */
-    void associate(User user, ResponseLoggerService service) throws IOException;
-
-    void removeUser(User user) throws IOException;
+    public PrintWriter getWriter() throws IOException {
+        return response.getWriter();
+    }
 }

@@ -1,5 +1,6 @@
 package org.piraso.server.bridge;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.piraso.api.Preferences;
@@ -55,6 +56,10 @@ public class BridgeLoggerRegistryImpl implements LoggerRegistry {
         if(BridgeConfig.INSTANCE.isQueryAlways()) {
             init();
         }
+    }
+
+    public boolean isWatched(PirasoEntryPoint request) throws IOException {
+        return CollectionUtils.isNotEmpty(getContextLoggers(request));
     }
 
     public List<Preferences> getContextPreferences(PirasoEntryPoint entryPoint) throws IOException {
