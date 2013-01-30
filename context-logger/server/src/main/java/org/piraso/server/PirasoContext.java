@@ -39,6 +39,7 @@ public class PirasoContext implements ContextPreference {
     private static final Log LOG = LogFactory.getLog(PirasoContext.class);
 
     private static final Log LOG_ENTRY_POINT = PirasoLogger.getEntryPoint();
+    public static final String INDENT_PROPERTY = "indent";
 
     private LoggerRegistry registry;
 
@@ -97,6 +98,25 @@ public class PirasoContext implements ContextPreference {
         return context;
     }
 
+    public void setIndent(int indent) {
+        if(indent <= 0) {
+            removeProperty(PirasoContext.class, INDENT_PROPERTY);
+
+            return;
+        }
+
+        addProperty(PirasoContext.class, INDENT_PROPERTY, indent);
+    }
+
+    public int getIndent() {
+        Integer indent = (Integer) getProperty(PirasoContext.class, INDENT_PROPERTY);
+        if(indent != null) {
+            return indent;
+        }
+
+        return 0;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -108,6 +128,16 @@ public class PirasoContext implements ContextPreference {
         }
         
         map.put(name, value);
+    }
+
+    public void removeProperty(Class<?> clazz, String name) {
+        Map<String, Object> map = propertyBag.get(clazz);
+        if(map == null) {
+            map = new HashMap<String, Object>();
+            propertyBag.put(clazz, map);
+        }
+
+        map.remove(name);
     }
 
     /**
@@ -301,6 +331,7 @@ public class PirasoContext implements ContextPreference {
             entry.setReferenceGroup(new GroupEntry(refGroupChainId.getGroupIds()));
         }
 
+        entry.setIndent(getIndent());
         entry.setRequestId(requestId);
         entry.setBaseRequestId(requestId);
         entry.setLevel(level.getName());

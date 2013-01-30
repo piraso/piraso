@@ -36,6 +36,16 @@ public class Entry {
 
     protected GroupEntry group;
 
+    protected int indent = 0;
+
+    public int getIndent() {
+        return indent;
+    }
+
+    public void setIndent(int indent) {
+        this.indent = indent;
+    }
+
     public Long getRequestId() {
         return requestId;
     }
