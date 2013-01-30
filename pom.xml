@@ -72,11 +72,6 @@
     <module>piraso-assembly</module>
     <module>piraso-maven-plugin</module>
     <module>context-logger</module>
-    <module>java-context-logger</module>
-    <module>spring-context-logger</module>
-    <module>sql-context-logger</module>
-    <module>hibernate-context-logger</module>
-    <module>log4j-context-logger</module>
     <module>piraso-headless</module>
     <module>piraso-bridge</module>
     <module>piraso-web</module>

@@ -1,6 +1,6 @@
 Piraso
 
-Copyright 2011 Piraso Alvin R. de Leon
+Copyright 2013 Piraso Alvin R. de Leon
 
 This product includes software developed by
-Alvin R. de Leon (https://github.com/alvinrdeleon/piraso/).
+Alvin R. de Leon (https://github.com/alvinrdeleon/).
