@@ -8,6 +8,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.piraso.api.JacksonUtils;
 import org.piraso.api.entry.Entry;
@@ -25,6 +26,9 @@ import static org.piraso.api.PirasoConstants.*;
 import static org.piraso.api.PirasoConstants.ENCODING_UTF_8;
 
 public class HttpPirasoLogHandler extends AbstractHttpHandler {
+
+    private static final Logger LOG = Logger.getLogger(HttpPirasoLogHandler.class);
+
 
     private Entry entry;
 
@@ -61,6 +65,8 @@ public class HttpPirasoLogHandler extends AbstractHttpHandler {
         Validate.notNull(uri, "uri should not be null.");
         Validate.notNull(entry, "entry should not be null.");
         Validate.notNull(user, "user should not be null.");
+
+        LOG.info(String.format("Executing %s...", uri));
 
         HttpPost post = new HttpPost(uri.getPath());
 

@@ -71,12 +71,12 @@ public final class PirasoConstants {
 
     //--- These are the cascaded properties for call propagation.
 
-    public static String REMOTE_ADDRESS_HEADER = "Piraso-Remote-Address";
+    public static final String REMOTE_ADDRESS_HEADER = "Piraso-Remote-Address";
 
-    public static String REQUEST_ID_HEADER = "Piraso-Request-Id";
+    public static final String REQUEST_ID_HEADER = "Piraso-Request-Id";
 
-    public static String GROUP_ID_HEADER = "Piraso-Group-Id";
+    public static final String GROUP_ID_HEADER = "Piraso-Group-Id";
 
-    public static String METHOD_NAME_HEADER = "Piraso-Method-Name";
+    public static final String METHOD_NAME_HEADER = "Piraso-Method-Name";
 
 }

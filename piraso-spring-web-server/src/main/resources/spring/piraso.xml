@@ -37,7 +37,7 @@
 
     <bean id="pirasoServlet" class="org.piraso.server.spring.web.PirasoServlet">
         <property name="registry" ref="pirasoUserRegistry"/>
-        <property name="version" value="1.0-SNAPSHOT"/>
+        <property name="version" value="1.1-SNAPSHOT"/>
     </bean>
 
     <bean id="pirasoFilter" class="org.piraso.server.spring.web.PirasoFilter">

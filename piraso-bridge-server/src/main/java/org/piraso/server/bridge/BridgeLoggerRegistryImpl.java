@@ -27,12 +27,25 @@ public class BridgeLoggerRegistryImpl implements LoggerRegistry {
     public void init() {
         try {
             HttpPirasoGetBridgeRegistryHandler handler = factory.createGetRegistryHandler();
+            handler.execute();
+
             registry.clear();
 
             BridgeRegistry bridgeRegistry = handler.getRegistry();
             for(BridgeLogger logger : bridgeRegistry.getLoggers()) {
-                registry.associate(logger.getUser(), new BridgeLoggerServiceImpl(logger, factory));
+                User user =  logger.getUser();
+
+                if(LOG.isDebugEnabled()) {
+                    LOG.debug(String.format("User - Remote Address: %s, ID: %s.", user.getRemoteAddr(), user.getActivityUuid()));
+                }
+
+                registry.associate(user, new BridgeLoggerServiceImpl(logger, factory));
             }
+
+            if(LOG.isDebugEnabled()) {
+                LOG.debug(String.format("Registry size  %d.", registry.getUserLoggerMap().size()));
+            }
+
         } catch (Exception e) {
             LOG.warn(e.getMessage(), e);
         }

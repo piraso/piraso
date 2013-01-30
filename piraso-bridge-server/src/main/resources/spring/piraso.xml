@@ -77,7 +77,12 @@
 
   <bean id="pirasoHandlerFactory" class="org.piraso.server.bridge.BridgeHttpHandlerFactory"/>
 
-  <bean id="pirasoLoggerRegistry" class="org.piraso.server.bridge.BridgeLoggerRegistryImpl">
+  <bean id="bridgeConfig" class="org.piraso.server.bridge.BridgeConfig" factory-method="valueOf" init-method="init">
+    <constructor-arg value="INSTANCE" />
+    <property name="factory" ref="pirasoHandlerFactory"/>
+  </bean>
+
+  <bean id="pirasoLoggerRegistry" class="org.piraso.server.bridge.BridgeLoggerRegistryImpl" depends-on="bridgeConfig" init-method="init">
     <property name="factory" ref="pirasoHandlerFactory"/>
   </bean>
 
@@ -88,11 +93,6 @@
   <bean class="org.piraso.server.PirasoContextIDGenerator" factory-method="valueOf">
     <constructor-arg value="INSTANCE" />
     <property name="idGenerator" ref="pirasoRequestIDGenerator"/>
-  </bean>
-
-  <bean id="bridgeConfig" class="org.piraso.server.bridge.BridgeConfig" factory-method="valueOf" init-method="init">
-    <constructor-arg value="INSTANCE" />
-    <property name="factory" ref="pirasoHandlerFactory"/>
   </bean>
 
   <bean class="org.piraso.server.service.LoggerRegistrySingleton" factory-method="valueOf">

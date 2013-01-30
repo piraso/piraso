@@ -9,6 +9,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
 import org.piraso.client.net.AbstractHttpHandler;
 import org.piraso.client.net.HttpPirasoException;
 import org.xml.sax.SAXException;
@@ -21,6 +22,8 @@ import java.util.List;
 import static org.piraso.api.PirasoConstants.*;
 
 public class HttpPirasoIDRequestHandler extends AbstractHttpHandler {
+    private static final Logger LOG = Logger.getLogger(HttpPirasoIDRequestHandler.class);
+
     private HttpEntity responseEntity;
 
     private Long requestID;
@@ -40,6 +43,8 @@ public class HttpPirasoIDRequestHandler extends AbstractHttpHandler {
 
     private void doExecute() throws IOException, SAXException, ParserConfigurationException {
         Validate.notNull(uri, "uri should not be null.");
+
+        LOG.info(String.format("Executing %s...", uri));
 
         HttpPost post = new HttpPost(uri.getPath());
 
