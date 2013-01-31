@@ -40,6 +40,8 @@ public class RegexMethodInterceptorEvent<T>  {
     private Object[] replacedArguments;
 
     private boolean wasSetReturnedValue;
+
+    private boolean skip;
     
     RegexMethodInterceptorEvent(RegexMethodInterceptor<T> source, MethodInvocation invocation) {
         this(source, invocation, null);
@@ -79,6 +81,14 @@ public class RegexMethodInterceptorEvent<T>  {
 
     public RegexMethodInterceptor<T> getSource() {
         return source;
+    }
+
+    public boolean isSkip() {
+        return skip;
+    }
+
+    public void skip() {
+        this.skip = true;
     }
 
     public Object getReturnedValue() {

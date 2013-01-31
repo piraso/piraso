@@ -42,6 +42,12 @@ public class RegexMethodInterceptor<T> implements MethodInterceptor {
         Set<RegexMethodInterceptorListener<T>> invokeListeners = getListeners(invocation.getMethod());
 
         RegexMethodInterceptorEvent event = fireBeforeCall(invokeListeners, invocation);
+
+        // skip invocation
+        if(event != null && event.isSkip()) {
+            return null;
+        }
+
         Object returnValue;
 
         try {
