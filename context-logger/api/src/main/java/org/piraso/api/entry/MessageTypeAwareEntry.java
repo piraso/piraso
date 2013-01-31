@@ -7,5 +7,5 @@ public interface MessageTypeAwareEntry extends MessageAwareEntry {
      *
      * @return the entry content type
      */
-    String getMessageType();
+    MessageType getMessageType();
 }
