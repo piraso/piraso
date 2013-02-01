@@ -60,11 +60,15 @@ public final class EntryUtils {
     }
 
     public static Entry cloneEntry(Entry entry) throws IOException {
-        ObjectMapper mapper = JacksonUtils.MAPPER;
+        try {
+            ObjectMapper mapper = JacksonUtils.MAPPER;
 
-        StringWriter writer = new StringWriter();
-        mapper.writeValue(writer, entry);
+            StringWriter writer = new StringWriter();
+            mapper.writeValue(writer, entry);
 
-        return mapper.readValue(writer.toString(), entry.getClass());
+            return mapper.readValue(writer.toString(), entry.getClass());
+        } catch (Exception e) {
+            return entry;
+        }
     }
 }
