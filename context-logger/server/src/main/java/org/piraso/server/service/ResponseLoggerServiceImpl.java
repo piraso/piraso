@@ -18,27 +18,27 @@
 
 package org.piraso.server.service;
 
-import org.piraso.api.GeneralPreferenceEnum;
-import org.piraso.api.LongIDGenerator;
-import org.piraso.api.JacksonUtils;
-import org.piraso.api.Preferences;
-import org.piraso.api.entry.Entry;
-import org.piraso.api.io.PirasoEntryWriter;
-import org.piraso.server.IOUtils;
-import org.piraso.server.PirasoRequest;
-import org.piraso.server.PirasoResponse;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.piraso.api.GeneralPreferenceEnum;
+import org.piraso.api.JacksonUtils;
+import org.piraso.api.LongIDGenerator;
+import org.piraso.api.Preferences;
+import org.piraso.api.entry.Entry;
+import org.piraso.api.entry.EntryUtils;
+import org.piraso.api.io.PirasoEntryWriter;
+import org.piraso.server.IOUtils;
+import org.piraso.server.PirasoRequest;
+import org.piraso.server.PirasoResponse;
 
 import javax.swing.event.EventListenerList;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -325,10 +325,6 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
                 // only do this for no id request
                 // clone and set request id to global id
                 if(preferences.isEnabled(GeneralPreferenceEnum.NO_REQUEST_CONTEXT.getPropertyName())) {
-                    StringWriter writer = new StringWriter();
-                    mapper.writeValue(writer, entry);
-                    entry = mapper.readValue(writer.toString(), entry.getClass());
-
                     entry.setRequestId(globalId);
                 }
 
@@ -403,7 +399,7 @@ public class ResponseLoggerServiceImpl implements ResponseLoggerService {
                 return;
             }
 
-            transferQueue.add(entry);
+            transferQueue.add(EntryUtils.cloneEntry(entry));
             notifyAll();
         }
     }

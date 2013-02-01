@@ -18,6 +18,12 @@
 
 package org.piraso.api.entry;
 
+import org.codehaus.jackson.map.ObjectMapper;
+import org.piraso.api.JacksonUtils;
+
+import java.io.IOException;
+import java.io.StringWriter;
+
 /**
  * Contains helper method for processing entries.
  */
@@ -51,5 +57,14 @@ public final class EntryUtils {
         }
 
         return stackTrace;
+    }
+
+    public static Entry cloneEntry(Entry entry) throws IOException {
+        ObjectMapper mapper = JacksonUtils.MAPPER;
+
+        StringWriter writer = new StringWriter();
+        mapper.writeValue(writer, entry);
+
+        return mapper.readValue(writer.toString(), entry.getClass());
     }
 }
