@@ -105,12 +105,14 @@ public class PirasoServlet implements HttpRequestHandler {
             retrieveRegistry(response);
         } else if(SERVICE_LOG_PARAMETER_VALUE.equals(request.getParameter(SERVICE_PARAMETER))) {
             log(request);
+            writeResponse(response, PLAIN_CONTENT_TYPE, "OK");
         } else if(SERVICE_REQUEST_ID_PARAMETER_VALUE.equals(request.getParameter(SERVICE_PARAMETER))) {
             writeResponse(response, PLAIN_CONTENT_TYPE, String.valueOf(PirasoContextIDGenerator.INSTANCE.next()));
         } else if(SERVICE_START_PARAMETER_VALUE.equals(request.getParameter(SERVICE_PARAMETER))) {
             startLoggerService(request, response, user);
         } else if(SERVICE_STOP_PARAMETER_VALUE.equals(request.getParameter(SERVICE_PARAMETER))) {
             stopService(response, user);
+            writeResponse(response, PLAIN_CONTENT_TYPE, "OK");
         } else if(SERVICE_TEST_PARAMETER_VALUE.equals(request.getParameter(SERVICE_PARAMETER))) {
             writeResponse(response, JSON_CONTENT_TYPE, String.format("{\"status\":\"%s\", \"version\":\"%s\", \"bridgeSupported\": true}", STATUS_OK, version));
         } else {
