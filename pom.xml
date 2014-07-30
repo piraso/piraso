@@ -57,6 +57,14 @@
     <developerConnection>scm:git:https://github.com/piraso/piraso.git</developerConnection>
   </scm>
 
+  <repositories>
+    <repository>
+      <id>sonatype-nexus-snapshots</id>
+      <name>Sonatype Nexus Snapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </repository>
+  </repositories>
+
   <modules>
     <module>piraso-assembly</module>
     <module>piraso-maven-plugin</module>
