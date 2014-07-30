@@ -33,7 +33,9 @@ import org.codehaus.plexus.archiver.jar.ManifestException;
 import org.codehaus.plexus.archiver.war.WarArchiver;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
+import org.xml.sax.SAXException;
 
+import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -91,6 +93,12 @@ public class WarMojo
      */
     @Parameter
     private String packagingIncludes;
+
+    /**
+     * piraso logging path
+     */
+    @Parameter( defaultValue = "/piraso/logging", required = true )
+    private String pirasoLoggingPath = "/piraso/logging";
 
     /**
      * The WAR archiver.
@@ -215,7 +223,13 @@ public class WarMojo
 
         warArchiver.addDirectory( getWebappDirectory(), getPackagingIncludes(), getPackagingExcludes() );
 
-        final File webXmlFile = new File( getWebappDirectory(), "WEB-INF/web.xml" );
+        File webXmlFile = new File( getWebappDirectory(), "WEB-INF/web.xml" );
+        WebXmlPirasoModifier worker = new WebXmlPirasoModifier();
+        worker.setWebXml(webXmlFile);
+        worker.setOutputDirectory(webXmlFile.getParentFile());
+        worker.setPirasoLoggingPath(pirasoLoggingPath);
+        worker.execute();
+
         if ( webXmlFile.exists() )
         {
             warArchiver.setWebxml( webXmlFile );

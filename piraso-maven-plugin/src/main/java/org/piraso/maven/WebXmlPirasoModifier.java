@@ -109,7 +109,10 @@ public class WebXmlPirasoModifier extends AbstractXMLPirasoModifier {
         try {
             File outputFile = new File(outputDirectory, webXml.getName());
             writeDocument(outputFile);
-            project.getProperties().setProperty("maven.war.webxml", outputFile.getAbsolutePath());
+
+            if(project != null) {
+                project.getProperties().setProperty("maven.war.webxml", outputFile.getAbsolutePath());
+            }
         } catch (Exception e) {
             throw new MojoExecutionException(e.getMessage(), e);
         }
