@@ -18,7 +18,7 @@
     <spring.version>3.1.0.RELEASE</spring.version>
     <commons-io.version>2.2</commons-io.version>
     <commons-lang.version>2.6</commons-lang.version>
-    <commons-collections.version>3.2.1</commons-collections.version>
+    <commons-collections.version>3.2.2</commons-collections.version>
     <slf4j-log4j12.version>1.5.8</slf4j-log4j12.version>
     <mockito-all.version>1.9.0</mockito-all.version>
     <log4j.version>1.2.14</log4j.version>
